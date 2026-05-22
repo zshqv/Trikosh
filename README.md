@@ -131,3 +131,33 @@ Built and maintained by [Ashutosh Tripathi](https://github.com/zshqv).
 ---
 
 > "The goal of Trikosh is not to replace thinking. It is to make thinking possible."
+
+---
+
+## Data Sources & Limitations
+
+Financial data on Trikosh is sourced via **[yFinance](https://github.com/ranaroussi/yfinance)**, an open-source Python library that retrieves publicly available data from Yahoo Finance. Data is fetched for educational and non-commercial purposes only.
+
+**Known limitations:**
+
+- Data may lag behind official filings by days or weeks and is not real-time
+- Figures may differ from audited primary-source annual reports due to restatements or rounding
+- Currency conversions are approximate and not guaranteed for non-USD reporters
+- Some fields may be null or missing, particularly for non-US listed companies (e.g. `.NS` tickers)
+- yFinance data availability varies by company and is subject to Yahoo Finance's own data coverage
+
+Always verify data against primary sources before analytical use: company annual reports, SEC EDGAR filings, and official investor relations disclosures.
+
+---
+
+## License
+
+MIT License — see [LICENSE](./LICENSE) for full terms.
+
+Copyright © 2025 Trikosh Contributors.
+
+---
+
+## Disclaimer
+
+All data and content on Trikosh is provided for **educational and non-commercial purposes only**. Nothing on this platform constitutes financial advice or an investment recommendation of any kind. Data sourced via yFinance may contain errors or omissions and should be independently verified against primary sources before use. The maintainers accept no liability for any investment decision made using this data. yFinance retrieves data from Yahoo Finance; Trikosh has no commercial affiliation with Yahoo Finance or its parent entities. See [DISCLAIMER.md](./DISCLAIMER.md) for the full terms.
