@@ -1,433 +1,341 @@
-"use client";
+'use client'
 
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import Link from "next/link";
-import { ArrowLeft, ExternalLink } from "lucide-react";
-import { motion } from "motion/react";
-import {
-  LineChart, Line, BarChart, Bar, XAxis, YAxis,
-  CartesianGrid, Tooltip, ResponsiveContainer, Legend,
-} from "recharts";
+import { useState } from 'react'
+import { useParams } from 'next/navigation'
+import Link from 'next/link'
+import { COMPANIES, MOCK_CARDS } from '@/lib/mockData'
+import TickerBadge from '@/components/ui/TickerBadge'
+import DeltaLabel from '@/components/ui/DeltaLabel'
+import DataAssetCard from '@/components/ui/DataAssetCard'
+import type { Sector } from '@/lib/types'
+import { formatPercent, formatMultiple, formatCurrency } from '@/lib/utils'
 
-interface CompanyData {
-  company: {
-    ticker: string;
-    name: string;
-    sector: string;
-    industry: string;
-    country: string;
-  };
-  income_statements: any[];
-  balance_sheets: any[];
-  cash_flow_statements: any[];
-  financial_ratios: any[];
+type Tab = 'Financials' | 'Ratios' | 'Peers' | 'Overview'
+type FinTab = 'Income Statement' | 'Balance Sheet' | 'Cash Flow'
+
+const RATIOS_FULL = [
+  { label: 'Gross Margin', value: 0.684, unit: 'PCT' as const, period: 'FY2024', peerContext: 'Above sector median' },
+  { label: 'Operating Margin', value: 0.213, unit: 'PCT' as const, period: 'FY2024', peerContext: 'Above sector median' },
+  { label: 'Net Margin', value: 0.178, unit: 'PCT' as const, period: 'FY2024', peerContext: 'Above sector median' },
+  { label: 'ROE', value: 0.252, unit: 'PCT' as const, period: 'FY2024', peerContext: 'Above sector median' },
+  { label: 'ROIC', value: 0.188, unit: 'PCT' as const, period: 'FY2024', peerContext: 'Above sector median' },
+  { label: 'FCF Margin', value: 0.221, unit: 'PCT' as const, period: 'FY2024', peerContext: 'Above sector median' },
+  { label: 'Current Ratio', value: 1.3, unit: 'RATIO' as const, period: 'FY2024', peerContext: 'Below sector median' },
+  { label: 'Debt/Equity', value: 0.48, unit: 'RATIO' as const, period: 'FY2024', peerContext: 'Below sector median' },
+  { label: 'P/E', value: 14.8, unit: 'MULTIPLE' as const, period: 'FY2024', peerContext: 'Below sector median' },
+  { label: 'EV/EBITDA', value: 13.2, unit: 'MULTIPLE' as const, period: 'FY2024', peerContext: 'Below sector median' },
+  { label: 'Revenue CAGR', value: 0.048, unit: 'PCT' as const, period: 'FY2019–FY2024', peerContext: 'Below sector median' },
+  { label: 'R&D Intensity', value: 0.154, unit: 'PCT' as const, period: 'FY2024', peerContext: 'Above sector median' },
+]
+
+const INCOME_STATEMENT = [
+  { metric: 'Revenue', fy2020: 82.6e9, fy2021: 93.8e9, fy2022: 94.9e9, fy2023: 85.2e9, fy2024: 88.8e9 },
+  { metric: 'Gross Profit', fy2020: 54.4e9, fy2021: 62.0e9, fy2022: 63.0e9, fy2023: 57.0e9, fy2024: 60.7e9 },
+  { metric: 'Operating Income', fy2020: 18.0e9, fy2021: 22.3e9, fy2022: 21.8e9, fy2023: 17.4e9, fy2024: 18.9e9 },
+  { metric: 'Net Income', fy2020: 14.7e9, fy2021: 20.9e9, fy2022: 17.9e9, fy2023: 13.8e9, fy2024: 15.8e9 },
+  { metric: 'EPS (diluted)', fy2020: 5.51, fy2021: 7.81, fy2022: 6.73, fy2023: 5.30, fy2024: 6.02 },
+]
+
+function formatTableValue(label: string, value: number): string {
+  if (label === 'EPS (diluted)') return `$${value.toFixed(2)}`
+  return formatCurrency(value)
 }
 
-const SECTOR_COLORS: Record<string, string> = {
-  "Financial Services": "#d4a853",
-  "Healthcare":         "#4aad7a",
-  "Technology":         "#6b9fd4",
-  "Communication Services": "#a87fd4",
-};
-
-function fmt(n: number | undefined | null, type: "pct" | "x" | "b"): string {
-  if (n == null || isNaN(Number(n))) return "—";
-  const v = Number(n);
-  if (type === "pct") return `${(v * 100).toFixed(1)}%`;
-  if (type === "x")   return `${v.toFixed(2)}x`;
-  if (type === "b")   return `$${(v / 1e9).toFixed(1)}B`;
-  return "—";
+function yoyDelta(current: number, prev: number): number {
+  return (current - prev) / Math.abs(prev)
 }
 
-const CHART_COLORS = {
-  primary:   "#d4a853",
-  secondary: "#4aad7a",
-  tertiary:  "#6b9fd4",
-  negative:  "#d95f5f",
-};
+export default function CompanyDetailPage() {
+  const { ticker } = useParams<{ ticker: string }>()
+  const [activeTab, setActiveTab] = useState<Tab>('Financials')
+  const [finTab, setFinTab] = useState<FinTab>('Income Statement')
 
-const tooltipStyle = {
-  backgroundColor: "#111111",
-  border: "0.5px solid rgba(255,255,255,0.08)",
-  borderRadius: "6px",
-  fontSize: "12px",
-  fontFamily: "var(--font-mono, monospace)",
-  color: "#f0f0f0",
-};
+  const company = COMPANIES.find(c => c.ticker === ticker)
+  const card = MOCK_CARDS.find(c => c.company.ticker === ticker)
+  const peers = MOCK_CARDS.filter(c => c.company.sector === company?.sector && c.company.ticker !== ticker).slice(0, 4)
 
-function RatioCard({ label, value }: { label: string; value: string }) {
-  return (
-    <div
-      style={{
-        backgroundColor: "var(--surface-2, #1a1a1a)",
-        border: "0.5px solid rgba(255,255,255,0.06)",
-        borderRadius: "6px",
-        padding: "14px 16px",
-      }}
-    >
-      <p style={{ fontSize: "10px", color: "#666", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: "6px" }}>
-        {label}
-      </p>
-      <p
-        style={{
-          fontFamily: "var(--font-mono, monospace)",
-          fontSize: "16px",
-          fontWeight: 500,
-          color: "#f0f0f0",
-        }}
-      >
-        {value}
-      </p>
-    </div>
-  );
-}
-
-function SectionLabel({ children }: { children: string }) {
-  return (
-    <p
-      style={{
-        fontSize: "10px",
-        fontFamily: "var(--font-mono)",
-        color: "var(--amber)",
-        letterSpacing: "0.14em",
-        textTransform: "uppercase",
-        marginBottom: "14px",
-      }}
-    >
-      {children}
-    </p>
-  );
-}
-
-function FadeInUp({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay }}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
-function ChartWrap({ children }: { children: React.ReactNode }) {
-  return (
-    <div
-      style={{
-        backgroundColor: "#111111",
-        border: "0.5px solid rgba(255,255,255,0.06)",
-        borderRadius: "8px",
-        padding: "24px",
-      }}
-    >
-      {children}
-    </div>
-  );
-}
-
-export default function CompanyPage() {
-  const params = useParams();
-  const ticker = (params.ticker as string).toUpperCase();
-  const [data, setData]       = useState<CompanyData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError]     = useState<string | null>(null);
-
-  useEffect(() => {
-    fetch(`/api/companies/${ticker}`)
-      .then(r => {
-        if (!r.ok) throw new Error("Not found");
-        return r.json();
-      })
-      .then(d => { setData(d); setLoading(false); })
-      .catch(() => { setError("Company not found or database unreachable."); setLoading(false); });
-  }, [ticker]);
-
-  if (loading) {
+  if (!company) {
     return (
-      <div style={{ backgroundColor: "#0a0a0a", minHeight: "100vh", padding: "48px 24px" }}>
-        <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
-          <div style={{ width: "120px", height: "32px", backgroundColor: "#111", borderRadius: "4px", marginBottom: "48px", animation: "pulse 2s infinite" }} />
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: "12px", marginBottom: "40px" }}>
-            {Array.from({ length: 10 }).map((_, i) => (
-              <div key={i} style={{ height: "72px", backgroundColor: "#111", borderRadius: "6px", animation: "pulse 2s infinite" }} />
-            ))}
-          </div>
-        </div>
-        <style>{`@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }`}</style>
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '80px 24px', textAlign: 'center' }}>
+        <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-tertiary)' }}>
+          Company not found: {ticker}
+        </p>
+        <Link href="/companies" style={{ color: 'var(--accent-primary)', textDecoration: 'none', fontSize: '14px' }}>
+          ← Back to Companies
+        </Link>
       </div>
-    );
+    )
   }
 
-  if (error || !data) {
-    return (
-      <div style={{ backgroundColor: "#0a0a0a", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <div style={{ textAlign: "center" }}>
-          <p style={{ fontFamily: "monospace", fontSize: "28px", color: "#d4a853", marginBottom: "12px" }}>{ticker}</p>
-          <p style={{ fontSize: "14px", color: "#d95f5f", marginBottom: "24px" }}>{error}</p>
-          <Link href="/companies" style={{ fontSize: "13px", color: "#666", textDecoration: "none" }}>
-            ← Back to companies
-          </Link>
-        </div>
-      </div>
-    );
+  const TABS: Tab[] = ['Financials', 'Ratios', 'Peers', 'Overview']
+
+  const RESEARCH_QUESTIONS: Record<Sector, string[]> = {
+    'Financial Services': [
+      'How does this company\'s net interest margin compare across different interest rate cycles, and what is its sensitivity to a 100bps rate move?',
+      'What proportion of revenues comes from fee-based versus spread-based income, and how does that mix affect earnings stability?',
+      'How does the CET1 ratio compare to the regulatory minimum, and what does the excess capital suggest about future capital return capacity?',
+    ],
+    'AI & Technology': [
+      'What percentage of revenue is recurring, and how has net revenue retention trended over the past three years?',
+      'How does the R&D intensity compare to peers, and is there evidence that R&D investment is translating into accelerating revenue growth?',
+      'How does FCF margin trajectory compare to operating margin — and does the gap tell you something about working capital or capex intensity?',
+    ],
+    'Healthcare': [
+      'What is the revenue concentration in the top three products, and what is the patent expiry timeline for the highest-revenue drug?',
+      'How does the gross margin compare to pure-play peers in the same sub-sector, and what explains any gap?',
+      'What clinical stage is the pipeline in, and what is the historical approval rate for drugs that reach Phase III from this company\'s pipeline?',
+    ],
   }
 
-  const { company, income_statements, balance_sheets, cash_flow_statements, financial_ratios } = data;
-  const sectorColor = SECTOR_COLORS[company.sector] ?? "#666";
-  const latestRatios = financial_ratios[financial_ratios.length - 1] ?? {};
-
-  const revenueData = income_statements.filter(i => i.revenue).map(i => ({
-    year: String(i.fiscal_year),
-    Revenue:      parseFloat((i.revenue      / 1e9).toFixed(2)),
-    "Gross Profit": parseFloat((i.gross_profit / 1e9).toFixed(2)),
-    "Net Income":   parseFloat((i.net_income  / 1e9).toFixed(2)),
-  }));
-
-  const marginData = financial_ratios.filter(r => r.gross_margin).map(r => ({
-    year: String(r.fiscal_year),
-    "Gross Margin":     parseFloat((r.gross_margin   * 100).toFixed(1)),
-    "Operating Margin": parseFloat((r.operating_margin * 100).toFixed(1)),
-    "Net Margin":       parseFloat((r.net_margin      * 100).toFixed(1)),
-  }));
-
-  const balanceData = balance_sheets.filter(b => b.total_assets).map(b => ({
-    year: String(b.fiscal_year),
-    "Total Assets":      parseFloat((b.total_assets      / 1e9).toFixed(2)),
-    "Total Liabilities": parseFloat((b.total_liabilities / 1e9).toFixed(2)),
-    "Total Equity":      parseFloat((b.total_equity      / 1e9).toFixed(2)),
-  }));
-
-  const cashData = cash_flow_statements.filter(c => c.operating_cash_flow).map(c => ({
-    year: String(c.fiscal_year),
-    "Operating CF":   parseFloat((c.operating_cash_flow / 1e9).toFixed(2)),
-    "Free Cash Flow": parseFloat((c.free_cash_flow      / 1e9).toFixed(2)),
-    "Capex":          parseFloat((Math.abs(c.capital_expenditure) / 1e9).toFixed(2)),
-  }));
-
-  const KEY_RATIOS = [
-    { label: "Gross Margin",  value: fmt(latestRatios.gross_margin,       "pct") },
-    { label: "Net Margin",    value: fmt(latestRatios.net_margin,         "pct") },
-    { label: "ROE",           value: fmt(latestRatios.return_on_equity,   "pct") },
-    { label: "ROA",           value: fmt(latestRatios.return_on_assets,   "pct") },
-    { label: "Current Ratio", value: fmt(latestRatios.current_ratio,      "x")   },
-    { label: "Debt / Equity", value: fmt(latestRatios.debt_to_equity,     "x")   },
-    { label: "P/E Ratio",     value: fmt(latestRatios.price_to_earnings,  "x")   },
-    { label: "P/B Ratio",     value: fmt(latestRatios.price_to_book,      "x")   },
-    { label: "EV / EBITDA",   value: fmt(latestRatios.ev_to_ebitda,       "x")   },
-    { label: "FCF Yield",     value: fmt(latestRatios.free_cash_flow_yield, "pct") },
-  ];
-
-  const axisStyle = { fill: "#444", fontSize: 11, fontFamily: "var(--font-mono, monospace)" };
-
   return (
-    <div style={{ backgroundColor: "#0a0a0a", minHeight: "100vh", color: "#f0f0f0" }}>
+    <div style={{ backgroundColor: 'var(--bg-base)', minHeight: '100vh' }}>
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '40px 24px' }}>
 
-      {/* Breadcrumb */}
-      <div style={{ borderBottom: "0.5px solid rgba(255,255,255,0.06)" }}>
-        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "16px 24px" }}>
+        {/* Breadcrumb */}
+        <div style={{ marginBottom: '20px' }}>
           <Link
             href="/companies"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "6px",
-              fontSize: "12px",
-              color: "#666",
-              textDecoration: "none",
-              transition: "color 0.15s ease",
-            }}
-            onMouseEnter={e => ((e.currentTarget as HTMLAnchorElement).style.color = "#f0f0f0")}
-            onMouseLeave={e => ((e.currentTarget as HTMLAnchorElement).style.color = "#666")}
+            style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-secondary)', textDecoration: 'none' }}
           >
-            <ArrowLeft size={13} strokeWidth={1.5} />
-            Companies
+            ← Companies
           </Link>
         </div>
-      </div>
 
-      {/* Company header */}
-      <div style={{ borderBottom: "0.5px solid rgba(255,255,255,0.06)", backgroundColor: "#111" }}>
-        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "28px 24px" }}>
-          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "16px", flexWrap: "wrap" }}>
+        {/* Header */}
+        <div
+          style={{
+            backgroundColor: 'var(--bg-surface-1)',
+            border: 'var(--border-rest)',
+            borderRadius: '12px',
+            padding: '24px',
+            marginBottom: '24px',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
             <div>
-              <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "6px" }}>
-                <span
-                  style={{
-                    fontFamily: "var(--font-mono, monospace)",
-                    fontSize: "24px",
-                    fontWeight: 500,
-                    color: "var(--amber, #d4a853)",
-                  }}
-                >
-                  {company.ticker}
-                </span>
-                <span
-                  style={{
-                    fontSize: "10px",
-                    fontWeight: 500,
-                    color: sectorColor,
-                    backgroundColor: sectorColor + "18",
-                    border: `0.5px solid ${sectorColor}40`,
-                    borderRadius: "4px",
-                    padding: "3px 8px",
-                    letterSpacing: "0.06em",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  {company.sector}
-                </span>
+              <div style={{ marginBottom: '10px' }}>
+                <TickerBadge ticker={company.ticker} exchange={company.exchange} />
               </div>
-              <h1 style={{ fontSize: "18px", fontWeight: 400, color: "#f0f0f0", marginBottom: "4px" }}>
+              <h1
+                style={{
+                  fontFamily: 'var(--font-serif)',
+                  fontSize: '32px',
+                  fontWeight: 500,
+                  lineHeight: 1.2,
+                  color: 'var(--text-primary)',
+                  marginBottom: '8px',
+                }}
+              >
                 {company.name}
               </h1>
-              <p style={{ fontSize: "12px", color: "#444" }}>
-                {company.industry} · {company.country}
+              <p style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-tertiary)', marginBottom: '6px' }}>
+                {company.sector} · {company.industry}
+              </p>
+              <p style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-secondary)', fontStyle: 'italic', maxWidth: '560px', lineHeight: 1.5 }}>
+                {company.analyticalLens}
               </p>
             </div>
-            <Link
-              href={`/compare?a=${company.ticker}`}
+            <button
               style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "6px",
-                fontSize: "12px",
-                color: "#666",
-                border: "0.5px solid rgba(255,255,255,0.08)",
-                borderRadius: "6px",
-                padding: "7px 14px",
-                textDecoration: "none",
-                transition: "color 0.15s ease, border-color 0.15s ease",
+                fontFamily: 'var(--font-sans)',
+                fontSize: '13px',
+                color: 'var(--accent-primary)',
+                border: 'var(--border-hover)',
+                borderRadius: '6px',
+                padding: '8px 16px',
+                backgroundColor: 'rgba(37,99,235,0.06)',
+                cursor: 'pointer',
                 flexShrink: 0,
               }}
-              onMouseEnter={e => {
-                const el = e.currentTarget as HTMLAnchorElement;
-                el.style.color = "#f0f0f0";
-                el.style.borderColor = "rgba(255,255,255,0.15)";
-              }}
-              onMouseLeave={e => {
-                const el = e.currentTarget as HTMLAnchorElement;
-                el.style.color = "#666";
-                el.style.borderColor = "rgba(255,255,255,0.08)";
-              }}
             >
-              <ExternalLink size={13} strokeWidth={1.5} />
-              Compare
-            </Link>
+              Export for Analysis
+            </button>
           </div>
         </div>
-      </div>
 
-      {/* Main content */}
-      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "28px 24px", display: "flex", flexDirection: "column", gap: "34px" }}>
+        {/* Tab navigation */}
+        <div
+          style={{
+            display: 'flex',
+            gap: '0',
+            borderBottom: 'var(--border-rest)',
+            marginBottom: '24px',
+          }}
+        >
+          {TABS.map(tab => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              style={{
+                fontFamily: 'var(--font-sans)',
+                fontSize: '14px',
+                fontWeight: activeTab === tab ? 500 : 400,
+                color: activeTab === tab ? 'var(--accent-primary)' : 'var(--text-secondary)',
+                backgroundColor: 'transparent',
+                border: 'none',
+                borderBottom: activeTab === tab ? '2px solid var(--accent-primary)' : '2px solid transparent',
+                padding: '10px 20px',
+                cursor: 'pointer',
+                transition: 'color 150ms ease',
+              }}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
 
-        {/* Key ratios */}
-        <FadeInUp>
-          <section>
-            <SectionLabel>Key ratios — latest year</SectionLabel>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: "8px" }}>
-              {KEY_RATIOS.map(({ label, value }) => (
-                <RatioCard key={label} label={label} value={value} />
+        {/* Financials tab */}
+        {activeTab === 'Financials' && (
+          <div>
+            <div style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>
+              {(['Income Statement', 'Balance Sheet', 'Cash Flow'] as FinTab[]).map(ft => (
+                <button
+                  key={ft}
+                  onClick={() => setFinTab(ft)}
+                  style={{
+                    fontFamily: 'var(--font-sans)',
+                    fontSize: '12px',
+                    padding: '5px 12px',
+                    borderRadius: '5px',
+                    border: 'var(--border-rest)',
+                    backgroundColor: finTab === ft ? 'var(--bg-muted)' : 'var(--bg-surface-1)',
+                    color: finTab === ft ? 'var(--text-primary)' : 'var(--text-secondary)',
+                    cursor: 'pointer',
+                  }}
+                >
+                  {ft}
+                </button>
               ))}
             </div>
-          </section>
-        </FadeInUp>
 
-        {/* Revenue chart */}
-        {revenueData.length > 0 && (
-          <FadeInUp>
-            <section>
-              <SectionLabel>Revenue & profitability (USD billions)</SectionLabel>
-              <ChartWrap>
-                <ResponsiveContainer width="100%" height={280}>
-                  <BarChart data={revenueData} barGap={4}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-                    <XAxis dataKey="year" tick={axisStyle} axisLine={false} tickLine={false} />
-                    <YAxis tick={axisStyle} axisLine={false} tickLine={false} width={48} />
-                    <Tooltip contentStyle={tooltipStyle} cursor={{ fill: "rgba(255,255,255,0.03)" }} />
-                    <Legend wrapperStyle={{ fontSize: "11px", fontFamily: "var(--font-mono)", color: "#666" }} />
-                    <Bar dataKey="Revenue"      fill={CHART_COLORS.primary}   radius={[3,3,0,0]} />
-                    <Bar dataKey="Gross Profit" fill={CHART_COLORS.secondary} radius={[3,3,0,0]} />
-                    <Bar dataKey="Net Income"   fill={CHART_COLORS.tertiary}  radius={[3,3,0,0]} />
-                  </BarChart>
-                </ResponsiveContainer>
-              </ChartWrap>
-            </section>
-          </FadeInUp>
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', backgroundColor: 'var(--bg-surface-1)', borderRadius: '8px', overflow: 'hidden', border: 'var(--border-rest)' }}>
+                <thead>
+                  <tr style={{ backgroundColor: 'var(--bg-surface-2)' }}>
+                    <th style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-tertiary)', padding: '10px 16px', textAlign: 'left', border: 'var(--border-rest)' }}>Metric</th>
+                    {['FY2020', 'FY2021', 'FY2022', 'FY2023', 'FY2024'].map(yr => (
+                      <th key={yr} style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-tertiary)', padding: '10px 16px', textAlign: 'right', border: 'var(--border-rest)' }}>{yr}</th>
+                    ))}
+                    <th style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-tertiary)', padding: '10px 16px', textAlign: 'right', border: 'var(--border-rest)' }}>YoY</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {INCOME_STATEMENT.map((row, i) => {
+                    const delta = yoyDelta(row.fy2024, row.fy2023)
+                    return (
+                      <tr key={row.metric} style={{ backgroundColor: i % 2 === 0 ? 'var(--bg-surface-1)' : 'var(--bg-base)' }}>
+                        <td style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-primary)', padding: '10px 16px', border: 'var(--border-rest)' }}>{row.metric}</td>
+                        {[row.fy2020, row.fy2021, row.fy2022, row.fy2023, row.fy2024].map((v, j) => (
+                          <td key={j} style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-primary)', fontVariantNumeric: 'tabular-nums', padding: '10px 16px', textAlign: 'right', border: 'var(--border-rest)' }}>
+                            {formatTableValue(row.metric, v)}
+                          </td>
+                        ))}
+                        <td style={{ padding: '10px 16px', textAlign: 'right', border: 'var(--border-rest)' }}>
+                          <DeltaLabel value={delta} size="sm" />
+                        </td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-tertiary)', marginTop: '12px' }}>
+              Source: SEC 10-K · FY2024 · GAAP · USD · Last updated: 2025-01-22 · Known limitations: Figures based on public filings; segment reclassifications may affect historical comparability.
+            </p>
+          </div>
         )}
 
-        {/* Margins chart */}
-        {marginData.length > 0 && (
-          <FadeInUp>
-            <section>
-              <SectionLabel>Margin analysis (%)</SectionLabel>
-              <ChartWrap>
-                <ResponsiveContainer width="100%" height={260}>
-                  <LineChart data={marginData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-                    <XAxis dataKey="year" tick={axisStyle} axisLine={false} tickLine={false} />
-                    <YAxis tick={axisStyle} axisLine={false} tickLine={false} width={40} unit="%" />
-                    <Tooltip contentStyle={tooltipStyle} cursor={{ stroke: "rgba(255,255,255,0.08)" }} />
-                    <Legend wrapperStyle={{ fontSize: "11px", fontFamily: "var(--font-mono)", color: "#666" }} />
-                    <Line type="monotone" dataKey="Gross Margin"     stroke={CHART_COLORS.primary}   strokeWidth={1.5} dot={{ r: 3, fill: CHART_COLORS.primary }}   />
-                    <Line type="monotone" dataKey="Operating Margin" stroke={CHART_COLORS.secondary} strokeWidth={1.5} dot={{ r: 3, fill: CHART_COLORS.secondary }} />
-                    <Line type="monotone" dataKey="Net Margin"       stroke={CHART_COLORS.tertiary}  strokeWidth={1.5} dot={{ r: 3, fill: CHART_COLORS.tertiary }}  />
-                  </LineChart>
-                </ResponsiveContainer>
-              </ChartWrap>
-            </section>
-          </FadeInUp>
+        {/* Ratios tab */}
+        {activeTab === 'Ratios' && (
+          <div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '12px' }}>
+              {RATIOS_FULL.map(ratio => {
+                const above = ratio.peerContext === 'Above sector median'
+                const fmtValue = ratio.unit === 'PCT' ? formatPercent(ratio.value) : ratio.unit === 'MULTIPLE' ? formatMultiple(ratio.value) : ratio.value.toFixed(2)
+                return (
+                  <div
+                    key={ratio.label}
+                    style={{
+                      backgroundColor: 'var(--bg-surface-1)',
+                      border: 'var(--border-rest)',
+                      borderRadius: '8px',
+                      padding: '16px',
+                    }}
+                  >
+                    <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-tertiary)', marginBottom: '6px' }}>
+                      {ratio.label}
+                    </p>
+                    <p style={{ fontFamily: 'var(--font-sans)', fontSize: '22px', fontWeight: 500, fontVariantNumeric: 'tabular-nums', color: 'var(--text-primary)', marginBottom: '6px' }}>
+                      {fmtValue}
+                    </p>
+                    <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: above ? 'var(--delta-pos)' : 'var(--delta-neg)', fontWeight: 500 }}>
+                      {above ? '▲' : '▼'} {ratio.peerContext}
+                    </p>
+                    <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-tertiary)', marginTop: '4px' }}>{ratio.period}</p>
+                  </div>
+                )
+              })}
+            </div>
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-tertiary)', marginTop: '12px' }}>
+              Source: SEC 10-K · FY2024 · GAAP · USD · Last updated: 2025-01-22 · Known limitations: Peer median calculated from Trikosh coverage universe only.
+            </p>
+          </div>
         )}
 
-        {/* Balance sheet chart */}
-        {balanceData.length > 0 && (
-          <FadeInUp>
-            <section>
-              <SectionLabel>Balance sheet (USD billions)</SectionLabel>
-              <ChartWrap>
-                <ResponsiveContainer width="100%" height={260}>
-                  <BarChart data={balanceData} barGap={4}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-                    <XAxis dataKey="year" tick={axisStyle} axisLine={false} tickLine={false} />
-                    <YAxis tick={axisStyle} axisLine={false} tickLine={false} width={48} />
-                    <Tooltip contentStyle={tooltipStyle} cursor={{ fill: "rgba(255,255,255,0.03)" }} />
-                    <Legend wrapperStyle={{ fontSize: "11px", fontFamily: "var(--font-mono)", color: "#666" }} />
-                    <Bar dataKey="Total Assets"      fill={CHART_COLORS.tertiary}  radius={[3,3,0,0]} />
-                    <Bar dataKey="Total Liabilities" fill={CHART_COLORS.negative}  radius={[3,3,0,0]} />
-                    <Bar dataKey="Total Equity"      fill={CHART_COLORS.secondary} radius={[3,3,0,0]} />
-                  </BarChart>
-                </ResponsiveContainer>
-              </ChartWrap>
-            </section>
-          </FadeInUp>
+        {/* Peers tab */}
+        {activeTab === 'Peers' && (
+          <div>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-secondary)', marginBottom: '20px' }}>
+              Peer companies in {company.sector}.
+            </p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '16px' }}>
+              {peers.map(peer => (
+                <DataAssetCard key={peer.company.ticker} data={peer} />
+              ))}
+            </div>
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-tertiary)', marginTop: '12px' }}>
+              Source: SEC 10-K · FY2024 · GAAP · USD · Last updated: 2025-01-22 · Known limitations: Peer selection limited to Trikosh coverage universe.
+            </p>
+          </div>
         )}
 
-        {/* Cash flow chart */}
-        {cashData.length > 0 && (
-          <FadeInUp>
-            <section>
-              <SectionLabel>Cash flow (USD billions)</SectionLabel>
-              <ChartWrap>
-                <ResponsiveContainer width="100%" height={260}>
-                  <LineChart data={cashData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-                    <XAxis dataKey="year" tick={axisStyle} axisLine={false} tickLine={false} />
-                    <YAxis tick={axisStyle} axisLine={false} tickLine={false} width={48} />
-                    <Tooltip contentStyle={tooltipStyle} cursor={{ stroke: "rgba(255,255,255,0.08)" }} />
-                    <Legend wrapperStyle={{ fontSize: "11px", fontFamily: "var(--font-mono)", color: "#666" }} />
-                    <Line type="monotone" dataKey="Operating CF"   stroke={CHART_COLORS.primary}   strokeWidth={1.5} dot={{ r: 3, fill: CHART_COLORS.primary }}   />
-                    <Line type="monotone" dataKey="Free Cash Flow" stroke={CHART_COLORS.secondary} strokeWidth={1.5} dot={{ r: 3, fill: CHART_COLORS.secondary }} />
-                    <Line type="monotone" dataKey="Capex"          stroke={CHART_COLORS.negative}  strokeWidth={1.5} dot={{ r: 3, fill: CHART_COLORS.negative }}  />
-                  </LineChart>
-                </ResponsiveContainer>
-              </ChartWrap>
-            </section>
-          </FadeInUp>
+        {/* Overview tab */}
+        {activeTab === 'Overview' && (
+          <div style={{ maxWidth: '640px' }}>
+            <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 500, color: 'var(--text-primary)', marginBottom: '16px' }}>
+              Key Research Questions
+            </h2>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '24px', lineHeight: 1.6 }}>
+              These questions do not have answers here. Your job is to find them — in the 10-K, the earnings calls, and the financial statements.
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {RESEARCH_QUESTIONS[company.sector].map((q, i) => (
+                <div
+                  key={i}
+                  style={{
+                    backgroundColor: 'var(--bg-surface-1)',
+                    border: 'var(--border-rest)',
+                    borderRadius: '8px',
+                    padding: '20px',
+                    borderLeft: '3px solid var(--accent-primary)',
+                  }}
+                >
+                  <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--accent-primary)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                    Question {i + 1}
+                  </p>
+                  <p style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-primary)', lineHeight: 1.6 }}>
+                    {q}
+                  </p>
+                </div>
+              ))}
+            </div>
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-tertiary)', marginTop: '24px' }}>
+              Source: SEC 10-K · FY2024 · GAAP · USD · Last updated: 2025-01-22 · Known limitations: Research questions are sector-generic; company-specific nuances should be identified from filings.
+            </p>
+          </div>
         )}
-
       </div>
     </div>
-  );
+  )
 }

@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(mkdir -p /c/Users/tashu/Trikosh/apps/api/routers /c/Users/tashu/Trikosh/apps/api/schemas /c/Users/tashu/Trikosh/apps/api/services /c/Users/tashu/Trikosh/apps/api/db)",
+      "Bash(mkdir -p /c/Users/tashu/Trikosh/prisma)",
+      "Bash(npx tsc *)",
+      "Bash(npm run *)",
+      "mcp__Claude_Preview__preview_start",
+      "mcp__Claude_in_Chrome__tabs_context_mcp",
+      "Bash(curl -s http://localhost:3000)",
+      "Bash(curl -s http://localhost:3000 -o /dev/null -w \"%{http_code}\")",
+      "Bash(curl -s http://localhost:3000/companies -o /dev/null -w \"%{http_code}\")",
+      "Bash(curl -s http://localhost:3000/sectors -o /dev/null -w \"%{http_code}\")",
+      "Bash(curl -s http://localhost:3000/compare -o /dev/null -w \"%{http_code}\")",
+      "Bash(curl -s http://localhost:3000/glossary -o /dev/null -w \"%{http_code}\")",
+      "Bash(curl -s http://localhost:3000/research -o /dev/null -w \"%{http_code}\")",
+      "Bash(curl -s http://localhost:3000/companies/JPM -o /dev/null -w \"%{http_code}\")",
+      "Bash(curl -s http://localhost:3000/companies/NVDA -o /dev/null -w \"%{http_code}\")",
+      "Bash(curl -s http://localhost:3000/companies/ABBV -o /dev/null -w \"%{http_code}\")",
+      "Bash(kill %1)",
+      "Bash(Select-String \".env\")",
+      "Bash(python test_new_tickers.py)",
+      "Bash(pip install *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)"
+    ]
+  }
+}

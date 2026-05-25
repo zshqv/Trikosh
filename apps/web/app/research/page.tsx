@@ -1,512 +1,232 @@
-"use client";
+import Link from 'next/link'
 
-import Link from "next/link";
-import { Download, ArrowRight } from "lucide-react";
-import { motion } from "motion/react";
-import { useState } from "react";
+const FINANCIAL_SECTOR_CHECKLIST = [
+  'What is the current NIM and how has it trended over the last four quarters?',
+  'What is the CET1 ratio relative to the regulatory minimum and internal target?',
+  'What is the efficiency ratio, and is it improving year-over-year?',
+  'What percentage of revenue is fee-based versus net interest income?',
+  'What is the net charge-off rate and how does it compare to the prior cycle?',
+  'What are the provision levels relative to non-performing loans?',
+  'Has management issued forward guidance on NIM in the current rate environment?',
+  'What is the loan growth rate and where is it concentrated?',
+  'Is there capital constraint on buybacks or dividends from a regulatory capital buffer perspective?',
+  'What is the return on tangible common equity versus peers?',
+]
 
-const STEPS = [
-  {
-    number: "01",
-    title: "Understand the business",
-    body: "Before opening a spreadsheet, read the company's most recent annual report (10-K or 20-F). Understand what they sell, who they sell it to, how they make money, and what could go wrong. If you can't explain the business in two sentences, you're not ready to value it.",
-  },
-  {
-    number: "02",
-    title: "Map the sector context",
-    body: "No company exists in a vacuum. Read the sector primer for your company's industry. Understand the competitive dynamics, regulatory environment, and the metrics that matter in this specific sector. A bank is not analysed like a software company.",
-  },
-  {
-    number: "03",
-    title: "Build the financial model",
-    body: "Pull 5 years of income statements, balance sheets, and cash flow statements. Normalise them so they're comparable year-over-year. Calculate 12–15 key ratios. Look for trends, not snapshots. A single year's data tells you nothing — trajectory tells you everything.",
-  },
-  {
-    number: "04",
-    title: "Value the company",
-    body: "Use at least two valuation methods. DCF for intrinsic value. Comparable company analysis for market-relative value. Precedent transactions if you're writing a potential M&A scenario. Triangulate. A price target is a range, not a number.",
-  },
-  {
-    number: "05",
-    title: "Write the investment thesis",
-    body: "State in three sentences why this stock will outperform: the specific mispricing the market has made, the catalyst that will correct it, and what would prove you wrong. If you can't articulate the bear case clearly, your thesis is incomplete.",
-  },
-];
+const HEALTHCARE_CHECKLIST = [
+  'What is the revenue concentration in the top three products?',
+  'When do the key patents for the largest drug expire, and what is the biosimilar landscape?',
+  'What is the R&D intensity as a percentage of revenue versus pharma peers?',
+  'How many drugs are in Phase III trials and what is the expected approval timeline?',
+  'What is the gross margin trend, and is there evidence of pricing pressure?',
+  'What is the MLR trend for managed care companies and how does it compare to guidance?',
+  'Has the company completed any M&A to address pipeline gaps, and at what price?',
+  'What percentage of revenue comes from US versus international markets?',
+  'What is the free cash flow conversion rate from net income?',
+  'Has management issued guidance on the revenue impact of the Inflation Reduction Act?',
+]
 
-const DOS = [
-  "Start with the business, not the numbers. A great financial model of a bad business is still a bad investment.",
-  "Always cite your data sources. Where did the revenue figure come from? Which fiscal year?",
-  "Use DM Mono or any monospace font for numbers in a published report. Mixed fonts in tables look unprofessional.",
-  "State your assumptions explicitly. Every projection is only as good as the assumptions behind it.",
-  "Compare across at least 3 years of data. One year is noise. Three years is a pattern.",
-  "Write for a reader who doesn't know the company. Avoid jargon without definition.",
-  "Include a valuation summary table — multiple methods side by side with price target range.",
-];
-
-const DONTS = [
-  "Don't present a bull case without a bear case. It's not research, it's promotion.",
-  "Don't copy management guidance into your model without questioning it. CFOs are optimistic by nature.",
-  "Don't compare P/E ratios across different sectors. A 12x P/E for a bank vs. a 40x P/E for software says nothing without context.",
-  "Don't ignore the cash flow statement. Net income can be manipulated; FCF is harder to fake.",
-  "Don't write a price target without showing your work. A number without a model is noise.",
-  "Don't use annual data when quarterly is more appropriate — especially for cyclical businesses.",
-  "Don't confuse revenue growth with quality growth. Revenue from a one-time event inflates the top line without repeating.",
-];
-
-const PRIMERS = [
-  {
-    sector: "Financial Services",
-    color: "#d4a853",
-    keyMetrics: ["Net Interest Margin", "ROE", "Cost-to-Income Ratio", "NPL Ratio", "CET1 Capital Ratio"],
-    watch: "Regulatory capital requirements change how much capital banks must hold, which directly affects ROE. Watch central bank policy — rate cycles dominate bank earnings more than most management decisions.",
-    avoid: "Don't use gross margin or operating margin for banks — they're meaningless. Loan book quality matters far more than headline growth.",
-  },
-  {
-    sector: "Healthcare",
-    color: "#4aad7a",
-    keyMetrics: ["R&D as % of Revenue", "Pipeline Stage Breakdown", "Revenue Concentration", "Operating Margin", "FCF Conversion"],
-    watch: "The FDA or EMA approval calendar. A single drug approval can re-rate a pharma company by 20–30% overnight. Patent expiry timelines are equally important — model what happens when your biggest drug goes generic.",
-    avoid: "Don't project linear revenue growth without accounting for patent cliffs. Always map the top-5 revenue drugs and their expiry dates before building a model.",
-  },
-  {
-    sector: "Technology",
-    color: "#6b9fd4",
-    keyMetrics: ["Revenue Growth (YoY)", "Gross Margin", "R&D Intensity", "FCF Conversion", "Operating Leverage"],
-    watch: "Semis and software behave differently. For semiconductors, book-to-bill ratio and capacity utilisation predict earnings quarters in advance. For software, watch net revenue retention — above 120% means the base grows without new sales.",
-    avoid: "Don't use P/E for pre-profit software. Use EV/Revenue or EV/Gross Profit instead. Don't conflate hardware and software margins — NVIDIA's gross margin is ~74%; Infosys is ~33%. Both are 'technology.'",
-  },
-];
-
-function FadeInUp({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay }}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
-function SectionLabel({ children }: { children: React.ReactNode }) {
-  return (
-    <p
-      style={{
-        fontFamily: "var(--font-mono)",
-        fontSize: "10px",
-        color: "var(--amber)",
-        letterSpacing: "0.14em",
-        textTransform: "uppercase",
-        marginBottom: "14px",
-      }}
-    >
-      {children}
-    </p>
-  );
-}
+const TECH_CHECKLIST = [
+  'What percentage of revenue is recurring (subscriptions, multi-year contracts)?',
+  'What is the net revenue retention rate, and has it been above or below 110% over the past year?',
+  'What is the rule-of-40 score (revenue growth + FCF margin)?',
+  'How does the R&D intensity compare to peers, and is it correlated with revenue growth acceleration?',
+  'What is the revenue CAGR over five years, and what portion is organic versus acquired?',
+  'What are the gross margin trends, and is there evidence of AI-related cost pressure?',
+  'What is the remaining performance obligation (RPO) growth rate — the best leading indicator of future revenue?',
+  'How is capex trending as a percentage of revenue, and what is driving investment?',
+  'What percentage of revenue comes from the top five customers?',
+  'Has operating leverage materialised — is operating margin expanding as revenue grows?',
+]
 
 export default function ResearchPage() {
-  const [dlHovered, setDlHovered] = useState(false);
-
   return (
-    <div style={{ backgroundColor: "var(--bg)", minHeight: "100vh" }}>
-      <div style={{ maxWidth: "1000px", margin: "0 auto", padding: "40px 24px" }}>
-
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          style={{ marginBottom: "40px" }}
+    <div style={{ backgroundColor: 'var(--bg-base)', minHeight: '100vh' }}>
+      <div style={{ maxWidth: '760px', margin: '0 auto', padding: '40px 24px 80px' }}>
+        <h1
+          style={{
+            fontFamily: 'var(--font-serif)',
+            fontSize: '32px',
+            fontWeight: 500,
+            lineHeight: 1.2,
+            color: 'var(--text-primary)',
+            marginBottom: '36px',
+          }}
         >
-          <SectionLabel>Frameworks</SectionLabel>
-          <h1
-            style={{
-              fontSize: "clamp(24px, 4vw, 36px)",
-              fontWeight: 500,
-              letterSpacing: "-0.02em",
-              marginBottom: "8px",
-            }}
-          >
-            Research
-          </h1>
-          <p
-            style={{
-              fontSize: "14px",
-              color: "var(--text-muted)",
-              maxWidth: "560px",
-              lineHeight: 1.7,
-            }}
-          >
-            Everything you need to write your first equity research report. Not watered-down theory
-            — actual frameworks used by analysts at investment banks and asset managers.
-          </p>
-        </motion.div>
+          Research Guide
+        </h1>
 
-        {/* Template download */}
-        <FadeInUp>
-          <section style={{ marginBottom: "48px" }}>
-            <div
-              style={{
-                backgroundColor: "var(--surface)",
-                border: "0.5px solid var(--border)",
-                borderRadius: "8px",
-                padding: "24px 28px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                flexWrap: "wrap",
-                gap: "20px",
-              }}
-            >
-              <div>
-                <p
-                  style={{
-                    fontSize: "10px",
-                    fontFamily: "var(--font-mono)",
-                    color: "var(--amber)",
-                    letterSpacing: "0.10em",
-                    textTransform: "uppercase",
-                    marginBottom: "6px",
-                  }}
-                >
-                  Downloadable template
-                </p>
-                <h2
-                  style={{
-                    fontSize: "18px",
-                    fontWeight: 500,
-                    marginBottom: "6px",
-                    letterSpacing: "-0.01em",
-                  }}
-                >
-                  Equity Research Report Template
-                </h2>
-                <p style={{ fontSize: "13px", color: "var(--text-muted)" }}>
-                  Excel workbook with pre-built income statement, balance sheet, ratio tracker, and
-                  DCF model. Drop in your numbers and go.
-                </p>
-              </div>
-              <a
-                href="/api/template"
-                download="trikosh-equity-research-template.xlsx"
-                onMouseEnter={() => setDlHovered(true)}
-                onMouseLeave={() => setDlHovered(false)}
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  backgroundColor: dlHovered ? "var(--amber)" : "transparent",
-                  color: dlHovered ? "#0a0a0a" : "var(--amber)",
-                  border: "1px solid var(--amber)",
-                  padding: "10px 20px",
-                  borderRadius: "6px",
-                  fontSize: "13px",
-                  fontWeight: 600,
-                  textDecoration: "none",
-                  flexShrink: 0,
-                  transition: "background-color 0.18s ease, color 0.18s ease",
-                  cursor: "pointer",
-                }}
-              >
-                <Download size={14} strokeWidth={2} />
-                Download .xlsx
-              </a>
-            </div>
-          </section>
-        </FadeInUp>
+        {/* Sony founding story */}
+        <section style={{ marginBottom: '48px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 500, color: 'var(--text-primary)', marginBottom: '16px' }}>
+            Why Trikosh Exists
+          </h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
+              In 2023, trying to research Sony for the first time, I hit a wall immediately. The company has six distinct business segments — games, music, pictures, electronics, financial services, imaging sensors — and the data for each of them lived in completely different places. Some was in English annual reports on the Sony investor relations page. Some was buried in Japanese earnings supplements. The segment accounting changed between years. There was no baseline to start from.
+            </p>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
+              I spent more time finding data than analysing it. And I was looking at one company. The problem wasn&apos;t intelligence. It was friction. No standardised starting point. No sector context. No explanation of what the numbers mean in the context of that particular industry.
+            </p>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
+              Trikosh is what I wished had existed then. Standardised financial data for companies that define their sectors. Ratio analysis already computed. Sector frameworks that explain what to look for before you open the filing. A glossary written for people who are learning, not for people who already know. The purpose is not to do the analysis for you — it is to give you a place to start, so you can do the thinking yourself.
+            </p>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
+              The coverage is 50 companies. They were chosen not because they are the biggest, but because they are the clearest examples of what their sectors do. JPMorgan is in the database not because it is the largest US bank, but because it is the one that best illustrates how commercial banking works. NVIDIA is in the database because it is the infrastructure layer of the AI cycle — understanding NVIDIA means understanding AI capital expenditure economics. Each company earns its place by being analytically useful.
+            </p>
+          </div>
+        </section>
 
-        {/* Step-by-step guide */}
-        <FadeInUp>
-          <section style={{ marginBottom: "48px" }}>
-            <SectionLabel>How to write an equity research report</SectionLabel>
+        {/* Where to begin */}
+        <section style={{ marginBottom: '48px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 500, color: 'var(--text-primary)', marginBottom: '16px' }}>
+            Where to Begin
+          </h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
+              The first thing you read when researching a company should not be the 10-K. Read the investor presentation and the latest earnings call transcript first. The investor presentation gives you the story management wants to tell. The earnings call gives you the questions analysts actually care about. Together they tell you what the consensus debate is before you form your own view.
+            </p>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
+              Then read the annual report. Start with the MD&amp;A — Management Discussion and Analysis. It is where management explains the numbers in plain language. After that, read the notes to the financial statements. Most of the important accounting choices are buried there, not in the headline figures.
+            </p>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
+              In an annual report: read the business overview first, then risk factors (the honest ones), then MD&amp;A, then the actual financial statements, then the notes. Do not start with the financials — without context, the numbers tell you nothing.
+            </p>
+          </div>
+        </section>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: "1px" }}>
-              {STEPS.map((step, i) => (
-                <div
-                  key={step.number}
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "80px 1fr",
-                    gap: "24px",
-                    padding: "22px 0",
-                    borderBottom: i < STEPS.length - 1 ? "0.5px solid var(--border)" : "none",
-                  }}
-                >
-                  <span
+        {/* Income Statement */}
+        <section style={{ marginBottom: '48px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 500, color: 'var(--text-primary)', marginBottom: '16px' }}>
+            The Income Statement
+          </h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
+              Start with revenue. Is it growing? What is driving the growth — price, volume, or mix? Is growth accelerating or decelerating? Are there one-time items inflating the number? Is revenue recurring or transactional?
+            </p>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
+              Then move to gross margin. Gross margin tells you the fundamental economics of the product or service. A declining gross margin is a red flag — it means either pricing power is eroding, input costs are rising faster than selling prices, or the revenue mix is shifting toward lower-value products. Always compare gross margin to peers, not to a fixed target.
+            </p>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
+              Red flags on the income statement: revenue growing faster than accounts receivable (or the reverse), gross margin declining while revenue grows, large restructuring charges recurring every year, aggressive revenue recognition in the notes, non-GAAP adjustments that exclude real economic costs.
+            </p>
+          </div>
+        </section>
+
+        {/* Balance Sheet */}
+        <section style={{ marginBottom: '48px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 500, color: 'var(--text-primary)', marginBottom: '16px' }}>
+            The Balance Sheet
+          </h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
+              The balance sheet tells you what the company owns and what it owes. The most important question is whether the asset base can support the liability structure across different economic scenarios. Net debt is a starting point — but it is only meaningful in the context of the earnings capacity to service it.
+            </p>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
+              Leverage signals to watch: is net debt rising faster than EBITDA? Is the debt maturity profile concentrated in the near term? Does goodwill represent a large proportion of total assets (and if so, what acquisitions created it)? Is inventory building unexpectedly? Are days sales outstanding extending?
+            </p>
+          </div>
+        </section>
+
+        {/* Cash Flow Statement */}
+        <section style={{ marginBottom: '48px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 500, color: 'var(--text-primary)', marginBottom: '16px' }}>
+            The Cash Flow Statement
+          </h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
+              Free cash flow diverges from net income for two main reasons: working capital movements and non-cash charges (primarily depreciation and amortisation). A company that earns strong net income but generates weak FCF is usually consuming working capital — either receivables are rising or payables are falling — which can signal underlying operational stress.
+            </p>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
+              In the investing activities section, look at capex relative to depreciation. If capex is persistently above depreciation, the company is investing in growth. If capex equals depreciation, it is in maintenance mode. In the financing activities section, rising debt alongside falling cash is a warning sign. Buybacks funded by debt deserve scrutiny.
+            </p>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
+              FCF conversion (FCF divided by net income) above 90% over multiple years suggests high-quality earnings. Below 70% consistently is a flag worth investigating.
+            </p>
+          </div>
+        </section>
+
+        {/* Sector Checklists */}
+        <section style={{ marginBottom: '48px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 500, color: 'var(--text-primary)', marginBottom: '24px' }}>
+            Sector Checklists
+          </h2>
+
+          {[
+            { sector: 'Financial Services', items: FINANCIAL_SECTOR_CHECKLIST },
+            { sector: 'Healthcare', items: HEALTHCARE_CHECKLIST },
+            { sector: 'AI & Technology', items: TECH_CHECKLIST },
+          ].map(({ sector, items }) => (
+            <div key={sector} style={{ marginBottom: '32px' }}>
+              <h3 style={{ fontFamily: 'var(--font-sans)', fontSize: '16px', fontWeight: 500, color: 'var(--text-primary)', marginBottom: '14px' }}>
+                {sector}
+              </h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {items.map((item, i) => (
+                  <label
+                    key={i}
                     style={{
-                      fontFamily: "var(--font-mono)",
-                      fontSize: "28px",
-                      fontWeight: 300,
-                      color: "var(--text-subtle)",
-                      lineHeight: 1,
-                      paddingTop: "4px",
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      gap: '10px',
+                      fontFamily: 'var(--font-sans)',
+                      fontSize: '14px',
+                      color: 'var(--text-secondary)',
+                      lineHeight: 1.55,
+                      cursor: 'pointer',
                     }}
                   >
-                    {step.number}
-                  </span>
-                  <div>
-                    <h3
+                    <input
+                      type="checkbox"
                       style={{
-                        fontSize: "15px",
-                        fontWeight: 500,
-                        color: "var(--text-primary)",
-                        marginBottom: "7px",
-                        letterSpacing: "-0.01em",
+                        marginTop: '3px',
+                        accentColor: 'var(--accent-primary)',
+                        flexShrink: 0,
                       }}
-                    >
-                      {step.title}
-                    </h3>
-                    <p style={{ fontSize: "13px", color: "var(--text-muted)", lineHeight: 1.75 }}>
-                      {step.body}
-                    </p>
-                  </div>
-                </div>
-              ))}
+                    />
+                    {item}
+                  </label>
+                ))}
+              </div>
             </div>
-          </section>
-        </FadeInUp>
+          ))}
+        </section>
 
-        {/* Dos and don'ts */}
-        <FadeInUp>
-          <section style={{ marginBottom: "48px" }}>
-            <SectionLabel>Dos and don&apos;ts</SectionLabel>
-
-            <div
+        {/* Download template */}
+        <section>
+          <div
+            style={{
+              backgroundColor: 'var(--bg-surface-1)',
+              border: 'var(--border-rest)',
+              borderRadius: '12px',
+              padding: '28px',
+            }}
+          >
+            <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '18px', fontWeight: 500, color: 'var(--text-primary)', marginBottom: '10px' }}>
+              Download Template
+            </h2>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-secondary)', lineHeight: 1.65, marginBottom: '20px', maxWidth: '520px' }}>
+              The equity research template contains a structured income statement model (FY2019–FY2024), a ratio calculator with all 12 Trikosh ratios pre-built, a peer comparison grid, and a two-page analyst write-up template. Use it as a starting point for your own analysis.
+            </p>
+            <Link
+              href="/api/template"
               style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-                gap: "24px",
+                fontFamily: 'var(--font-sans)',
+                fontSize: '14px',
+                fontWeight: 500,
+                color: '#FFFFFF',
+                backgroundColor: 'var(--accent-primary)',
+                padding: '10px 20px',
+                borderRadius: '6px',
+                textDecoration: 'none',
+                display: 'inline-block',
               }}
             >
-              <div>
-                <p
-                  style={{
-                    fontSize: "11px",
-                    color: "var(--green)",
-                    fontFamily: "var(--font-mono)",
-                    letterSpacing: "0.06em",
-                    marginBottom: "14px",
-                  }}
-                >
-                  DO
-                </p>
-                <div style={{ display: "flex", flexDirection: "column", gap: "11px" }}>
-                  {DOS.map((item, i) => (
-                    <div key={i} style={{ display: "flex", gap: "10px" }}>
-                      <span
-                        style={{
-                          color: "var(--green)",
-                          fontSize: "14px",
-                          flexShrink: 0,
-                          marginTop: "1px",
-                        }}
-                      >
-                        +
-                      </span>
-                      <p style={{ fontSize: "13px", color: "var(--text-muted)", lineHeight: 1.65 }}>
-                        {item}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <p
-                  style={{
-                    fontSize: "11px",
-                    color: "var(--red)",
-                    fontFamily: "var(--font-mono)",
-                    letterSpacing: "0.06em",
-                    marginBottom: "14px",
-                  }}
-                >
-                  DON&apos;T
-                </p>
-                <div style={{ display: "flex", flexDirection: "column", gap: "11px" }}>
-                  {DONTS.map((item, i) => (
-                    <div key={i} style={{ display: "flex", gap: "10px" }}>
-                      <span
-                        style={{
-                          color: "var(--red)",
-                          fontSize: "14px",
-                          flexShrink: 0,
-                          marginTop: "1px",
-                        }}
-                      >
-                        –
-                      </span>
-                      <p style={{ fontSize: "13px", color: "var(--text-muted)", lineHeight: 1.65 }}>
-                        {item}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </section>
-        </FadeInUp>
-
-        {/* Sector primers */}
-        <FadeInUp>
-          <section>
-            <SectionLabel>Sector primers</SectionLabel>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
-              {PRIMERS.map(({ sector, color, keyMetrics, watch, avoid }) => (
-                <div
-                  key={sector}
-                  style={{
-                    backgroundColor: "var(--surface)",
-                    border: "0.5px solid var(--border)",
-                    borderRadius: "8px",
-                    overflow: "hidden",
-                  }}
-                >
-                  <div style={{ borderLeft: `3px solid ${color}`, padding: "22px 26px" }}>
-                    <h3
-                      style={{
-                        fontSize: "15px",
-                        fontWeight: 500,
-                        color: "var(--text-primary)",
-                        marginBottom: "18px",
-                        letterSpacing: "-0.01em",
-                      }}
-                    >
-                      {sector}
-                    </h3>
-
-                    <div
-                      style={{
-                        display: "grid",
-                        gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-                        gap: "18px",
-                      }}
-                    >
-                      <div>
-                        <p
-                          style={{
-                            fontSize: "10px",
-                            fontFamily: "var(--font-mono)",
-                            color: "var(--text-subtle)",
-                            letterSpacing: "0.08em",
-                            textTransform: "uppercase",
-                            marginBottom: "8px",
-                          }}
-                        >
-                          Key metrics
-                        </p>
-                        <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
-                          {keyMetrics.map(m => (
-                            <span
-                              key={m}
-                              style={{
-                                fontSize: "11px",
-                                color: color,
-                                backgroundColor: color + "18",
-                                border: `0.5px solid ${color}40`,
-                                borderRadius: "4px",
-                                padding: "3px 8px",
-                              }}
-                            >
-                              {m}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div>
-                        <p
-                          style={{
-                            fontSize: "10px",
-                            fontFamily: "var(--font-mono)",
-                            color: "var(--text-subtle)",
-                            letterSpacing: "0.08em",
-                            textTransform: "uppercase",
-                            marginBottom: "8px",
-                          }}
-                        >
-                          What to watch
-                        </p>
-                        <p style={{ fontSize: "13px", color: "var(--text-muted)", lineHeight: 1.7 }}>
-                          {watch}
-                        </p>
-                      </div>
-
-                      <div>
-                        <p
-                          style={{
-                            fontSize: "10px",
-                            fontFamily: "var(--font-mono)",
-                            color: "var(--text-subtle)",
-                            letterSpacing: "0.08em",
-                            textTransform: "uppercase",
-                            marginBottom: "8px",
-                          }}
-                        >
-                          Common mistakes
-                        </p>
-                        <p style={{ fontSize: "13px", color: "var(--text-muted)", lineHeight: 1.7 }}>
-                          {avoid}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div style={{ marginTop: "28px", display: "flex", gap: "16px", flexWrap: "wrap" }}>
-              <Link
-                href="/sectors"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "6px",
-                  fontSize: "13px",
-                  color: "var(--text-muted)",
-                  textDecoration: "none",
-                  transition: "color 0.15s ease",
-                  cursor: "pointer",
-                }}
-                onMouseEnter={e =>
-                  ((e.currentTarget as HTMLAnchorElement).style.color = "var(--text-primary)")
-                }
-                onMouseLeave={e =>
-                  ((e.currentTarget as HTMLAnchorElement).style.color = "var(--text-muted)")
-                }
-              >
-                Full sector breakdowns <ArrowRight size={12} />
-              </Link>
-              <Link
-                href="/glossary"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "6px",
-                  fontSize: "13px",
-                  color: "var(--text-muted)",
-                  textDecoration: "none",
-                  transition: "color 0.15s ease",
-                  cursor: "pointer",
-                }}
-                onMouseEnter={e =>
-                  ((e.currentTarget as HTMLAnchorElement).style.color = "var(--text-primary)")
-                }
-                onMouseLeave={e =>
-                  ((e.currentTarget as HTMLAnchorElement).style.color = "var(--text-muted)")
-                }
-              >
-                Glossary of terms <ArrowRight size={12} />
-              </Link>
-            </div>
-          </section>
-        </FadeInUp>
-
+              Download Equity Research Template
+            </Link>
+          </div>
+        </section>
       </div>
     </div>
-  );
+  )
 }

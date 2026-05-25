@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Company {
+  id             String      @id @default(cuid())
+  ticker         String      @unique
+  exchange       String
+  name           String
+  sector         String
+  industry       String
+  analyticalLens String
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  financials     Financial[]
+}
+
+model Financial {
+  id        String   @id @default(cuid())
+  companyId String
+  company   Company  @relation(fields: [companyId], references: [id])
+  period    String
+  metric    String
+  value     Float
+  unit      String
+  source    String
+  standard  String
+  currency  String
+  updatedAt DateTime @updatedAt
+
+  @@unique([companyId, period, metric])
+  @@index([companyId])
+  @@index([metric])
+}
+
+model GlossaryTerm {
+  id             String   @id @default(cuid())
+  term           String   @unique
+  definition     String
+  analystNote    String?
+  relatedTickers String[]
+}

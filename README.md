@@ -12,7 +12,7 @@ Trikosh is built on a simple observation: financial information exists, but fina
 
 ## What Trikosh Is
 
-Trikosh is a structured financial research platform covering 30 companies across three sectors — Financial Services, Artificial Intelligence, and Healthcare — with five years of standardised financial data, ratio analysis, peer comparison, and research starter frameworks.
+Trikosh is a structured financial research platform covering 50 companies across five sectors — Financial Services, Artificial Intelligence, and Healthcare — with five years of standardised financial data, ratio analysis, peer comparison, and research starter frameworks.
 
 It is not a data vendor. It is not an AI tool. It is infrastructure — the foundation on which a student builds their own understanding.
 
@@ -32,7 +32,7 @@ It is not a data vendor. It is not an AI tool. It is infrastructure — the foun
 ## Core Features
 
 ### Standardised Financial Statements
-Five years of income statements, balance sheets, and cash flow statements — cleaned, structured, and consistent across all 30 companies.
+Five years of income statements, balance sheets, and cash flow statements — cleaned, structured, and consistent across all 50 companies.
 
 ### Ratio Analysis
 Pre-computed financial ratios across profitability, leverage, liquidity, efficiency, and valuation — with methodology documented transparently.
@@ -81,7 +81,7 @@ Trikosh is currently in active development. This is v0.0.1 — the founding comm
 |---|---|
 | Repository and architecture | ✅ Complete |
 | Database schema | 🔄 In progress |
-| Data loading — 30 companies | ⏳ Upcoming |
+| Data loading — 50 companies | ⏳ Upcoming |
 | Frontend — company pages | ⏳ Upcoming |
 | Peer comparison tool | ⏳ Upcoming |
 | Research frameworks | ⏳ Upcoming |

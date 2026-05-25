@@ -28,8 +28,7 @@ COMPANIES = [
     ("V",                "Visa",              "Financial Services"),
 
     # Financial Services — European
-    ("UBS",              "UBS Group",         "Financial Services"),
-    ("DB",               "Deutsche Bank",     "Financial Services"),
+    ("DB",               "Deutsche Bank AG",  "Financial Services"),
     ("ALIZF",            "Allianz",           "Financial Services"),
     ("ING",              "ING Group",         "Financial Services"),
     ("BNPQY",            "BNP Paribas",       "Financial Services"),
@@ -65,4 +64,32 @@ COMPANIES = [
 
     # Healthcare — Indian
     ("SUNPHARMA.NS",     "Sun Pharma",        "Healthcare"),
+
+    # Consumer & Retail — Global
+    ("NSRGY",            "Nestle",            "Consumer & Retail"),
+    ("UL",               "Unilever",          "Consumer & Retail"),
+    ("LVMUY",            "LVMH",              "Consumer & Retail"),
+    ("PG",               "Procter & Gamble",  "Consumer & Retail"),
+    ("CL",               "Colgate-Palmolive", "Consumer & Retail"),
+    ("WMT",              "Walmart",           "Consumer & Retail"),
+    ("MCD",              "McDonald's",        "Consumer & Retail"),
+    ("QSR",              "Restaurant Brands", "Consumer & Retail"),
+
+    # Consumer & Retail — Indian
+    ("HINDUNILVR.NS",    "Hindustan Unilever","Consumer & Retail"),
+    ("TATACONSUM.NS",    "Tata Consumer",     "Consumer & Retail"),
+
+    # Digital Platforms & E-Commerce — US
+    ("AMZN",             "Amazon",            "Digital Platforms & E-Commerce"),
+    ("UBER",             "Uber",              "Digital Platforms & E-Commerce"),
+    ("EBAY",             "eBay",              "Digital Platforms & E-Commerce"),
+    ("ETSY",             "Etsy",              "Digital Platforms & E-Commerce"),
+    ("BKNG",             "Booking Holdings",  "Digital Platforms & E-Commerce"),
+
+    # Digital Platforms & E-Commerce — Global
+    ("BABA",             "Alibaba",           "Digital Platforms & E-Commerce"),
+    ("JD",               "JD.com",            "Digital Platforms & E-Commerce"),
+    ("SE",               "Sea Limited",       "Digital Platforms & E-Commerce"),
+    ("SHOP",             "Shopify",           "Digital Platforms & E-Commerce"),
+    ("MELI",             "MercadoLibre",      "Digital Platforms & E-Commerce"),
 ]

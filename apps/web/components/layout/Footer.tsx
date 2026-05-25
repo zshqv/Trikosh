@@ -76,7 +76,7 @@ export default function Footer() {
                 marginTop: '3px',
               }}
             >
-              v1.0 · 30 companies
+              v1.0 · 50 companies
             </span>
           </Link>
           <p

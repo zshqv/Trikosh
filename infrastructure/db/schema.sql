@@ -1,7 +1,7 @@
 -- =============================================================================
 -- TRIKOSH FINANCIAL RESEARCH INFRASTRUCTURE
 -- Database Schema v0.1 — PostgreSQL
--- Six tables | 30 companies | 3 sectors | 5 years of financial data
+-- Six tables | 50 companies | 5 sectors | 5 years of financial data
 --
 -- Sectors covered: Financial Services | Artificial Intelligence | Healthcare
 --
@@ -81,7 +81,7 @@ $$ LANGUAGE plpgsql;
 
 -- =============================================================================
 -- TABLE 1: companies
--- Master directory of all 30 companies covered by Trikosh.
+-- Master directory of all 50 companies covered by Trikosh.
 -- Every other table links back to this via company_id.
 -- =============================================================================
 
@@ -398,7 +398,7 @@ CREATE TRIGGER trg_income_updated_at
     BEFORE UPDATE ON income_statements
     FOR EACH ROW EXECUTE FUNCTION update_updated_at();
 
-COMMENT ON TABLE income_statements IS 'Income statements — P&L data for all 30 Trikosh companies';
+COMMENT ON TABLE income_statements IS 'Income statements — P&L data for all 50 Trikosh companies';
 
 
 -- =============================================================================
@@ -633,7 +633,7 @@ CREATE TRIGGER trg_bs_updated_at
     BEFORE UPDATE ON balance_sheets
     FOR EACH ROW EXECUTE FUNCTION update_updated_at();
 
-COMMENT ON TABLE balance_sheets IS 'Balance sheets — financial position snapshots for all 30 Trikosh companies';
+COMMENT ON TABLE balance_sheets IS 'Balance sheets — financial position snapshots for all 50 Trikosh companies';
 
 
 -- =============================================================================
