@@ -7,10 +7,6 @@ import TickerBadge from '@/components/ui/TickerBadge'
 import DeltaLabel from '@/components/ui/DeltaLabel'
 import { formatPercent, formatMultiple, formatCurrency } from '@/lib/utils'
 
-// ---------------------------------------------------------------------------
-// Types — mirror the real DB schema returned by /api/companies/[ticker]
-// ---------------------------------------------------------------------------
-
 interface CompanyRow {
   ticker: string
   name: string
@@ -97,54 +93,59 @@ interface ApiResponse {
   peers: PeerRow[]
 }
 
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
-
 type Tab    = 'Financials' | 'Ratios' | 'Peers' | 'Overview'
 type FinTab = 'Income Statement' | 'Balance Sheet' | 'Cash Flow'
 
+/** Safely convert anything the API returns to a number or null */
+function toNum(value: unknown): number | null {
+  if (value == null) return null
+  const n = Number(value)
+  return isNaN(n) ? null : n
+}
+
 /** Format a financial statement cell value. Returns '—' for null. */
-function fmtCell(value: number | null, isEPS = false): string {
-  if (value == null) return '—'
-  if (isEPS) return `$${value.toFixed(2)}`
-  return formatCurrency(value)
+function fmtCell(value: unknown, isEPS = false): string {
+  const n = toNum(value)
+  if (n == null) return '—'
+  if (isEPS) return `$${n.toFixed(2)}`
+  return formatCurrency(n)
 }
 
 /** Safe YoY delta. Returns null when either value is missing or denominator is zero. */
-function yoyDelta(current: number | null, prev: number | null): number | null {
-  if (current == null || prev == null || prev === 0) return null
-  return (current - prev) / Math.abs(prev)
+function yoyDelta(current: unknown, prev: unknown): number | null {
+  const c = toNum(current)
+  const p = toNum(prev)
+  if (c == null || p == null || p === 0) return null
+  return (c - p) / Math.abs(p)
 }
 
 /** Format a ratio card value according to its unit. */
-function fmtRatio(value: number | null, unit: 'PCT' | 'MULTIPLE' | 'RATIO'): string {
-  if (value == null) return '—'
-  if (unit === 'PCT')      return formatPercent(value)
-  if (unit === 'MULTIPLE') return formatMultiple(value)
-  return value.toFixed(2)
+function fmtRatio(value: unknown, unit: 'PCT' | 'MULTIPLE' | 'RATIO'): string {
+  const n = toNum(value)
+  if (n == null) return '—'
+  if (unit === 'PCT')      return formatPercent(n)
+  if (unit === 'MULTIPLE') return formatMultiple(n)
+  return n.toFixed(2)
 }
 
-// Map DB ratio column names → display metadata
 const RATIO_MAP: { label: string; key: keyof RatioRow; unit: 'PCT' | 'MULTIPLE' | 'RATIO' }[] = [
-  { label: 'Gross Margin',       key: 'gross_margin',        unit: 'PCT'      },
-  { label: 'Operating Margin',   key: 'operating_margin',    unit: 'PCT'      },
-  { label: 'Net Margin',         key: 'net_margin',          unit: 'PCT'      },
-  { label: 'Return on Equity',   key: 'return_on_equity',    unit: 'PCT'      },
-  { label: 'Return on Assets',   key: 'return_on_assets',    unit: 'PCT'      },
-  { label: 'Current Ratio',      key: 'current_ratio',       unit: 'RATIO'    },
-  { label: 'Debt / Equity',      key: 'debt_to_equity',      unit: 'RATIO'    },
-  { label: 'Debt / Assets',      key: 'debt_to_assets',      unit: 'RATIO'    },
-  { label: 'Asset Turnover',     key: 'asset_turnover',      unit: 'RATIO'    },
-  { label: 'Interest Coverage',  key: 'interest_coverage',   unit: 'RATIO'    },
-  { label: 'P/E',                key: 'price_to_earnings',   unit: 'MULTIPLE' },
-  { label: 'P/B',                key: 'price_to_book',       unit: 'MULTIPLE' },
-  { label: 'EV/EBITDA',          key: 'ev_to_ebitda',        unit: 'MULTIPLE' },
-  { label: 'FCF Yield',          key: 'free_cash_flow_yield',unit: 'PCT'      },
-  { label: 'Earnings Yield',     key: 'earnings_yield',      unit: 'PCT'      },
+  { label: 'Gross Margin',        key: 'gross_margin',         unit: 'PCT'      },
+  { label: 'Operating Margin',    key: 'operating_margin',     unit: 'PCT'      },
+  { label: 'Net Margin',          key: 'net_margin',           unit: 'PCT'      },
+  { label: 'Return on Equity',    key: 'return_on_equity',     unit: 'PCT'      },
+  { label: 'Return on Assets',    key: 'return_on_assets',     unit: 'PCT'      },
+  { label: 'Current Ratio',       key: 'current_ratio',        unit: 'RATIO'    },
+  { label: 'Debt / Equity',       key: 'debt_to_equity',       unit: 'RATIO'    },
+  { label: 'Debt / Assets',       key: 'debt_to_assets',       unit: 'RATIO'    },
+  { label: 'Asset Turnover',      key: 'asset_turnover',       unit: 'RATIO'    },
+  { label: 'Interest Coverage',   key: 'interest_coverage',    unit: 'RATIO'    },
+  { label: 'P/E',                 key: 'price_to_earnings',    unit: 'MULTIPLE' },
+  { label: 'P/B',                 key: 'price_to_book',        unit: 'MULTIPLE' },
+  { label: 'EV/EBITDA',           key: 'ev_to_ebitda',         unit: 'MULTIPLE' },
+  { label: 'FCF Yield',           key: 'free_cash_flow_yield', unit: 'PCT'      },
+  { label: 'Earnings Yield',      key: 'earnings_yield',       unit: 'PCT'      },
 ]
 
-// Sector-specific research questions (generic — no real data needed)
 const RESEARCH_QUESTIONS: Record<string, string[]> = {
   'Financial Services': [
     'How does this company\'s net interest margin compare across different interest rate cycles, and what is its sensitivity to a 100bps rate move?',
@@ -179,10 +180,6 @@ const DEFAULT_QUESTIONS = [
   'What is the capital allocation priority — reinvestment, acquisitions, or shareholder returns — and is it consistent with the stated strategy?',
 ]
 
-// ---------------------------------------------------------------------------
-// Loading skeleton
-// ---------------------------------------------------------------------------
-
 function LoadingSkeleton() {
   return (
     <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '40px 24px' }}>
@@ -202,13 +199,9 @@ function LoadingSkeleton() {
   )
 }
 
-// ---------------------------------------------------------------------------
-// Financial table — shared by Income / Balance / Cash Flow tabs
-// ---------------------------------------------------------------------------
-
 interface TableRow {
   metric: string
-  values: (number | null)[]
+  values: unknown[]
   isEPS?: boolean
 }
 
@@ -237,9 +230,9 @@ function FinancialTable({ rows, years }: { rows: TableRow[]; years: string[] }) 
         </thead>
         <tbody>
           {rows.map((row, i) => {
-            const lastVal  = row.values[row.values.length - 1] ?? null
-            const prevVal  = row.values[row.values.length - 2] ?? null
-            const delta    = yoyDelta(lastVal, prevVal)
+            const lastVal = row.values[row.values.length - 1]
+            const prevVal = row.values[row.values.length - 2]
+            const delta   = yoyDelta(lastVal, prevVal)
             return (
               <tr key={row.metric} style={{ backgroundColor: i % 2 === 0 ? 'var(--bg-surface-1)' : 'var(--bg-base)' }}>
                 <td style={tdStyle('left')}>{row.metric}</td>
@@ -273,10 +266,6 @@ const tdStyle = (align: 'left' | 'right'): React.CSSProperties => ({
   textAlign: align, border: 'var(--border-rest)',
 })
 
-// ---------------------------------------------------------------------------
-// Main page component
-// ---------------------------------------------------------------------------
-
 export default function CompanyDetailPage() {
   const { ticker } = useParams<{ ticker: string }>()
   const [activeTab, setActiveTab] = useState<Tab>('Financials')
@@ -302,7 +291,6 @@ export default function CompanyDetailPage() {
       .finally(() => setLoading(false))
   }, [ticker])
 
-  // --- Loading ---
   if (loading) {
     return (
       <div style={{ backgroundColor: 'var(--bg-base)', minHeight: '100vh' }}>
@@ -311,7 +299,6 @@ export default function CompanyDetailPage() {
     )
   }
 
-  // --- Not found ---
   if (notFound || !data) {
     return (
       <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '80px 24px', textAlign: 'center' }}>
@@ -326,10 +313,6 @@ export default function CompanyDetailPage() {
   }
 
   const { company, income_statements, balance_sheets, cash_flow_statements, financial_ratios, market_data, peers } = data
-
-  // ---------------------------------------------------------------------------
-  // Build financial tables — API returns newest-first; reverse for display
-  // ---------------------------------------------------------------------------
 
   const incomeAsc   = [...income_statements].reverse()
   const balanceAsc  = [...balance_sheets].reverse()
@@ -363,7 +346,6 @@ export default function CompanyDetailPage() {
     { metric: 'Dividends Paid',      values: cashflowAsc.map(r => r.dividends_paid) },
   ]
 
-  // Active financial table based on sub-tab
   const activeFinRows = finTab === 'Income Statement' ? incomeRows
     : finTab === 'Balance Sheet' ? balanceRows
     : cashflowRows
@@ -372,23 +354,14 @@ export default function CompanyDetailPage() {
     : finTab === 'Balance Sheet' ? balanceYears
     : cashflowYears
 
-  // Most recent year ratios (API returns DESC, so index 0 = newest)
   const latestRatios = financial_ratios[0] ?? null
-
-  // Research questions for this sector (fall back to defaults)
   const researchQuestions = RESEARCH_QUESTIONS[company.sector] ?? DEFAULT_QUESTIONS
-
   const TABS: Tab[] = ['Financials', 'Ratios', 'Peers', 'Overview']
-
-  // ---------------------------------------------------------------------------
-  // Render
-  // ---------------------------------------------------------------------------
 
   return (
     <div style={{ backgroundColor: 'var(--bg-base)', minHeight: '100vh' }}>
       <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '40px 24px' }}>
 
-        {/* Breadcrumb */}
         <div style={{ marginBottom: '20px' }}>
           <Link
             href="/companies"
@@ -398,7 +371,6 @@ export default function CompanyDetailPage() {
           </Link>
         </div>
 
-        {/* Header */}
         <div style={{
           backgroundColor: 'var(--bg-surface-1)', border: 'var(--border-rest)',
           borderRadius: '12px', padding: '24px', marginBottom: '24px',
@@ -419,22 +391,21 @@ export default function CompanyDetailPage() {
                 {company.country ? ` · ${company.country}` : ''}
               </p>
 
-              {/* Market data summary strip */}
               {market_data && (
                 <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', marginTop: '10px' }}>
-                  {market_data.price != null && (
+                  {toNum(market_data.price) != null && (
                     <span style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: 'var(--text-secondary)' }}>
-                      Price: <strong style={{ color: 'var(--text-primary)' }}>${Number(market_data.price).toFixed(2)}</strong>
+                      Price: <strong style={{ color: 'var(--text-primary)' }}>${toNum(market_data.price)!.toFixed(2)}</strong>
                     </span>
                   )}
-                  {market_data.market_cap != null && (
+                  {toNum(market_data.market_cap) != null && (
                     <span style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: 'var(--text-secondary)' }}>
-                      Mkt Cap: <strong style={{ color: 'var(--text-primary)' }}>{formatCurrency(Number(market_data.market_cap))}</strong>
+                      Mkt Cap: <strong style={{ color: 'var(--text-primary)' }}>{formatCurrency(toNum(market_data.market_cap)!)}</strong>
                     </span>
                   )}
-                  {market_data.beta != null && (
+                  {toNum(market_data.beta) != null && (
                     <span style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: 'var(--text-secondary)' }}>
-                      Beta: <strong style={{ color: 'var(--text-primary)' }}>{Number(market_data.beta).toFixed(2)}</strong>
+                      Beta: <strong style={{ color: 'var(--text-primary)' }}>{toNum(market_data.beta)!.toFixed(2)}</strong>
                     </span>
                   )}
                 </div>
@@ -456,7 +427,6 @@ export default function CompanyDetailPage() {
           </div>
         </div>
 
-        {/* Tab navigation */}
         <div style={{ display: 'flex', gap: '0', borderBottom: 'var(--border-rest)', marginBottom: '24px' }}>
           {TABS.map(tab => (
             <button
@@ -476,9 +446,6 @@ export default function CompanyDetailPage() {
           ))}
         </div>
 
-        {/* ------------------------------------------------------------------ */}
-        {/* Financials tab                                                      */}
-        {/* ------------------------------------------------------------------ */}
         {activeTab === 'Financials' && (
           <div>
             <div style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>
@@ -498,23 +465,18 @@ export default function CompanyDetailPage() {
                 </button>
               ))}
             </div>
-
             <FinancialTable rows={activeFinRows} years={activeFinYears} />
-
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-tertiary)', marginTop: '12px' }}>
-              Source: Trikosh pipeline via FMP API · {company.exchange ?? ''} · {company.currency ?? 'USD'} · Known limitations: Figures sourced via FMP; verify against primary filings.
+              Source: Trikosh pipeline · {company.exchange ?? ''} · {company.currency ?? 'USD'} · Verify against primary filings.
             </p>
           </div>
         )}
 
-        {/* ------------------------------------------------------------------ */}
-        {/* Ratios tab                                                          */}
-        {/* ------------------------------------------------------------------ */}
         {activeTab === 'Ratios' && (
           <div>
             {latestRatios == null ? (
               <p style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-tertiary)', padding: '24px 0' }}>
-                No ratio data available for this company yet. Run the pipeline to populate.
+                No ratio data available for this company yet.
               </p>
             ) : (
               <>
@@ -524,8 +486,8 @@ export default function CompanyDetailPage() {
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '12px' }}>
                   {RATIO_MAP.map(({ label, key, unit }) => {
                     const raw = latestRatios[key]
-                    const value = raw != null ? Number(raw) : null
-                    const formatted = fmtRatio(value, unit)
+                    const formatted = fmtRatio(raw, unit)
+                    const n = toNum(raw)
                     return (
                       <div key={label} style={{
                         backgroundColor: 'var(--bg-surface-1)', border: 'var(--border-rest)',
@@ -534,7 +496,7 @@ export default function CompanyDetailPage() {
                         <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-tertiary)', marginBottom: '6px' }}>
                           {label}
                         </p>
-                        <p style={{ fontFamily: 'var(--font-sans)', fontSize: '22px', fontWeight: 500, fontVariantNumeric: 'tabular-nums', color: value != null ? 'var(--text-primary)' : 'var(--text-tertiary)', marginBottom: '4px' }}>
+                        <p style={{ fontFamily: 'var(--font-sans)', fontSize: '22px', fontWeight: 500, fontVariantNumeric: 'tabular-nums', color: n != null ? 'var(--text-primary)' : 'var(--text-tertiary)', marginBottom: '4px' }}>
                           {formatted}
                         </p>
                         <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-tertiary)' }}>
@@ -547,14 +509,11 @@ export default function CompanyDetailPage() {
               </>
             )}
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-tertiary)', marginTop: '12px' }}>
-              Source: Trikosh pipeline via FMP API · Known limitations: Peer median calculated from Trikosh coverage universe only.
+              Source: Trikosh pipeline · Peer median calculated from Trikosh coverage universe only.
             </p>
           </div>
         )}
 
-        {/* ------------------------------------------------------------------ */}
-        {/* Peers tab                                                           */}
-        {/* ------------------------------------------------------------------ */}
         {activeTab === 'Peers' && (
           <div>
             <p style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-secondary)', marginBottom: '20px' }}>
@@ -609,9 +568,6 @@ export default function CompanyDetailPage() {
           </div>
         )}
 
-        {/* ------------------------------------------------------------------ */}
-        {/* Overview tab                                                        */}
-        {/* ------------------------------------------------------------------ */}
         {activeTab === 'Overview' && (
           <div style={{ maxWidth: '640px' }}>
             <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 500, color: 'var(--text-primary)', marginBottom: '16px' }}>
@@ -636,7 +592,7 @@ export default function CompanyDetailPage() {
               ))}
             </div>
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-tertiary)', marginTop: '24px' }}>
-              Source: Trikosh research framework · Research questions are sector-generic; company-specific nuances should be identified from filings.
+              Source: Trikosh research framework · Research questions are sector-generic.
             </p>
           </div>
         )}
