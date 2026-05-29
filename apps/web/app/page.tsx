@@ -427,3 +427,5 @@ export default function LandingPage() {
     </div>
   )
 }
+
+// updated
