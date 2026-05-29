@@ -25,7 +25,7 @@ const FEATURES = [
   },
   {
     claim: 'Know what questions to ask, not just what numbers to find',
-    body: 'Research kits and sector checklists give you the investigative frame. The data answers the questions — but you have to know which questions to ask first.',
+    body: 'Research kits and sector checklists give you the investigative frame. The data answers the questions - but you have to know which questions to ask first.',
   },
 ]
 
@@ -56,7 +56,7 @@ export default function LandingPage() {
             marginBottom: '24px',
           }}
         >
-          Open-source &middot; Free forever &middot; MIT License
+          Open-source · Free forever · MIT License
         </p>
         <h1
           style={{
@@ -82,7 +82,7 @@ export default function LandingPage() {
           }}
         >
           Built after struggling to research Sony with fragmented data and no starting point.
-          Trikosh gives students standardised financial data for 100+ companies &mdash; built for
+          Trikosh gives students standardised financial data for 100+ companies - built for
           equity research, not trading.
         </p>
         <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
@@ -103,7 +103,7 @@ export default function LandingPage() {
               gap: '6px',
             }}
           >
-            Explore Companies &rarr;
+            Explore Companies
           </Link>
           
             href="https://github.com/zshqv/Trikosh"
@@ -154,7 +154,7 @@ export default function LandingPage() {
               fontStyle: 'italic',
             }}
           >
-            100+ companies chosen because they define their sectors &mdash; not because they are the biggest.
+            100+ companies chosen because they define their sectors - not because they are the biggest.
           </p>
           <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
             {STATS.map(({ value, label }) => (
@@ -320,7 +320,7 @@ export default function LandingPage() {
               backgroundColor: 'var(--bg-surface-1)',
             }}
           >
-            View all 100+ companies &rarr;
+            View all 100+ companies
           </Link>
         </div>
       </section>
@@ -423,6 +423,7 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
     </div>
   )
 }
