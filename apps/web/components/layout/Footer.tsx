@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import Link from 'next/link'
 
@@ -25,9 +25,9 @@ const NAV_COLUMNS = [
   {
     heading: 'Project',
     links: [
-      { label: 'GitHub',       href: 'https://github.com/ashutoshatri/trikosh' },
-      { label: 'Contributing', href: 'https://github.com/ashutoshatri/trikosh/blob/main/CONTRIBUTING.md' },
-      { label: 'Roadmap',      href: 'https://github.com/ashutoshatri/trikosh/blob/main/ROADMAP.md' },
+      { label: 'GitHub',       href: 'https://github.com/zshqv/Trikosh' },
+      { label: 'Contributing', href: 'https://github.com/zshqv/Trikosh/blob/main/CONTRIBUTING.md' },
+      { label: 'Roadmap',      href: 'https://github.com/zshqv/Trikosh/blob/main/ROADMAP.md' },
       { label: 'About',        href: '/about' },
     ],
   },
@@ -41,7 +41,6 @@ export default function Footer() {
         borderTop: 'var(--border-rest)',
       }}
     >
-      {/* Main grid: brand column + nav columns */}
       <div
         style={{
           maxWidth: '1280px',
@@ -76,7 +75,7 @@ export default function Footer() {
                 marginTop: '3px',
               }}
             >
-              v1.0 · 50 companies
+              v1.0 · 100+ companies
             </span>
           </Link>
           <p
@@ -142,7 +141,7 @@ export default function Footer() {
         ))}
       </div>
 
-      {/* Bottom bar: disclaimer + copyright */}
+      {/* Bottom bar */}
       <div
         style={{
           maxWidth: '1280px',
@@ -164,7 +163,7 @@ export default function Footer() {
             lineHeight: 1.5,
           }}
         >
-          Data sourced via yFinance for educational use only — not financial advice.{' '}
+          Data sourced via yFinance for educational use only - not financial advice.{' '}
           <Link
             href="/disclaimer"
             style={{
@@ -184,7 +183,7 @@ export default function Footer() {
             whiteSpace: 'nowrap',
           }}
         >
-          © 2025 Trikosh Contributors — MIT License
+          © 2025 Trikosh Contributors - MIT License
         </span>
       </div>
     </footer>

@@ -1,4 +1,4 @@
-import Link from 'next/link'
+﻿import Link from 'next/link'
 
 const FINANCIAL_SECTOR_CHECKLIST = [
   'What is the current NIM and how has it trended over the last four quarters?',
@@ -33,10 +33,10 @@ const TECH_CHECKLIST = [
   'How does the R&D intensity compare to peers, and is it correlated with revenue growth acceleration?',
   'What is the revenue CAGR over five years, and what portion is organic versus acquired?',
   'What are the gross margin trends, and is there evidence of AI-related cost pressure?',
-  'What is the remaining performance obligation (RPO) growth rate — the best leading indicator of future revenue?',
+  'What is the remaining performance obligation (RPO) growth rate â€” the best leading indicator of future revenue?',
   'How is capex trending as a percentage of revenue, and what is driving investment?',
   'What percentage of revenue comes from the top five customers?',
-  'Has operating leverage materialised — is operating margin expanding as revenue grows?',
+  'Has operating leverage materialised â€” is operating margin expanding as revenue grows?',
 ]
 
 export default function ResearchPage() {
@@ -63,16 +63,16 @@ export default function ResearchPage() {
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
             <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
-              In 2023, trying to research Sony for the first time, I hit a wall immediately. The company has six distinct business segments — games, music, pictures, electronics, financial services, imaging sensors — and the data for each of them lived in completely different places. Some was in English annual reports on the Sony investor relations page. Some was buried in Japanese earnings supplements. The segment accounting changed between years. There was no baseline to start from.
+              In 2023, trying to research Sony for the first time, I hit a wall immediately. The company has six distinct business segments â€” games, music, pictures, electronics, financial services, imaging sensors â€” and the data for each of them lived in completely different places. Some was in English annual reports on the Sony investor relations page. Some was buried in Japanese earnings supplements. The segment accounting changed between years. There was no baseline to start from.
             </p>
             <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
               I spent more time finding data than analysing it. And I was looking at one company. The problem wasn&apos;t intelligence. It was friction. No standardised starting point. No sector context. No explanation of what the numbers mean in the context of that particular industry.
             </p>
             <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
-              Trikosh is what I wished had existed then. Standardised financial data for companies that define their sectors. Ratio analysis already computed. Sector frameworks that explain what to look for before you open the filing. A glossary written for people who are learning, not for people who already know. The purpose is not to do the analysis for you — it is to give you a place to start, so you can do the thinking yourself.
+              Trikosh is what I wished had existed then. Standardised financial data for companies that define their sectors. Ratio analysis already computed. Sector frameworks that explain what to look for before you open the filing. A glossary written for people who are learning, not for people who already know. The purpose is not to do the analysis for you â€” it is to give you a place to start, so you can do the thinking yourself.
             </p>
             <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
-              The coverage is 50 companies. They were chosen not because they are the biggest, but because they are the clearest examples of what their sectors do. JPMorgan is in the database not because it is the largest US bank, but because it is the one that best illustrates how commercial banking works. NVIDIA is in the database because it is the infrastructure layer of the AI cycle — understanding NVIDIA means understanding AI capital expenditure economics. Each company earns its place by being analytically useful.
+              The coverage is 100+ companies. They were chosen not because they are the biggest, but because they are the clearest examples of what their sectors do. JPMorgan is in the database not because it is the largest US bank, but because it is the one that best illustrates how commercial banking works. NVIDIA is in the database because it is the infrastructure layer of the AI cycle â€” understanding NVIDIA means understanding AI capital expenditure economics. Each company earns its place by being analytically useful.
             </p>
           </div>
         </section>
@@ -87,10 +87,10 @@ export default function ResearchPage() {
               The first thing you read when researching a company should not be the 10-K. Read the investor presentation and the latest earnings call transcript first. The investor presentation gives you the story management wants to tell. The earnings call gives you the questions analysts actually care about. Together they tell you what the consensus debate is before you form your own view.
             </p>
             <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
-              Then read the annual report. Start with the MD&amp;A — Management Discussion and Analysis. It is where management explains the numbers in plain language. After that, read the notes to the financial statements. Most of the important accounting choices are buried there, not in the headline figures.
+              Then read the annual report. Start with the MD&amp;A â€” Management Discussion and Analysis. It is where management explains the numbers in plain language. After that, read the notes to the financial statements. Most of the important accounting choices are buried there, not in the headline figures.
             </p>
             <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
-              In an annual report: read the business overview first, then risk factors (the honest ones), then MD&amp;A, then the actual financial statements, then the notes. Do not start with the financials — without context, the numbers tell you nothing.
+              In an annual report: read the business overview first, then risk factors (the honest ones), then MD&amp;A, then the actual financial statements, then the notes. Do not start with the financials â€” without context, the numbers tell you nothing.
             </p>
           </div>
         </section>
@@ -102,10 +102,10 @@ export default function ResearchPage() {
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
             <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
-              Start with revenue. Is it growing? What is driving the growth — price, volume, or mix? Is growth accelerating or decelerating? Are there one-time items inflating the number? Is revenue recurring or transactional?
+              Start with revenue. Is it growing? What is driving the growth â€” price, volume, or mix? Is growth accelerating or decelerating? Are there one-time items inflating the number? Is revenue recurring or transactional?
             </p>
             <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
-              Then move to gross margin. Gross margin tells you the fundamental economics of the product or service. A declining gross margin is a red flag — it means either pricing power is eroding, input costs are rising faster than selling prices, or the revenue mix is shifting toward lower-value products. Always compare gross margin to peers, not to a fixed target.
+              Then move to gross margin. Gross margin tells you the fundamental economics of the product or service. A declining gross margin is a red flag â€” it means either pricing power is eroding, input costs are rising faster than selling prices, or the revenue mix is shifting toward lower-value products. Always compare gross margin to peers, not to a fixed target.
             </p>
             <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
               Red flags on the income statement: revenue growing faster than accounts receivable (or the reverse), gross margin declining while revenue grows, large restructuring charges recurring every year, aggressive revenue recognition in the notes, non-GAAP adjustments that exclude real economic costs.
@@ -120,7 +120,7 @@ export default function ResearchPage() {
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
             <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
-              The balance sheet tells you what the company owns and what it owes. The most important question is whether the asset base can support the liability structure across different economic scenarios. Net debt is a starting point — but it is only meaningful in the context of the earnings capacity to service it.
+              The balance sheet tells you what the company owns and what it owes. The most important question is whether the asset base can support the liability structure across different economic scenarios. Net debt is a starting point â€” but it is only meaningful in the context of the earnings capacity to service it.
             </p>
             <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
               Leverage signals to watch: is net debt rising faster than EBITDA? Is the debt maturity profile concentrated in the near term? Does goodwill represent a large proportion of total assets (and if so, what acquisitions created it)? Is inventory building unexpectedly? Are days sales outstanding extending?
@@ -135,7 +135,7 @@ export default function ResearchPage() {
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
             <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
-              Free cash flow diverges from net income for two main reasons: working capital movements and non-cash charges (primarily depreciation and amortisation). A company that earns strong net income but generates weak FCF is usually consuming working capital — either receivables are rising or payables are falling — which can signal underlying operational stress.
+              Free cash flow diverges from net income for two main reasons: working capital movements and non-cash charges (primarily depreciation and amortisation). A company that earns strong net income but generates weak FCF is usually consuming working capital â€” either receivables are rising or payables are falling â€” which can signal underlying operational stress.
             </p>
             <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
               In the investing activities section, look at capex relative to depreciation. If capex is persistently above depreciation, the company is investing in growth. If capex equals depreciation, it is in maintenance mode. In the financing activities section, rising debt alongside falling cash is a warning sign. Buybacks funded by debt deserve scrutiny.
@@ -206,7 +206,7 @@ export default function ResearchPage() {
               Download Template
             </h2>
             <p style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-secondary)', lineHeight: 1.65, marginBottom: '20px', maxWidth: '520px' }}>
-              The equity research template contains a structured income statement model (FY2019–FY2024), a ratio calculator with all 12 Trikosh ratios pre-built, a peer comparison grid, and a two-page analyst write-up template. Use it as a starting point for your own analysis.
+              The equity research template contains a structured income statement model (FY2019â€“FY2024), a ratio calculator with all 12 Trikosh ratios pre-built, a peer comparison grid, and a two-page analyst write-up template. Use it as a starting point for your own analysis.
             </p>
             <Link
               href="/api/template"
@@ -230,3 +230,4 @@ export default function ResearchPage() {
     </div>
   )
 }
+
