@@ -8,7 +8,7 @@ import type { Sector } from '@/lib/types'
 import { MOCK_CARDS, RESEARCH_KITS } from '@/lib/mockData'
 
 const STATS = [
-  { value: '50', label: 'Companies' },
+  { value: '100+', label: 'Companies' },
   { value: '5', label: 'Sectors' },
   { value: '5 Years', label: 'Of Data' },
   { value: 'MIT', label: 'License' },
@@ -44,7 +44,7 @@ export default function LandingPage() {
   return (
     <div style={{ backgroundColor: 'var(--bg-base)' }}>
 
-      {/* ── Hero ── */}
+      {/* Hero */}
       <section style={{ maxWidth: '1280px', margin: '0 auto', padding: '80px 24px 64px' }}>
         <p
           style={{
@@ -56,7 +56,7 @@ export default function LandingPage() {
             marginBottom: '24px',
           }}
         >
-          Open-source · Free forever · MIT License
+          Open-source &middot; Free forever &middot; MIT License
         </p>
         <h1
           style={{
@@ -82,7 +82,7 @@ export default function LandingPage() {
           }}
         >
           Built after struggling to research Sony with fragmented data and no starting point.
-          Trikosh gives students standardised financial data for 50 companies — built for
+          Trikosh gives students standardised financial data for 100+ companies &mdash; built for
           equity research, not trading.
         </p>
         <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
@@ -103,10 +103,10 @@ export default function LandingPage() {
               gap: '6px',
             }}
           >
-            Explore Companies →
+            Explore Companies &rarr;
           </Link>
-          <a
-            href="https://github.com/ashutoshatri/trikosh"
+          
+            href="https://github.com/zshqv/Trikosh"
             target="_blank"
             rel="noopener noreferrer"
             style={{
@@ -130,7 +130,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── Stats strip ── */}
+      {/* Stats strip */}
       <section
         style={{
           borderTop: 'var(--border-rest)',
@@ -154,7 +154,7 @@ export default function LandingPage() {
               fontStyle: 'italic',
             }}
           >
-            50 companies chosen because they define their sectors — not because they are the biggest.
+            100+ companies chosen because they define their sectors &mdash; not because they are the biggest.
           </p>
           <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
             {STATS.map(({ value, label }) => (
@@ -195,7 +195,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── Feature cards ── */}
+      {/* Feature cards */}
       <section style={{ maxWidth: '1280px', margin: '0 auto', padding: '64px 24px' }}>
         <h2
           style={{
@@ -246,7 +246,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── Sector pills + search (transition hinge) ── */}
+      {/* Sector pills + search */}
       <section
         style={{
           borderTop: 'var(--border-rest)',
@@ -274,7 +274,7 @@ export default function LandingPage() {
           </div>
           <input
             type="text"
-            placeholder="Search companies or tickers…"
+            placeholder="Search companies or tickers..."
             value={search}
             onChange={e => setSearch(e.target.value)}
             style={{
@@ -293,7 +293,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── Data cards ── */}
+      {/* Data cards */}
       <section style={{ maxWidth: '1280px', margin: '0 auto', padding: '32px 24px' }}>
         <div
           style={{
@@ -320,12 +320,12 @@ export default function LandingPage() {
               backgroundColor: 'var(--bg-surface-1)',
             }}
           >
-            View all 50 companies →
+            View all 100+ companies &rarr;
           </Link>
         </div>
       </section>
 
-      {/* ── Research Kit preview ── */}
+      {/* Research Kit preview */}
       <section
         style={{
           borderTop: 'var(--border-rest)',
