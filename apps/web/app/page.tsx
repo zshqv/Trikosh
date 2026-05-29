@@ -105,7 +105,7 @@ export default function LandingPage() {
           >
             Explore Companies
           </Link>
-          
+          <a
             href="https://github.com/zshqv/Trikosh"
             target="_blank"
             rel="noopener noreferrer"
@@ -429,3 +429,5 @@ export default function LandingPage() {
 }
 
 // updated
+
+
