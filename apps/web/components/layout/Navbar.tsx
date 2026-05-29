@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { UserButton } from '@clerk/nextjs'
@@ -17,6 +17,18 @@ export default function Navbar() {
   const pathname = usePathname()
   const router = useRouter()
   const [query, setQuery] = useState('')
+  const [companyCount, setCompanyCount] = useState<number | null>(null)
+
+  useEffect(() => {
+    fetch('/api/companies')
+      .then(res => res.json())
+      .then(data => {
+        // handles both { companies: [...] } and a raw array
+        const list = Array.isArray(data) ? data : data.companies ?? []
+        setCompanyCount(list.length)
+      })
+      .catch(() => setCompanyCount(null))
+  }, [])
 
   function handleSearch(e: React.FormEvent) {
     e.preventDefault()
@@ -73,7 +85,7 @@ export default function Navbar() {
               display: 'block',
             }}
           >
-            v1.0 · 50 companies
+            v1.0 · {companyCount !== null ? `${companyCount} companies` : 'loading...'}
           </span>
         </Link>
 
