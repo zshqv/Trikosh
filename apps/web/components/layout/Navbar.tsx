@@ -1,9 +1,8 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { UserButton } from '@clerk/nextjs'
+import { UserButton, SignInButton, SignedIn, SignedOut } from '@clerk/nextjs'
 
 const NAV_LINKS = [
   { label: 'Companies', href: '/companies' },
@@ -23,7 +22,6 @@ export default function Navbar() {
     fetch('/api/companies')
       .then(res => res.json())
       .then(data => {
-        // handles both { companies: [...] } and a raw array
         const list = Array.isArray(data) ? data : data.companies ?? []
         setCompanyCount(list.length)
       })
@@ -85,7 +83,7 @@ export default function Navbar() {
               display: 'block',
             }}
           >
-            v1.0 · {companyCount !== null ? `${companyCount} companies` : 'loading...'}
+            v1.0 &middot; {companyCount !== null ? `${companyCount} companies` : 'loading...'}
           </span>
         </Link>
 
@@ -127,7 +125,7 @@ export default function Navbar() {
           <form onSubmit={handleSearch}>
             <input
               type="search"
-              placeholder="Search companies…"
+              placeholder="Search companies..."
               value={query}
               onChange={e => setQuery(e.target.value)}
               style={{
@@ -143,7 +141,31 @@ export default function Navbar() {
               }}
             />
           </form>
-          <UserButton afterSignOutUrl="/" />
+
+          <SignedOut>
+            <SignInButton mode="modal">
+              <button
+                style={{
+                  fontFamily: 'var(--font-sans)',
+                  fontSize: '13px',
+                  fontWeight: 500,
+                  color: 'var(--text-primary)',
+                  backgroundColor: 'var(--bg-surface-2)',
+                  border: 'var(--border-rest)',
+                  borderRadius: '6px',
+                  padding: '5px 12px',
+                  cursor: 'pointer',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                Sign in
+              </button>
+            </SignInButton>
+          </SignedOut>
+
+          <SignedIn>
+            <UserButton afterSignOutUrl="/" />
+          </SignedIn>
         </div>
       </div>
     </nav>
