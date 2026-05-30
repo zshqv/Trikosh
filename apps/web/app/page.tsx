@@ -1,6 +1,7 @@
 ﻿'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import SectorPill from '@/components/data/SectorPill'
 import DataAssetCard from '@/components/ui/DataAssetCard'
@@ -29,9 +30,10 @@ const FEATURES = [
   },
 ]
 
-const SECTORS: Sector[] = ['Financial Services', 'AI & Technology', 'Healthcare']
+const SECTORS: Sector[] = ['Financial Services', 'AI & Technology', 'Healthcare', 'Consumer & Retail', 'Consumer Internet & Digital Platforms']
 
 export default function LandingPage() {
+  const router = useRouter()
   const [activeSector, setActiveSector] = useState<Sector | null>(null)
   const [search, setSearch] = useState('')
 
@@ -256,21 +258,14 @@ export default function LandingPage() {
       >
         <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px' }}>
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '16px' }}>
+            {SECTORS.map(sector => (
             <SectorPill
-              sector="Financial Services"
-              active={activeSector === 'Financial Services'}
-              onClick={() => setActiveSector(activeSector === 'Financial Services' ? null : 'Financial Services')}
+              key={sector}
+              sector={sector}
+              active={activeSector === sector}
+              onClick={() => setActiveSector(activeSector === sector ? null : sector)}
             />
-            <SectorPill
-              sector="AI & Technology"
-              active={activeSector === 'AI & Technology'}
-              onClick={() => setActiveSector(activeSector === 'AI & Technology' ? null : 'AI & Technology')}
-            />
-            <SectorPill
-              sector="Healthcare"
-              active={activeSector === 'Healthcare'}
-              onClick={() => setActiveSector(activeSector === 'Healthcare' ? null : 'Healthcare')}
-            />
+          ))}
           </div>
           <input
             type="text"
@@ -303,7 +298,7 @@ export default function LandingPage() {
           }}
         >
           {filteredCards.map(card => (
-            <DataAssetCard key={card.company.ticker} data={card} />
+            <DataAssetCard key={card.company.ticker} data={card} onClick={() => router.push(`/companies/${card.company.ticker}`)} />
           ))}
         </div>
         <div style={{ marginTop: '24px', textAlign: 'center' }}>
@@ -429,5 +424,12 @@ export default function LandingPage() {
 }
 
 // updated
+
+
+
+
+
+
+
 
 

@@ -19,16 +19,16 @@ export default function AboutPage() {
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginBottom: '48px' }}>
           <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
-            Trikosh started as a personal frustration. In 2023, trying to research Sony for the first time â€” not to trade it, but to genuinely understand how it works as a business â€” I found no useful starting point. The data was fragmented, the frameworks were implicit, and everything assumed you already knew what you were looking for. I did not know what I was looking for. That is the point.
+            Trikosh started as a personal frustration. In 2023, trying to research Sony for the first time — not to trade it, but to genuinely understand how it works as a business — I found no useful starting point. The data was fragmented, the frameworks were implicit, and everything assumed you already knew what you were looking for. I did not know what I was looking for. That is the point.
           </p>
           <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
-            The financial infrastructure that professionals use every day â€” Bloomberg, FactSet, Capital IQ â€” costs thousands of dollars a month. Students and early-career analysts who are trying to learn do not have access to it. What they have is a search engine, a free tier of something, and a lot of fragmented PDFs. Trikosh is an attempt to build something that someone with a functional internet and a frontal lobe can use this, regardless of whether they have institutional access.
+            The financial infrastructure that professionals use every day — Bloomberg, FactSet, Capital IQ — costs thousands of dollars a month. Students and early-career analysts who are trying to learn do not have access to it. What they have is a search engine, a free tier of something, and a lot of fragmented PDFs. Trikosh is an attempt to build something that someone with a functional internet and a frontal lobe can use this, regardless of whether they have institutional access.
           </p>
           <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
-            The platform is not trying to replace Bloomberg. It is trying to give finance students and CFA candidates the baseline they need to start doing real research â€” not scraping data from tables in PDFs, but actually asking analytical questions about businesses. The 100+ companies in the coverage universe were chosen for their analytical clarity, not their market cap. They are the companies that best illustrate how their sectors work.
+            The platform is not trying to replace Bloomberg. It is trying to give finance students and CFA candidates the baseline they need to start doing real research — not scraping data from tables in PDFs, but actually asking analytical questions about businesses. The 100+ companies in the coverage universe were chosen for their analytical clarity, not their market cap. They are the companies that best illustrate how their sectors work.
           </p>
           <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
-            Trikosh is open source and MIT licensed. The data comes from public filings â€” SEC EDGAR, annual reports, investor presentations. Everything is standardised on a consistent basis so you can compare companies without adjusting for different reporting formats. The source is always disclosed. The limitations are always noted. The platform does not have opinions about which companies to buy or sell. It has data, and it has frameworks for how to think about that data. What you do with it is your job.
+            Trikosh is open source and MIT licensed. The data comes from public filings — SEC EDGAR, annual reports, investor presentations. Everything is standardised on a consistent basis so you can compare companies without adjusting for different reporting formats. The source is always disclosed. The limitations are always noted. The platform does not have opinions about which companies to buy or sell. It has data, and it has frameworks for how to think about that data. What you do with it is your job.
           </p>
         </div>
 
@@ -70,7 +70,7 @@ export default function AboutPage() {
             Open Source
           </h2>
           <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.75, marginBottom: '16px' }}>
-            Trikosh is MIT licensed. The full codebase â€” Next.js frontend, FastAPI backend, Prisma schema, data pipeline â€” is available on GitHub. Contributions are welcome, particularly additions to the coverage universe, corrections to financial data, and improvements to the sector frameworks.
+            Trikosh is MIT licensed. The full codebase — Next.js frontend, FastAPI backend, Prisma schema, data pipeline — is available on GitHub. Contributions are welcome, particularly additions to the coverage universe, corrections to financial data, and improvements to the sector frameworks.
           </p>
 
           <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
@@ -93,7 +93,7 @@ export default function AboutPage() {
                 backgroundColor: 'rgba(37,99,235,0.06)',
               }}
             >
-              View on GitHub â†’
+              View on GitHub →
             </a>
 
             <span
@@ -121,7 +121,7 @@ export default function AboutPage() {
               ['SEC EDGAR', 'Primary source for all US-listed companies. 10-K and 10-Q filings.'],
               ['Annual Reports', 'English-language annual reports for international companies.'],
               ['Investor Presentations', 'Management-prepared slides for supplemental segment data.'],
-              ['Coverage Period', 'FY2019 â€“ FY2024 (5 fiscal years).'],
+              ['Coverage Period', 'FY2019 – FY2024 (5 fiscal years).'],
               ['Accounting Standard', 'GAAP for US companies, IFRS for international. Flagged per company.'],
               ['Currency', 'USD for all US companies. Originating currency for international companies, with USD conversion noted.'],
             ].map(([label, value]) => (
