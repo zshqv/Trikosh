@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useMemo, useRef, useEffect } from 'react'
 import {
@@ -7,15 +7,6 @@ import {
 } from 'recharts'
 
 const PALETTE = ['#2563EB', '#6366F1', '#0EA5E9', '#D97706'] as const
-
-const SUGGESTED_SETS = [
-  { tickers: ['JPM', 'GS'],               label: 'JPM vs GS',       rationale: 'Bulge bracket bank vs pure-play investment bank' },
-  { tickers: ['MSFT', 'GOOGL'],           label: 'MSFT vs GOOGL',   rationale: 'Cloud-first SaaS vs advertising-dependent revenue model' },
-  { tickers: ['JNJ', 'PFE'],              label: 'JNJ vs PFE',      rationale: 'Diversified healthcare conglomerate vs single-exposure pharma' },
-  { tickers: ['NVDA', 'INTC'],            label: 'NVDA vs INTC',    rationale: 'AI capex beneficiary vs semiconductor incumbent' },
-  { tickers: ['ABBV', 'MRK'],             label: 'ABBV vs MRK',     rationale: 'Patent cliff recovery story vs single-drug revenue concentration' },
-  { tickers: ['JPM', 'BAC', 'GS', 'MS'], label: 'Big 4 Banks',     rationale: 'The four major US Wall Street banks on one screen' },
-]
 
 interface CompanyMeta {
   ticker: string
@@ -56,20 +47,20 @@ function toNum(v: unknown): number | null {
 }
 
 function fmtPct(v: number | null) {
-  if (v == null) return '—'
+  if (v == null) return '\u2013'
   return `${(v * 100).toFixed(1)}%`
 }
 function fmtMult(v: number | null) {
-  if (v == null) return '—'
-  return `${v.toFixed(1)}×`
+  if (v == null) return '\u2013'
+  return `${v.toFixed(1)}\u00d7`
 }
 function fmtRev(v: number | null) {
-  if (v == null) return '—'
+  if (v == null) return '\u2013'
   const b = v / 1e9
   return b >= 100 ? `$${b.toFixed(0)}B` : `$${b.toFixed(1)}B`
 }
 function fmtGrowth(v: number | null) {
-  if (v == null) return '—'
+  if (v == null) return '\u2013'
   const p = (v * 100).toFixed(1)
   return v >= 0 ? `+${p}%` : `${p}%`
 }
@@ -141,7 +132,7 @@ const METRICS: MetricDef[] = [
 ]
 
 const GROUP_NOTES: Record<string, string> = {
-  'Revenue & Growth': 'Scale and pace of growth — calibrates how much the business can change in absolute terms.',
+  'Revenue & Growth': 'Scale and pace of growth \u2014 calibrates how much the business can change in absolute terms.',
   'Profitability':    'The margin waterfall from gross to FCF. Levels vary widely by sector; compare peer-relative trends.',
   'Returns':          'ROE measures profit per dollar of equity. High ROE driven by leverage needs ROIC decomposition.',
   'Valuation':        'Relative tools, not absolute judgements. Growth rate, earnings quality, and sector norms all context.',
@@ -155,17 +146,18 @@ const SECTORS = [
   'Consumer Internet & Digital Platforms',
 ]
 
+const NULL_TICKER = ''
+
 export default function ComparePage() {
   const [allCompanies, setAllCompanies] = useState<CompanyMeta[]>([])
-  const [tickers, setTickers] = useState<string[]>(['JPM', 'GS'])
+  const [tickers, setTickers] = useState<string[]>([NULL_TICKER, NULL_TICKER])
   const [details, setDetails] = useState<Record<string, CompanyDetail>>({})
   const [loading, setLoading] = useState<Record<string, boolean>>({})
   const [sectorFilter, setSectorFilter] = useState<string>('All')
-  const [showDropdown, setShowDropdown] = useState(false)
+  const [openDropdown, setOpenDropdown] = useState<number | null>(null)
   const [trendMetric, setTrendMetric] = useState<'gross_margin' | 'operating_margin' | 'net_margin'>('operating_margin')
-  const dropdownRef = useRef<HTMLDivElement>(null)
+  const dropdownRefs = useRef<(HTMLDivElement | null)[]>([])
 
-  // Load all companies on mount
   useEffect(() => {
     fetch('/api/companies?limit=200')
       .then(r => r.json())
@@ -173,20 +165,19 @@ export default function ComparePage() {
       .catch(() => {})
   }, [])
 
-  // Close dropdown on outside click
   useEffect(() => {
     function onOutside(e: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node))
-        setShowDropdown(false)
+      if (openDropdown === null) return
+      const ref = dropdownRefs.current[openDropdown]
+      if (ref && !ref.contains(e.target as Node)) setOpenDropdown(null)
     }
     document.addEventListener('mousedown', onOutside)
     return () => document.removeEventListener('mousedown', onOutside)
-  }, [])
+  }, [openDropdown])
 
-  // Fetch detail for each ticker that we don't have yet
   useEffect(() => {
     tickers.forEach(ticker => {
-      if (details[ticker] || loading[ticker]) return
+      if (!ticker || details[ticker] || loading[ticker]) return
       setLoading(prev => ({ ...prev, [ticker]: true }))
       fetch(`/api/companies/${ticker}`)
         .then(r => r.json())
@@ -196,14 +187,15 @@ export default function ComparePage() {
     })
   }, [tickers])
 
-  const crossSector = useMemo(() => {
-    const sectors = new Set(tickers.map(t => allCompanies.find(c => c.ticker === t)?.sector))
-    return sectors.size > 1
-  }, [tickers, allCompanies])
+  const activeTickers = tickers.filter(t => t !== NULL_TICKER)
 
-  // Margin bar chart data
+  const crossSector = useMemo(() => {
+    const sectors = new Set(activeTickers.map(t => allCompanies.find(c => c.ticker === t)?.sector))
+    return sectors.size > 1
+  }, [activeTickers, allCompanies])
+
   const marginBarData = useMemo(() =>
-    tickers.map(t => {
+    activeTickers.map(t => {
       const d = details[t]
       const r = d?.financial_ratios[0]
       return {
@@ -212,14 +204,13 @@ export default function ComparePage() {
         'Operating': r ? +(toNum(r.operating_margin) ?? 0) * 100 : 0,
         'Net':       r ? +(toNum(r.net_margin)       ?? 0) * 100 : 0,
       }
-    }), [tickers, details])
+    }), [activeTickers, details])
 
-  // Trend line chart data
   const trendData = useMemo(() => {
     const years = ['FY2021', 'FY2022', 'FY2023', 'FY2024', 'FY2025']
     return years.map(yr => {
       const pt: Record<string, string | number> = { year: yr }
-      tickers.forEach(t => {
+      activeTickers.forEach(t => {
         const d = details[t]
         if (!d) return
         const fyNum = parseInt(yr.replace('FY', ''))
@@ -231,20 +222,60 @@ export default function ComparePage() {
       })
       return pt
     })
-  }, [tickers, details, trendMetric])
+  }, [activeTickers, details, trendMetric])
 
   function leaderIdx(metric: MetricDef): number | null {
     if (metric.higherIsBetter === null) return null
-    const vals = tickers.map(t => details[t] ? metric.extract(details[t]) : null)
+    const vals = activeTickers.map(t => details[t] ? metric.extract(details[t]) : null)
     const nums = vals.filter((v): v is number => v !== null)
-    if (!nums.length) return null
+    if (nums.length < 2) return null
     const best = metric.higherIsBetter ? Math.max(...nums) : Math.min(...nums)
     return vals.findIndex(v => v === best)
+  }
+
+  function loserIdx(metric: MetricDef): number | null {
+    if (metric.higherIsBetter === null) return null
+    const vals = activeTickers.map(t => details[t] ? metric.extract(details[t]) : null)
+    const nums = vals.filter((v): v is number => v !== null)
+    if (nums.length < 2) return null
+    const worst = metric.higherIsBetter ? Math.min(...nums) : Math.max(...nums)
+    const lastIdx = vals.map((v, i) => v === worst ? i : -1).filter(i => i !== -1).pop()
+    return lastIdx ?? null
   }
 
   const filteredCompanies = useMemo(() =>
     allCompanies.filter(c => sectorFilter === 'All' || c.sector === sectorFilter),
     [allCompanies, sectorFilter])
+
+  function selectTicker(slotIdx: number, ticker: string) {
+    setTickers(prev => {
+      const next = [...prev]
+      next[slotIdx] = ticker
+      return next
+    })
+    setOpenDropdown(null)
+    setSectorFilter('All')
+  }
+
+  function removeTicker(slotIdx: number) {
+    setTickers(prev => {
+      const next = [...prev]
+      if (prev.length > 2) {
+        next.splice(slotIdx, 1)
+      } else {
+        next[slotIdx] = NULL_TICKER
+      }
+      return next
+    })
+  }
+
+  function addSlot() {
+    if (tickers.length >= 4) return
+    setTickers(prev => [...prev, NULL_TICKER])
+  }
+
+  const isLoadingAny = activeTickers.some(t => loading[t])
+  const hasEnoughToCompare = activeTickers.length >= 2
 
   const tooltipStyle = {
     fontFamily: 'var(--font-mono)',
@@ -253,8 +284,6 @@ export default function ComparePage() {
     border: '0.5px solid rgba(0,0,0,0.10)',
     borderRadius: '6px',
   }
-
-  const isLoadingAny = tickers.some(t => loading[t])
 
   return (
     <div style={{ backgroundColor: 'var(--bg-base)', minHeight: '100vh' }}>
@@ -266,367 +295,418 @@ export default function ComparePage() {
             Peer Comparison
           </h1>
           <p style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-secondary)' }}>
-            Select 2–4 companies to compare key financial metrics side by side. Live data from Trikosh database.
+            Select 2\u20134 companies to compare key financial metrics side by side. Live data from Trikosh database.
           </p>
         </div>
 
-        {/* Selector card */}
+        {/* Selector row */}
         <div style={{ backgroundColor: 'var(--bg-surface-1)', border: 'var(--border-rest)', borderRadius: '12px', padding: '20px', marginBottom: '16px' }}>
 
-          {/* Selected company chips */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center', marginBottom: '16px' }}>
-            {tickers.map((ticker, i) => {
-              const co = allCompanies.find(c => c.ticker === ticker)
-              const color = PALETTE[i]
-              return (
-                <div key={ticker} style={{
-                  display: 'flex', alignItems: 'center', gap: '7px',
-                  backgroundColor: `${color}12`, border: `1px solid ${color}38`,
-                  borderRadius: '7px', padding: '6px 10px',
-                }}>
-                  <span style={{ width: '7px', height: '7px', borderRadius: '50%', backgroundColor: color, flexShrink: 0 }} />
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', fontWeight: 500, color, letterSpacing: '0.04em' }}>
-                    {ticker}
-                  </span>
-                  <span style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-secondary)' }}>
-                    {co?.name ?? ''}
-                  </span>
-                  {tickers.length > 2 && (
-                    <button
-                      onClick={() => setTickers(prev => prev.filter(t => t !== ticker))}
-                      style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-tertiary)', fontSize: '15px', lineHeight: 1, padding: '0 0 0 2px' }}
-                      aria-label={`Remove ${ticker}`}
-                    >×</button>
-                  )}
-                </div>
-              )
-            })}
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', flexWrap: 'wrap' }}>
 
-            {tickers.length < 4 && (
-              <div style={{ position: 'relative' }} ref={dropdownRef}>
-                <button
-                  onClick={() => setShowDropdown(v => !v)}
-                  style={{
-                    fontFamily: 'var(--font-sans)', fontSize: '13px',
-                    color: 'var(--text-secondary)', backgroundColor: 'var(--bg-surface-2)',
-                    border: 'var(--border-rest)', borderRadius: '7px',
-                    padding: '6px 12px', cursor: 'pointer',
-                    display: 'flex', alignItems: 'center', gap: '5px',
-                  }}
-                >
-                  <span style={{ fontSize: '16px', lineHeight: 1, marginTop: '-1px' }}>+</span> Add company
-                </button>
+            {/* Company slots */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', flex: 1 }}>
+              {tickers.map((ticker, slotIdx) => {
+                const co = allCompanies.find(c => c.ticker === ticker)
+                const color = PALETTE[slotIdx]
+                const isOpen = openDropdown === slotIdx
+                const alreadySelected = new Set(tickers.filter((t, i) => i !== slotIdx && t !== NULL_TICKER))
 
-                {showDropdown && (
-                  <div style={{
-                    position: 'absolute', top: 'calc(100% + 6px)', left: 0, zIndex: 30,
-                    backgroundColor: 'var(--bg-surface-1)', border: 'var(--border-rest)',
-                    borderRadius: '10px', width: '320px', maxHeight: '420px',
-                    overflowY: 'auto', boxShadow: '0 6px 28px rgba(0,0,0,0.12)',
-                  }}>
-                    {/* Sector filter inside dropdown */}
-                    <div style={{ padding: '10px 12px', borderBottom: 'var(--border-rest)', display: 'flex', flexWrap: 'wrap', gap: '5px', position: 'sticky', top: 0, backgroundColor: 'var(--bg-surface-1)', zIndex: 1 }}>
-                      {['All', ...SECTORS].map(s => (
-                        <button
-                          key={s}
-                          onClick={() => setSectorFilter(s)}
-                          style={{
-                            fontFamily: 'var(--font-sans)', fontSize: '11px',
-                            padding: '3px 8px', borderRadius: '4px', border: 'var(--border-rest)',
-                            backgroundColor: sectorFilter === s ? 'var(--accent-primary)' : 'var(--bg-surface-2)',
-                            color: sectorFilter === s ? '#fff' : 'var(--text-secondary)',
-                            cursor: 'pointer',
-                          }}
-                        >
-                          {s === 'All' ? 'All' : s.split(' ')[0]}
-                        </button>
-                      ))}
-                    </div>
-
-                    {/* Company list */}
-                    {filteredCompanies.map(co => {
-                      const already = tickers.includes(co.ticker)
-                      return (
-                        <button
-                          key={co.ticker}
-                          onClick={() => {
-                            if (!already) {
-                              setTickers(p => [...p, co.ticker])
-                              setShowDropdown(false)
-                              setSectorFilter('All')
-                            }
-                          }}
-                          disabled={already}
-                          style={{
-                            width: '100%', textAlign: 'left', display: 'flex',
-                            alignItems: 'center', gap: '10px', padding: '8px 14px',
-                            background: 'none', border: 'none',
-                            cursor: already ? 'default' : 'pointer',
-                            opacity: already ? 0.38 : 1,
-                          }}
-                          onMouseEnter={e => { if (!already) (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'var(--bg-surface-2)' }}
-                          onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'transparent' }}
-                        >
-                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--accent-primary)', minWidth: '56px' }}>
-                            {co.ticker}
-                          </span>
-                          <span style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-primary)' }}>
-                            {co.name}
-                          </span>
-                        </button>
-                      )
-                    })}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-
-          {/* Suggested sets */}
-          <div>
-            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.07em', color: 'var(--text-tertiary)', marginBottom: '8px' }}>
-              Suggested comparisons
-            </p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-              {SUGGESTED_SETS.map(s => {
-                const active = s.tickers.length === tickers.length && s.tickers.every(t => tickers.includes(t))
                 return (
+                  <div key={slotIdx} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    {slotIdx > 0 && (
+                      <span style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-tertiary)' }}>vs</span>
+                    )}
+
+                    <div style={{ position: 'relative' }} ref={el => { dropdownRefs.current[slotIdx] = el }}>
+                      {/* Slot button */}
+                      <button
+                        onClick={() => setOpenDropdown(isOpen ? null : slotIdx)}
+                        style={{
+                          display: 'flex', alignItems: 'center', gap: '8px',
+                          padding: '8px 12px',
+                          backgroundColor: ticker ? `${color}10` : 'var(--bg-surface-2)',
+                          border: ticker ? `1px solid ${color}40` : 'var(--border-rest)',
+                          borderRadius: '8px', cursor: 'pointer',
+                          minWidth: '180px',
+                        }}
+                      >
+                        {ticker && (
+                          <span style={{ width: '7px', height: '7px', borderRadius: '50%', backgroundColor: color, flexShrink: 0 }} />
+                        )}
+                        <span style={{ fontFamily: ticker ? 'var(--font-mono)' : 'var(--font-sans)', fontSize: '13px', color: ticker ? color : 'var(--text-tertiary)', fontWeight: ticker ? 500 : 400, flex: 1, textAlign: 'left' }}>
+                          {ticker ? ticker : 'Select company'}
+                        </span>
+                        {ticker && co && (
+                          <span style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', color: 'var(--text-tertiary)', maxWidth: '100px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            {co.name.split(' ').slice(0, 2).join(' ')}
+                          </span>
+                        )}
+                        <span style={{ fontSize: '10px', color: 'var(--text-tertiary)', marginLeft: '2px' }}>{isOpen ? '\u25b2' : '\u25bc'}</span>
+                      </button>
+
+                      {/* Remove button — only show if selected and we have more than 2 slots OR slot is filled */}
+                      {ticker && (
+                        <button
+                          onClick={() => removeTicker(slotIdx)}
+                          title="Remove"
+                          style={{
+                            position: 'absolute', top: '-7px', right: '-7px',
+                            width: '18px', height: '18px', borderRadius: '50%',
+                            backgroundColor: 'var(--bg-surface-2)', border: 'var(--border-rest)',
+                            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            fontSize: '11px', color: 'var(--text-tertiary)', lineHeight: 1,
+                          }}
+                        >\u00d7</button>
+                      )}
+
+                      {/* Dropdown */}
+                      {isOpen && (
+                        <div style={{
+                          position: 'absolute', top: 'calc(100% + 6px)', left: 0, zIndex: 50,
+                          backgroundColor: 'var(--bg-surface-1)', border: 'var(--border-rest)',
+                          borderRadius: '10px', width: '300px', maxHeight: '380px',
+                          overflowY: 'auto', boxShadow: '0 6px 28px rgba(0,0,0,0.12)',
+                        }}>
+                          {/* Sector filter pills inside dropdown */}
+                          <div style={{ padding: '10px 12px', borderBottom: 'var(--border-rest)', display: 'flex', flexWrap: 'wrap', gap: '5px', position: 'sticky', top: 0, backgroundColor: 'var(--bg-surface-1)', zIndex: 1 }}>
+                            {['All', ...SECTORS].map(s => (
+                              <button
+                                key={s}
+                                onClick={e => { e.stopPropagation(); setSectorFilter(s) }}
+                                style={{
+                                  fontFamily: 'var(--font-sans)', fontSize: '11px',
+                                  padding: '3px 8px', borderRadius: '4px', border: 'var(--border-rest)',
+                                  backgroundColor: sectorFilter === s ? 'var(--accent-primary)' : 'var(--bg-surface-2)',
+                                  color: sectorFilter === s ? '#fff' : 'var(--text-secondary)',
+                                  cursor: 'pointer',
+                                }}
+                              >
+                                {s === 'All' ? 'All' : s.split(' ')[0]}
+                              </button>
+                            ))}
+                          </div>
+
+                          {filteredCompanies.length === 0 && (
+                            <div style={{ padding: '16px', fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-tertiary)' }}>
+                              No companies in this sector.
+                            </div>
+                          )}
+
+                          {filteredCompanies.map(co => {
+                            const already = alreadySelected.has(co.ticker)
+                            const isCurrent = ticker === co.ticker
+                            return (
+                              <button
+                                key={co.ticker}
+                                onClick={() => { if (!already) selectTicker(slotIdx, co.ticker) }}
+                                disabled={already}
+                                style={{
+                                  width: '100%', textAlign: 'left', display: 'flex',
+                                  alignItems: 'center', gap: '10px', padding: '8px 14px',
+                                  background: isCurrent ? 'var(--bg-surface-2)' : 'none',
+                                  border: 'none', cursor: already ? 'default' : 'pointer',
+                                  opacity: already ? 0.35 : 1,
+                                }}
+                                onMouseEnter={e => { if (!already && !isCurrent) (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'var(--bg-surface-2)' }}
+                                onMouseLeave={e => { if (!isCurrent) (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'transparent' }}
+                              >
+                                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--accent-primary)', minWidth: '52px' }}>
+                                  {co.ticker}
+                                </span>
+                                <span style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-primary)' }}>
+                                  {co.name}
+                                </span>
+                              </button>
+                            )
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )
+              })}
+
+              {/* Add company button */}
+              {tickers.length < 4 && (
+                <button
+                  onClick={addSlot}
+                  title="Add company"
+                  style={{
+                    width: '34px', height: '34px', borderRadius: '8px',
+                    backgroundColor: 'var(--bg-surface-2)', border: 'var(--border-rest)',
+                    cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: '20px', color: 'var(--text-tertiary)', lineHeight: 1,
+                    flexShrink: 0,
+                  }}
+                >+</button>
+              )}
+            </div>
+
+            {/* Sector filter — right side */}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '6px', flexShrink: 0 }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.07em', color: 'var(--text-tertiary)' }}>
+                Filter by sector
+              </span>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px', justifyContent: 'flex-end' }}>
+                {['All', ...SECTORS].map(s => (
                   <button
-                    key={s.label}
-                    onClick={() => setTickers(s.tickers.slice(0, 4))}
-                    title={s.rationale}
+                    key={s}
+                    onClick={() => setSectorFilter(s)}
                     style={{
-                      fontFamily: 'var(--font-sans)', fontSize: '12px',
+                      fontFamily: 'var(--font-sans)', fontSize: '11px',
                       padding: '4px 10px', borderRadius: '5px', border: 'var(--border-rest)',
-                      backgroundColor: active ? 'var(--accent-primary)' : 'var(--bg-surface-2)',
-                      color: active ? '#FFFFFF' : 'var(--text-secondary)',
+                      backgroundColor: sectorFilter === s ? 'var(--accent-primary)' : 'var(--bg-surface-2)',
+                      color: sectorFilter === s ? '#fff' : 'var(--text-secondary)',
                       cursor: 'pointer',
                     }}
                   >
-                    {s.label}
+                    {s === 'All' ? 'All' : s.split(' ').slice(0, 2).join(' ')}
                   </button>
-                )
-              })}
+                ))}
+              </div>
             </div>
+
           </div>
         </div>
 
         {/* Cross-sector warning */}
-        {crossSector && (
+        {crossSector && hasEnoughToCompare && (
           <div style={{
             backgroundColor: 'rgba(217,119,6,0.07)', border: '1px solid rgba(217,119,6,0.25)',
             borderRadius: '8px', padding: '12px 16px', marginBottom: '16px',
           }}>
             <p style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--delta-warn)' }}>
-              <strong>Cross-sector comparison.</strong> Margin levels are not directly comparable across sectors — software gross margins run 70–85%, managed care runs 20–30%. Use relative trajectories and peer-group context, not absolute levels.
+              <strong>Cross-sector comparison.</strong> Margin levels are not directly comparable across sectors \u2014 software gross margins run 70\u201385%, managed care runs 20\u201330%. Use relative trajectories and peer-group context, not absolute levels.
             </p>
           </div>
         )}
 
-        {/* Loading state */}
+        {/* Empty state */}
+        {!hasEnoughToCompare && (
+          <div style={{
+            backgroundColor: 'var(--bg-surface-1)', border: 'var(--border-rest)',
+            borderRadius: '12px', padding: '48px 24px', textAlign: 'center', marginBottom: '20px',
+          }}>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-tertiary)' }}>
+              Select at least 2 companies above to begin comparison.
+            </p>
+          </div>
+        )}
+
+        {/* Loading */}
         {isLoadingAny && (
-          <div style={{ padding: '16px', fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-tertiary)', marginBottom: '16px' }}>
-            Loading data...
+          <div style={{ padding: '12px 0', fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-tertiary)', marginBottom: '8px' }}>
+            Loading data\u2026
           </div>
         )}
 
         {/* Metrics table */}
-        <div style={{ backgroundColor: 'var(--bg-surface-1)', border: 'var(--border-rest)', borderRadius: '12px', marginBottom: '20px', overflow: 'hidden' }}>
-          <div style={{ padding: '18px 24px', borderBottom: 'var(--border-rest)' }}>
-            <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', fontWeight: 500, color: 'var(--text-primary)', marginBottom: '3px' }}>
-              Key Metrics — Latest Fiscal Year
-            </h2>
-            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-tertiary)' }}>
-              Live data from Trikosh database · ◆ marks the leader for each row
-            </p>
-          </div>
+        {hasEnoughToCompare && (
+          <div style={{ backgroundColor: 'var(--bg-surface-1)', border: 'var(--border-rest)', borderRadius: '12px', marginBottom: '20px', overflow: 'hidden' }}>
+            <div style={{ padding: '18px 24px', borderBottom: 'var(--border-rest)' }}>
+              <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', fontWeight: 500, color: 'var(--text-primary)', marginBottom: '3px' }}>
+                Key Metrics \u2014 Latest Fiscal Year
+              </h2>
+              <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-tertiary)' }}>
+                Live data from Trikosh database \u00b7 Green = best in set \u00b7 Red = lowest in set
+              </p>
+            </div>
 
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-              <thead>
-                <tr style={{ backgroundColor: 'var(--bg-surface-2)' }}>
-                  <th style={{
-                    padding: '10px 20px', textAlign: 'left',
-                    fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 500,
-                    textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-tertiary)',
-                    minWidth: '176px', borderRight: 'var(--border-rest)',
-                  }}>Metric</th>
-                  {tickers.map((ticker, i) => {
-                    const co = allCompanies.find(c => c.ticker === ticker)
-                    return (
-                      <th key={ticker} style={{ padding: '10px 20px', textAlign: 'right', minWidth: '140px' }}>
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '3px' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                            <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: PALETTE[i] }} />
-                            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', fontWeight: 500, color: PALETTE[i] }}>
-                              {ticker}
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <thead>
+                  <tr style={{ backgroundColor: 'var(--bg-surface-2)' }}>
+                    <th style={{
+                      padding: '10px 20px', textAlign: 'left',
+                      fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 500,
+                      textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-tertiary)',
+                      minWidth: '176px', borderRight: 'var(--border-rest)',
+                    }}>Metric</th>
+                    {activeTickers.map((ticker, i) => {
+                      const co = allCompanies.find(c => c.ticker === ticker)
+                      return (
+                        <th key={ticker} style={{ padding: '10px 20px', textAlign: 'right', minWidth: '140px' }}>
+                          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '3px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                              <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: PALETTE[i] }} />
+                              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', fontWeight: 500, color: PALETTE[i] }}>
+                                {ticker}
+                              </span>
+                            </div>
+                            <span style={{ fontFamily: 'var(--font-sans)', fontSize: '10px', color: 'var(--text-tertiary)', fontWeight: 400 }}>
+                              {co?.name.split(' ').slice(0, 2).join(' ') ?? ''}
                             </span>
                           </div>
-                          <span style={{ fontFamily: 'var(--font-sans)', fontSize: '10px', color: 'var(--text-tertiary)', fontWeight: 400 }}>
-                            {co?.name.split(' ').slice(0, 2).join(' ') ?? ''}
-                          </span>
-                        </div>
-                      </th>
-                    )
-                  })}
-                </tr>
-              </thead>
-              <tbody>
-                {(() => {
-                  const rows: React.ReactNode[] = []
-                  let lastGroup = ''
-                  METRICS.forEach((metric, ri) => {
-                    if (metric.group !== lastGroup) {
-                      lastGroup = metric.group
-                      rows.push(
-                        <tr key={`g-${metric.group}`}>
-                          <td colSpan={tickers.length + 1} style={{
-                            padding: '12px 20px 6px',
-                            backgroundColor: 'var(--bg-base)',
-                            borderTop: ri > 0 ? 'var(--border-rest)' : 'none',
-                          }}>
-                            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.07em', color: 'var(--text-secondary)', fontWeight: 500 }}>
-                              {metric.group}
-                            </span>
-                            <span style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', color: 'var(--text-tertiary)', marginLeft: '12px', fontStyle: 'italic' }}>
-                              {GROUP_NOTES[metric.group]}
-                            </span>
-                          </td>
-                        </tr>
+                        </th>
                       )
-                    }
-                    const leader = leaderIdx(metric)
-                    rows.push(
-                      <tr key={metric.label} style={{ backgroundColor: ri % 2 === 0 ? 'var(--bg-surface-1)' : 'transparent' }}>
-                        <td style={{ padding: '10px 20px', fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-secondary)', borderRight: 'var(--border-rest)' }}>
-                          {metric.label}
-                        </td>
-                        {tickers.map((ticker, ci) => {
-                          const d = details[ticker]
-                          const raw = d ? metric.extract(d) : null
-                          const isLeader = leader === ci
-                          const col = PALETTE[ci]
-                          const isNeg = typeof raw === 'number' && raw < 0
-                          return (
-                            <td key={ticker} style={{ padding: '10px 20px', textAlign: 'right' }}>
-                              {loading[ticker] ? (
-                                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--text-tertiary)' }}>…</span>
-                              ) : (
-                                <>
+                    })}
+                  </tr>
+                </thead>
+                <tbody>
+                  {(() => {
+                    const rows: React.ReactNode[] = []
+                    let lastGroup = ''
+                    METRICS.forEach((metric, ri) => {
+                      if (metric.group !== lastGroup) {
+                        lastGroup = metric.group
+                        rows.push(
+                          <tr key={`g-${metric.group}`}>
+                            <td colSpan={activeTickers.length + 1} style={{
+                              padding: '12px 20px 6px',
+                              backgroundColor: 'var(--bg-base)',
+                              borderTop: ri > 0 ? 'var(--border-rest)' : 'none',
+                            }}>
+                              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.07em', color: 'var(--text-secondary)', fontWeight: 500 }}>
+                                {metric.group}
+                              </span>
+                              <span style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', color: 'var(--text-tertiary)', marginLeft: '12px', fontStyle: 'italic' }}>
+                                {GROUP_NOTES[metric.group]}
+                              </span>
+                            </td>
+                          </tr>
+                        )
+                      }
+                      const leader = leaderIdx(metric)
+                      const loser  = loserIdx(metric)
+                      rows.push(
+                        <tr key={metric.label} style={{ backgroundColor: ri % 2 === 0 ? 'var(--bg-surface-1)' : 'transparent' }}>
+                          <td style={{ padding: '10px 20px', fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-secondary)', borderRight: 'var(--border-rest)' }}>
+                            {metric.label}
+                          </td>
+                          {activeTickers.map((ticker, ci) => {
+                            const d = details[ticker]
+                            const raw = d ? metric.extract(d) : null
+                            const isLeader = leader === ci
+                            const isLoser  = loser  === ci
+                            const isNeg = typeof raw === 'number' && raw < 0
+
+                            let cellColor = 'var(--text-primary)'
+                            if (isLeader)      cellColor = '#16a34a'
+                            else if (isLoser)  cellColor = '#dc2626'
+                            else if (isNeg)    cellColor = 'var(--delta-neg)'
+
+                            return (
+                              <td key={ticker} style={{ padding: '10px 20px', textAlign: 'right' }}>
+                                {loading[ticker] ? (
+                                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--text-tertiary)' }}>\u2026</span>
+                                ) : (
                                   <span style={{
                                     fontFamily: 'var(--font-mono)', fontSize: '13px',
                                     fontVariantNumeric: 'tabular-nums',
-                                    color: isLeader ? col : isNeg ? 'var(--delta-neg)' : 'var(--text-primary)',
-                                    fontWeight: isLeader ? 500 : 400,
+                                    color: cellColor,
+                                    fontWeight: (isLeader || isLoser) ? 500 : 400,
                                   }}>
                                     {metric.format(raw)}
                                   </span>
-                                  {isLeader && <span style={{ marginLeft: '5px', fontSize: '9px', color: col }}>◆</span>}
-                                </>
-                              )}
-                            </td>
-                          )
-                        })}
-                      </tr>
-                    )
-                  })
-                  return rows
-                })()}
-              </tbody>
-            </table>
-          </div>
+                                )}
+                              </td>
+                            )
+                          })}
+                        </tr>
+                      )
+                    })
+                    return rows
+                  })()}
+                </tbody>
+              </table>
+            </div>
 
-          <div style={{ padding: '10px 24px', borderTop: 'var(--border-rest)', backgroundColor: 'var(--bg-surface-2)' }}>
-            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-tertiary)' }}>
-              Source: Trikosh database · Live data · ◆ marks best-in-set for margin and return metrics · — shown where data unavailable
-            </p>
-          </div>
-        </div>
-
-        {/* Charts */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(460px, 1fr))', gap: '16px' }}>
-
-          {/* Margin bar chart */}
-          <div style={{ backgroundColor: 'var(--bg-surface-1)', border: 'var(--border-rest)', borderRadius: '12px', padding: '22px' }}>
-            <div style={{ marginBottom: '18px' }}>
-              <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', fontWeight: 500, color: 'var(--text-primary)', marginBottom: '3px' }}>
-                Margin Profile — Latest FY
-              </h2>
-              <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-tertiary)' }}>
-                Gross → Operating → Net margin per company.
+            <div style={{ padding: '10px 24px', borderTop: 'var(--border-rest)', backgroundColor: 'var(--bg-surface-2)' }}>
+              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-tertiary)' }}>
+                Source: Trikosh database \u00b7 Live data \u00b7 Green = best-in-set \u00b7 Red = lowest-in-set \u00b7 \u2013 shown where data unavailable
               </p>
             </div>
-            <ResponsiveContainer width="100%" height={240}>
-              <BarChart data={marginBarData} margin={{ top: 4, right: 8, left: 0, bottom: 4 }} barCategoryGap="28%">
-                <XAxis dataKey="ticker" tick={{ fontFamily: 'var(--font-mono)', fontSize: 11, fill: '#9CA3AF' }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fontFamily: 'var(--font-mono)', fontSize: 10, fill: '#9CA3AF' }} tickFormatter={v => `${v}%`} axisLine={false} tickLine={false} width={38} />
-                <Tooltip contentStyle={tooltipStyle} formatter={(v: unknown) => [`${v}%`]} />
-                <Legend wrapperStyle={{ fontFamily: 'var(--font-mono)', fontSize: '11px', paddingTop: '8px' }} />
-                <Bar dataKey="Gross"     fill="#2563EB" fillOpacity={0.9} radius={[2, 2, 0, 0]} />
-                <Bar dataKey="Operating" fill="#6366F1" fillOpacity={0.9} radius={[2, 2, 0, 0]} />
-                <Bar dataKey="Net"       fill="#0EA5E9" fillOpacity={0.9} radius={[2, 2, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-tertiary)', marginTop: '10px' }}>
-              Source: Trikosh database · Note: bank gross margin may be null — shown as 0
-            </p>
           </div>
+        )}
 
-          {/* Trend line chart */}
-          <div style={{ backgroundColor: 'var(--bg-surface-1)', border: 'var(--border-rest)', borderRadius: '12px', padding: '22px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '18px', gap: '12px', flexWrap: 'wrap' }}>
-              <div>
+        {/* Charts — only show when enough data */}
+        {hasEnoughToCompare && (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(460px, 1fr))', gap: '16px' }}>
+
+            {/* Margin bar chart */}
+            <div style={{ backgroundColor: 'var(--bg-surface-1)', border: 'var(--border-rest)', borderRadius: '12px', padding: '22px' }}>
+              <div style={{ marginBottom: '18px' }}>
                 <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', fontWeight: 500, color: 'var(--text-primary)', marginBottom: '3px' }}>
-                  5-Year Margin Trend
+                  Margin Profile \u2014 Latest FY
                 </h2>
                 <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-tertiary)' }}>
-                  FY2021–FY2025 · Structural vs cyclical margin movement.
+                  Gross \u2192 Operating \u2192 Net margin per company.
                 </p>
               </div>
-              <div style={{ display: 'flex', gap: '4px', flexShrink: 0 }}>
-                {([
-                  { key: 'gross_margin' as const,     label: 'Gross' },
-                  { key: 'operating_margin' as const, label: 'Operating' },
-                  { key: 'net_margin' as const,       label: 'Net' },
-                ]).map(opt => (
-                  <button
-                    key={opt.key}
-                    onClick={() => setTrendMetric(opt.key)}
-                    style={{
-                      fontFamily: 'var(--font-sans)', fontSize: '11px',
-                      padding: '4px 10px', borderRadius: '5px', border: 'var(--border-rest)',
-                      backgroundColor: trendMetric === opt.key ? 'var(--bg-muted)' : 'var(--bg-surface-2)',
-                      color: trendMetric === opt.key ? 'var(--text-primary)' : 'var(--text-secondary)',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    {opt.label}
-                  </button>
-                ))}
-              </div>
+              <ResponsiveContainer width="100%" height={240}>
+                <BarChart data={marginBarData} margin={{ top: 4, right: 8, left: 0, bottom: 4 }} barCategoryGap="28%">
+                  <XAxis dataKey="ticker" tick={{ fontFamily: 'var(--font-mono)', fontSize: 11, fill: '#9CA3AF' }} axisLine={false} tickLine={false} />
+                  <YAxis tick={{ fontFamily: 'var(--font-mono)', fontSize: 10, fill: '#9CA3AF' }} tickFormatter={v => `${v}%`} axisLine={false} tickLine={false} width={38} />
+                  <Tooltip contentStyle={tooltipStyle} formatter={(v: unknown) => [`${v}%`]} />
+                  <Legend wrapperStyle={{ fontFamily: 'var(--font-mono)', fontSize: '11px', paddingTop: '8px' }} />
+                  <Bar dataKey="Gross"     fill="#2563EB" fillOpacity={0.9} radius={[2, 2, 0, 0]} />
+                  <Bar dataKey="Operating" fill="#6366F1" fillOpacity={0.9} radius={[2, 2, 0, 0]} />
+                  <Bar dataKey="Net"       fill="#0EA5E9" fillOpacity={0.9} radius={[2, 2, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-tertiary)', marginTop: '10px' }}>
+                Source: Trikosh database \u00b7 Note: bank gross margin may be null \u2014 shown as 0
+              </p>
             </div>
-            <ResponsiveContainer width="100%" height={240}>
-              <LineChart data={trendData} margin={{ top: 4, right: 8, left: 0, bottom: 4 }}>
-                <XAxis dataKey="year" tick={{ fontFamily: 'var(--font-mono)', fontSize: 10, fill: '#9CA3AF' }} axisLine={{ stroke: 'rgba(0,0,0,0.06)' }} tickLine={false} />
-                <YAxis tick={{ fontFamily: 'var(--font-mono)', fontSize: 10, fill: '#9CA3AF' }} tickFormatter={v => `${v}%`} axisLine={false} tickLine={false} width={38} />
-                <Tooltip contentStyle={tooltipStyle} formatter={(v: unknown) => [`${v}%`]} />
-                <Legend wrapperStyle={{ fontFamily: 'var(--font-mono)', fontSize: '11px', paddingTop: '8px' }} />
-                {tickers.map((ticker, i) => (
-                  <Line
-                    key={ticker} type="monotone" dataKey={ticker}
-                    stroke={PALETTE[i]} strokeWidth={2}
-                    dot={{ r: 3, fill: PALETTE[i], strokeWidth: 0 }}
-                    activeDot={{ r: 5 }}
-                  />
-                ))}
-              </LineChart>
-            </ResponsiveContainer>
-            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-tertiary)', marginTop: '10px' }}>
-              Source: Trikosh database · FY2021–FY2025 · Only years with available data are plotted
-            </p>
-          </div>
 
-        </div>
+            {/* Trend line chart */}
+            <div style={{ backgroundColor: 'var(--bg-surface-1)', border: 'var(--border-rest)', borderRadius: '12px', padding: '22px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '18px', gap: '12px', flexWrap: 'wrap' }}>
+                <div>
+                  <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', fontWeight: 500, color: 'var(--text-primary)', marginBottom: '3px' }}>
+                    5-Year Margin Trend
+                  </h2>
+                  <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-tertiary)' }}>
+                    FY2021\u2013FY2025 \u00b7 Structural vs cyclical margin movement.
+                  </p>
+                </div>
+                <div style={{ display: 'flex', gap: '4px', flexShrink: 0 }}>
+                  {([
+                    { key: 'gross_margin' as const,     label: 'Gross' },
+                    { key: 'operating_margin' as const, label: 'Operating' },
+                    { key: 'net_margin' as const,       label: 'Net' },
+                  ]).map(opt => (
+                    <button
+                      key={opt.key}
+                      onClick={() => setTrendMetric(opt.key)}
+                      style={{
+                        fontFamily: 'var(--font-sans)', fontSize: '11px',
+                        padding: '4px 10px', borderRadius: '5px', border: 'var(--border-rest)',
+                        backgroundColor: trendMetric === opt.key ? 'var(--bg-muted)' : 'var(--bg-surface-2)',
+                        color: trendMetric === opt.key ? 'var(--text-primary)' : 'var(--text-secondary)',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <ResponsiveContainer width="100%" height={240}>
+                <LineChart data={trendData} margin={{ top: 4, right: 8, left: 0, bottom: 4 }}>
+                  <XAxis dataKey="year" tick={{ fontFamily: 'var(--font-mono)', fontSize: 10, fill: '#9CA3AF' }} axisLine={{ stroke: 'rgba(0,0,0,0.06)' }} tickLine={false} />
+                  <YAxis tick={{ fontFamily: 'var(--font-mono)', fontSize: 10, fill: '#9CA3AF' }} tickFormatter={v => `${v}%`} axisLine={false} tickLine={false} width={38} />
+                  <Tooltip contentStyle={tooltipStyle} formatter={(v: unknown) => [`${v}%`]} />
+                  <Legend wrapperStyle={{ fontFamily: 'var(--font-mono)', fontSize: '11px', paddingTop: '8px' }} />
+                  {activeTickers.map((ticker, i) => (
+                    <Line
+                      key={ticker} type="monotone" dataKey={ticker}
+                      stroke={PALETTE[i]} strokeWidth={2}
+                      dot={{ r: 3, fill: PALETTE[i], strokeWidth: 0 }}
+                      activeDot={{ r: 5 }}
+                    />
+                  ))}
+                </LineChart>
+              </ResponsiveContainer>
+              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-tertiary)', marginTop: '10px' }}>
+                Source: Trikosh database \u00b7 FY2021\u2013FY2025 \u00b7 Only years with available data are plotted
+              </p>
+            </div>
+
+          </div>
+        )}
+
       </div>
     </div>
   )
