@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import type { Sector } from '@/lib/types'
-import { COMPANIES, MOCK_CARDS, COMPANY_METRICS } from '@/lib/mockData'
+import { COMPANIES, MOCK_CARDS } from '@/lib/mockData'
 import SectorPill from '@/components/data/SectorPill'
 import DataAssetCard from '@/components/ui/DataAssetCard'
 
@@ -21,16 +21,16 @@ function buildCardData(ticker: string) {
     'Consumer Internet & Digital Platforms':{ primary: 'Revenue Growth YoY', secondary: 'EBITDA Margin', sparkline: [0.20, 0.25, 0.30, 0.35, 0.38, 0.40] },
   }
   const def = sectorDefaults[company.sector]
-  const metrics = COMPANY_METRICS[ticker]
+
   return {
     company,
-    primaryMetric:   { label: def.primary,   value: metrics?.primaryValue   ?? 0.12,  unit: 'PCT'      as const, period: 'FY2024' },
-    secondaryMetric: { label: def.secondary,  value: metrics?.secondaryValue ?? 0.025, unit: 'PCT'      as const, period: 'FY2024' },
+    primaryMetric:   { label: def.primary,   value: 0.12,  unit: 'PCT'      as const, period: 'FY2024' },
+    secondaryMetric: { label: def.secondary,  value: 0.025, unit: 'PCT'      as const, period: 'FY2024' },
     ratios: [
-      { label: 'P/E', value: metrics?.pe  ?? 16.0, unit: 'MULTIPLE' as const, period: 'FY2024' },
-      { label: 'ROE', value: metrics?.roe ?? 0.12,  unit: 'PCT'     as const, period: 'FY2024' },
+      { label: 'P/E', value: 16.0, unit: 'MULTIPLE' as const, period: 'FY2024' },
+      { label: 'ROE', value: 0.12,  unit: 'PCT'     as const, period: 'FY2024' },
     ],
-    sparkline: metrics?.sparkline ?? def.sparkline,
+    sparkline: def.sparkline,
     source: {
       source: 'SEC 10-K' as const,
       standard: 'GAAP' as const,

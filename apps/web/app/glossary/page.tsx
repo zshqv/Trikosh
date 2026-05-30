@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import { GLOSSARY_TERMS } from '@/lib/mockData'
+import { GLOSSARY as GLOSSARY_TERMS } from '@/lib/mockData'
 import TickerBadge from '@/components/ui/TickerBadge'
 
 export default function GlossaryPage() {
