@@ -473,11 +473,11 @@ export default function ComparePage() {
         {/* Cross-sector warning */}
         {crossSector && hasEnoughToCompare && (
           <div style={{
-            backgroundColor: 'rgba(217,119,6,0.07)', border: '1px solid rgba(217,119,6,0.25)',
-            borderRadius: '8px', padding: '12px 16px', marginBottom: '16px',
+            backgroundColor: "rgba(217,119,6,0.07)", border: "1px solid rgba(217,119,6,0.25)",
+            borderRadius: "8px", padding: "12px 16px", marginBottom: "16px",
           }}>
-            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--delta-warn)' }}>
-              <strong>Cross-sector comparison.</strong> Margin levels are not directly comparable across sectors \u2014 software gross margins run 70\u201385%, managed care runs 20\u201330%. Use relative trajectories and peer-group context, not absolute levels.
+            <p style={{ fontFamily: "var(--font-sans)", fontSize: "13px", color: "var(--delta-warn)" }}>
+              <strong>Heads up:</strong> These companies are from different sectors. Their numbers may not be directly comparable — use this view for broad context, not side-by-side benchmarking.
             </p>
           </div>
         )}
@@ -711,3 +711,4 @@ export default function ComparePage() {
     </div>
   )
 }
+
