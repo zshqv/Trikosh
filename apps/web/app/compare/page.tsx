@@ -52,7 +52,7 @@ function fmtPct(v: number | null) {
 }
 function fmtMult(v: number | null) {
   if (v == null) return '\u2013'
-  return `${v.toFixed(1)}\u00d7`
+  return `${v.toFixed(1)}×`
 }
 function fmtRev(v: number | null) {
   if (v == null) return '\u2013'
@@ -357,7 +357,7 @@ export default function ComparePage() {
                             cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
                             fontSize: '11px', color: 'var(--text-tertiary)', lineHeight: 1,
                           }}
-                        >\u00d7</button>
+                        >×</button>
                       )}
 
                       {/* Dropdown */}
@@ -711,4 +711,5 @@ export default function ComparePage() {
     </div>
   )
 }
+
 
