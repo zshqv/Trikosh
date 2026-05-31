@@ -203,7 +203,7 @@ export default function ResearchPage() {
             textTransform: 'uppercase',
             marginBottom: '12px',
           }}>
-            Research Framework · Trikosh Method
+            Research Framework Ã‚Â· Trikosh Method
           </div>
           <h1 style={{
             fontFamily: 'var(--font-serif)',
