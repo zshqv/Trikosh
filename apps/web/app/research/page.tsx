@@ -186,8 +186,8 @@ const SECTOR_RATIOS: Record<string, { primary: string[]; avoid: string[] }> = {
 }
 
 export default function ResearchPage() {
-  const [activeStep, setActiveStep] = useState<number | null>(null)
-  const [activeSector, setActiveSector] = useState<string | null>(null)
+  const [activeStep, setActiveStep] = useState(null as number | null)
+  const [activeSector, setActiveSector] = useState(null as string | null)
 
   return (
     <div style={{ backgroundColor: 'var(--bg-base)', minHeight: '100vh' }}>
