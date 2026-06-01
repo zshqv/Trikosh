@@ -6,6 +6,7 @@ import type { Sector } from '@/lib/types'
 import { COMPANIES, MOCK_CARDS } from '@/lib/mockData'
 import SectorPill from '@/components/data/SectorPill'
 import DataAssetCard from '@/components/ui/DataAssetCard'
+import { Reveal } from '@/components/effects/Reveal'
 
 type SortKey = 'name' | 'sector' | 'metric'
 
@@ -81,19 +82,24 @@ export default function CompaniesPage() {
 
   return (
     <div style={{ backgroundColor: 'var(--bg-base)', minHeight: '100vh' }}>
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '40px 24px' }}>
-        <h1
-          style={{
-            fontFamily: 'var(--font-serif)',
-            fontSize: '32px',
-            fontWeight: 500,
-            lineHeight: 1.2,
-            color: 'var(--text-primary)',
-            marginBottom: '28px',
-          }}
-        >
-          Companies
-        </h1>
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '56px 24px 80px' }}>
+        <Reveal>
+          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--accent-data)', marginBottom: '12px' }}>
+            Coverage universe
+          </p>
+          <h1
+            style={{
+              fontFamily: 'var(--font-sans)',
+              fontSize: 'clamp(32px, 5vw, 46px)',
+              fontWeight: 700,
+              lineHeight: 1.1,
+              color: 'var(--text-primary)',
+              marginBottom: '28px',
+            }}
+          >
+            Companies
+          </h1>
+        </Reveal>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '28px' }}>
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>

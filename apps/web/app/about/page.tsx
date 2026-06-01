@@ -90,7 +90,7 @@ export default function AboutPage() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '6px',
-                backgroundColor: 'rgba(37,99,235,0.06)',
+                backgroundColor: 'rgba(124,58,237,0.10)',
               }}
             >
               View on GitHub →
@@ -100,8 +100,8 @@ export default function AboutPage() {
               style={{
                 fontFamily: 'var(--font-mono)',
                 fontSize: '11px',
-                color: '#065F46',
-                backgroundColor: '#D1FAE5',
+                color: '#34d399',
+                backgroundColor: 'rgba(52,211,153,0.12)',
                 padding: '3px 8px',
                 borderRadius: '4px',
               }}

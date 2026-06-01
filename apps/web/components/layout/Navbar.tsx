@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
+import { motion } from 'motion/react'
 import { UserButton, SignInButton, SignedIn, SignedOut } from '@clerk/nextjs'
 
 const NAV_LINKS = [
@@ -16,6 +17,7 @@ export default function Navbar() {
   const pathname = usePathname()
   const router = useRouter()
   const [query, setQuery] = useState('')
+  const [hovered, setHovered] = useState<string | null>(null)
   const [companyCount, setCompanyCount] = useState<number | null>(null)
 
   useEffect(() => {
@@ -35,6 +37,11 @@ export default function Navbar() {
     setQuery('')
   }
 
+  // The link whose underline is shown: hovered takes priority, else active route.
+  const activeHref =
+    NAV_LINKS.find(l => l.href === pathname || pathname.startsWith(l.href))?.href ?? null
+  const highlight = hovered ?? activeHref
+
   return (
     <nav
       style={{
@@ -42,9 +49,11 @@ export default function Navbar() {
         top: 0,
         zIndex: 50,
         width: '100%',
-        height: '56px',
-        backgroundColor: 'var(--bg-surface-1)',
-        borderBottom: 'var(--border-rest)',
+        height: 'var(--nav-h)',
+        backgroundColor: 'rgba(10,10,10,0.8)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
+        borderBottom: '1px solid #1f1f1f',
         display: 'flex',
         alignItems: 'center',
       }}
@@ -65,15 +74,16 @@ export default function Navbar() {
         <Link href="/" style={{ textDecoration: 'none', flexShrink: 0 }}>
           <span
             style={{
-              fontFamily: 'var(--font-serif)',
-              fontSize: '15px',
-              fontWeight: 500,
+              fontFamily: 'var(--font-sans)',
+              fontSize: '16px',
+              fontWeight: 700,
+              letterSpacing: '0.04em',
               color: 'var(--text-primary)',
               display: 'block',
               lineHeight: 1.1,
             }}
           >
-            Trikosh
+            TRIKOSH
           </span>
           <span
             style={{
@@ -89,32 +99,49 @@ export default function Navbar() {
 
         {/* Center: Navigation links */}
         <div
+          onMouseLeave={() => setHovered(null)}
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '28px',
+            gap: '4px',
             flex: 1,
             justifyContent: 'center',
           }}
         >
           {NAV_LINKS.map(({ label, href }) => {
-            const isActive = pathname === href || (href !== '/' && pathname.startsWith(href))
+            const isActive = href === activeHref
+            const isHot = href === highlight
             return (
               <Link
                 key={href}
                 href={href}
+                onMouseEnter={() => setHovered(href)}
                 style={{
+                  position: 'relative',
                   fontFamily: 'var(--font-sans)',
                   fontSize: '14px',
-                  fontWeight: 400,
-                  color: isActive ? 'var(--accent-primary)' : 'var(--text-secondary)',
-                  textDecoration: isActive ? 'underline' : 'none',
-                  textDecorationColor: 'var(--accent-primary)',
-                  textUnderlineOffset: '3px',
-                  transition: 'color 150ms ease',
+                  fontWeight: isActive ? 600 : 500,
+                  color: isActive || isHot ? 'var(--text-primary)' : 'var(--text-secondary)',
+                  padding: '8px 14px',
+                  transition: 'color 180ms ease',
                 }}
               >
                 {label}
+                {isHot && (
+                  <motion.span
+                    layoutId="nav-underline"
+                    transition={{ type: 'spring', stiffness: 480, damping: 38 }}
+                    style={{
+                      position: 'absolute',
+                      left: 12,
+                      right: 12,
+                      bottom: -2,
+                      height: 2,
+                      borderRadius: 2,
+                      backgroundColor: 'var(--accent-primary)',
+                    }}
+                  />
+                )}
               </Link>
             )
           })}
@@ -133,9 +160,9 @@ export default function Navbar() {
                 fontSize: '13px',
                 color: 'var(--text-primary)',
                 backgroundColor: 'var(--bg-surface-2)',
-                border: 'var(--border-rest)',
-                borderRadius: '6px',
-                padding: '5px 10px',
+                border: '1px solid #1f1f1f',
+                borderRadius: '8px',
+                padding: '6px 12px',
                 width: '176px',
                 outline: 'none',
               }}
@@ -148,12 +175,12 @@ export default function Navbar() {
                 style={{
                   fontFamily: 'var(--font-sans)',
                   fontSize: '13px',
-                  fontWeight: 500,
-                  color: 'var(--text-primary)',
-                  backgroundColor: 'var(--bg-surface-2)',
-                  border: 'var(--border-rest)',
-                  borderRadius: '6px',
-                  padding: '5px 12px',
+                  fontWeight: 600,
+                  color: '#ffffff',
+                  backgroundColor: 'var(--accent-primary)',
+                  border: 'none',
+                  borderRadius: '8px',
+                  padding: '7px 14px',
                   cursor: 'pointer',
                   whiteSpace: 'nowrap',
                 }}

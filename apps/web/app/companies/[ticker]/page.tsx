@@ -3,6 +3,9 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
+import {
+  AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
+} from 'recharts'
 import TickerBadge from '@/components/ui/TickerBadge'
 import DeltaLabel from '@/components/ui/DeltaLabel'
 import { formatPercent, formatMultiple, formatCurrency } from '@/lib/utils'
@@ -216,6 +219,21 @@ function FinancialTable({ rows, years }: { rows: TableRow[]; years: string[] }) 
 
   return (
     <div style={{ overflowX: 'auto' }}>
+      <style jsx global>{`
+        .fin-row { transition: background-color 180ms ease; }
+        .fin-row td:first-child { position: relative; }
+        .fin-row td:first-child::before {
+          content: '';
+          position: absolute;
+          left: 0; top: 0; bottom: 0;
+          width: 3px;
+          background: var(--accent-primary);
+          clip-path: inset(50% 0 50% 0);
+          transition: clip-path 220ms cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
+        .fin-row:hover td:first-child::before { clip-path: inset(0 0 0 0); }
+        .fin-row:hover { background-color: rgba(124, 58, 237, 0.06) !important; }
+      `}</style>
       <table style={{
         width: '100%', borderCollapse: 'collapse',
         backgroundColor: 'var(--bg-surface-1)', borderRadius: '8px',
@@ -234,7 +252,7 @@ function FinancialTable({ rows, years }: { rows: TableRow[]; years: string[] }) 
             const prevVal = row.values[row.values.length - 2]
             const delta   = yoyDelta(lastVal, prevVal)
             return (
-              <tr key={row.metric} style={{ backgroundColor: i % 2 === 0 ? 'var(--bg-surface-1)' : 'var(--bg-base)' }}>
+              <tr key={row.metric} className="fin-row" style={{ backgroundColor: i % 2 === 0 ? 'var(--bg-surface-1)' : 'var(--bg-base)' }}>
                 <td style={tdStyle('left')}>{row.metric}</td>
                 {row.values.map((v, j) => (
                   <td key={j} style={{ ...tdStyle('right'), fontVariantNumeric: 'tabular-nums' }}>
@@ -321,6 +339,14 @@ export default function CompanyDetailPage() {
   const incomeYears   = incomeAsc.map(r => `FY${r.fiscal_year}`)
   const balanceYears  = balanceAsc.map(r => `FY${r.fiscal_year}`)
   const cashflowYears = cashflowAsc.map(r => `FY${r.fiscal_year}`)
+
+  const revChartData = incomeAsc
+    .map(r => ({
+      year: `FY${r.fiscal_year}`,
+      Revenue: toNum(r.revenue),
+      'Net Income': toNum(r.net_income),
+    }))
+    .filter(d => d.Revenue != null)
 
   const incomeRows: TableRow[] = [
     { metric: 'Revenue',          values: incomeAsc.map(r => r.revenue) },
@@ -420,7 +446,7 @@ export default function CompanyDetailPage() {
             <button style={{
               fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--accent-primary)',
               border: 'var(--border-hover)', borderRadius: '6px', padding: '8px 16px',
-              backgroundColor: 'rgba(37,99,235,0.06)', cursor: 'pointer', flexShrink: 0,
+              backgroundColor: 'rgba(124,58,237,0.10)', cursor: 'pointer', flexShrink: 0,
             }}>
               Export for Analysis
             </button>
@@ -448,6 +474,43 @@ export default function CompanyDetailPage() {
 
         {activeTab === 'Financials' && (
           <div>
+            {revChartData.length > 1 && (
+              <div style={{
+                backgroundColor: 'var(--bg-surface-1)', border: 'var(--border-rest)',
+                borderRadius: '12px', padding: '22px', marginBottom: '24px',
+              }}>
+                <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '3px' }}>
+                  Revenue &amp; Net Income
+                </h2>
+                <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-tertiary)', marginBottom: '16px' }}>
+                  {revChartData[0].year}–{revChartData[revChartData.length - 1].year} · Reported basis.
+                </p>
+                <ResponsiveContainer width="100%" height={260}>
+                  <AreaChart data={revChartData} margin={{ top: 4, right: 8, left: 0, bottom: 4 }}>
+                    <defs>
+                      <linearGradient id="revFill" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#7c3aed" stopOpacity={0.45} />
+                        <stop offset="100%" stopColor="#7c3aed" stopOpacity={0} />
+                      </linearGradient>
+                      <linearGradient id="netFill" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#a78bfa" stopOpacity={0.3} />
+                        <stop offset="100%" stopColor="#a78bfa" stopOpacity={0} />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid vertical={false} stroke="#1f1f1f" />
+                    <XAxis dataKey="year" tick={{ fontFamily: 'var(--font-mono)', fontSize: 11, fill: '#a1a1aa' }} axisLine={{ stroke: '#1f1f1f' }} tickLine={false} />
+                    <YAxis tick={{ fontFamily: 'var(--font-mono)', fontSize: 10, fill: '#a1a1aa' }} tickFormatter={(v: number) => formatCurrency(v)} axisLine={false} tickLine={false} width={52} />
+                    <Tooltip
+                      contentStyle={{ fontFamily: 'var(--font-mono)', fontSize: '11px', backgroundColor: 'rgba(17,17,17,0.92)', border: '1px solid #2a2a2a', borderRadius: '8px', color: 'var(--text-primary)' }}
+                      cursor={{ stroke: 'rgba(124,58,237,0.4)' }}
+                      formatter={(v: unknown) => [formatCurrency(Number(v))]}
+                    />
+                    <Area type="monotone" dataKey="Revenue" stroke="#7c3aed" strokeWidth={2} fill="url(#revFill)" />
+                    <Area type="monotone" dataKey="Net Income" stroke="#a78bfa" strokeWidth={2} fill="url(#netFill)" />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+            )}
             <div style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>
               {(['Income Statement', 'Balance Sheet', 'Cash Flow'] as FinTab[]).map(ft => (
                 <button
@@ -533,7 +596,7 @@ export default function CompanyDetailPage() {
                       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                       transition: 'border-color 150ms ease', cursor: 'pointer',
                     }}
-                      onMouseEnter={e => (e.currentTarget.style.borderColor = '#2563EB')}
+                      onMouseEnter={e => (e.currentTarget.style.borderColor = '#7c3aed')}
                       onMouseLeave={e => (e.currentTarget.style.borderColor = '')}
                     >
                       <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>

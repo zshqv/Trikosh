@@ -1,6 +1,9 @@
 'use client'
 
 import { useState } from 'react'
+import { motion, useReducedMotion } from 'motion/react'
+import TracingBeam from '@/components/aceternity/TracingBeam'
+import { Reveal } from '@/components/effects/Reveal'
 
 const STEPS = [
   {
@@ -8,7 +11,7 @@ const STEPS = [
     title: 'Understand the Business Before You Touch a Single Number',
     duration: '2-4 hours',
     tag: 'Qualitative',
-    tagColor: '#2563EB',
+    tagColor: '#7c3aed',
     body: [
       'Read the most recent annual report cover-to-cover — not the summary, the full document. Management\'s tone, risk factor language, and footnotes reveal far more than the headline numbers.',
       'Map the revenue model precisely: is the company selling products, subscriptions, transaction fees, or a mix? Pricing power and switching costs are the most predictive long-run moat indicators.',
@@ -184,13 +187,15 @@ const SECTOR_RATIOS = {
 export default function ResearchPage() {
   const [activeStep, setActiveStep] = useState(null)
   const [activeSector, setActiveSector] = useState(null)
+  const reduce = useReducedMotion()
 
   return (
     <div style={{ background: 'var(--bg-base)', minHeight: '100vh', fontFamily: 'var(--font-sans)' }}>
       <div style={{ maxWidth: 860, margin: '0 auto', padding: '56px 24px 80px' }}>
+       <TracingBeam>
 
         {/* Header */}
-        <div style={{ marginBottom: 48 }}>
+        <Reveal style={{ marginBottom: 48 }}>
           <div style={{
             display: 'inline-block',
             fontSize: 11,
@@ -198,7 +203,7 @@ export default function ResearchPage() {
             letterSpacing: '0.1em',
             textTransform: 'uppercase',
             color: 'var(--accent-primary)',
-            background: 'rgba(37,99,235,0.08)',
+            background: 'rgba(124,58,237,0.12)',
             padding: '4px 10px',
             borderRadius: 4,
             marginBottom: 16,
@@ -238,10 +243,10 @@ export default function ResearchPage() {
           >
             <span style={{ fontSize: 15 }}>↓</span> Download Excel Template
           </a>
-        </div>
+        </Reveal>
 
         {/* Sector Ratio Toggle */}
-        <div style={{
+        <Reveal style={{
           background: 'var(--bg-surface-1)',
           border: 'var(--border-rest)',
           borderRadius: 10,
@@ -268,7 +273,7 @@ export default function ResearchPage() {
                   padding: '6px 14px',
                   borderRadius: 20,
                   border: activeSector === sector ? '1px solid var(--accent-primary)' : 'var(--border-rest)',
-                  background: activeSector === sector ? 'rgba(37,99,235,0.1)' : 'transparent',
+                  background: activeSector === sector ? 'rgba(124,58,237,0.12)' : 'transparent',
                   color: activeSector === sector ? 'var(--accent-primary)' : 'var(--text-secondary)',
                   cursor: 'pointer',
                   transition: 'all 0.15s',
@@ -313,15 +318,19 @@ export default function ResearchPage() {
               </div>
             </div>
           )}
-        </div>
+        </Reveal>
 
         {/* Steps Accordion */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           {STEPS.map((step) => {
             const isOpen = activeStep === step.number
             return (
-              <div
+              <motion.div
                 key={step.number}
+                initial={reduce ? false : { opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-80px' }}
+                transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
                 style={{
                   background: 'var(--bg-surface-1)',
                   border: isOpen ? `1px solid ${step.tagColor}40` : 'var(--border-rest)',
@@ -435,7 +444,7 @@ export default function ResearchPage() {
                     </div>
                   </div>
                 )}
-              </div>
+              </motion.div>
             )
           })}
         </div>
@@ -452,6 +461,7 @@ export default function ResearchPage() {
           </p>
         </div>
 
+       </TracingBeam>
       </div>
     </div>
   )

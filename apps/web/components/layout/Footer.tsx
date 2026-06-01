@@ -129,7 +129,7 @@ export default function Footer() {
                       textDecoration: 'none',
                       transition: 'color 150ms ease',
                     }}
-                    onMouseEnter={e => ((e.currentTarget as HTMLAnchorElement).style.color = 'var(--text-primary)')}
+                    onMouseEnter={e => ((e.currentTarget as HTMLAnchorElement).style.color = 'var(--accent-primary)')}
                     onMouseLeave={e => ((e.currentTarget as HTMLAnchorElement).style.color = 'var(--text-secondary)')}
                   >
                     {label}

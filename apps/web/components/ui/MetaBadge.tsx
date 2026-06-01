@@ -4,10 +4,10 @@ interface MetaBadgeProps {
 }
 
 const VARIANTS = {
-  gaap: { bg: '#D1FAE5', color: '#065F46' },
-  ifrs: { bg: '#DBEAFE', color: '#1E40AF' },
-  sec:  { bg: '#DBEAFE', color: '#1E40AF' },
-  warn: { bg: '#FEF3C7', color: '#92400E' },
+  gaap: { bg: 'rgba(52,211,153,0.12)', color: '#34d399' },
+  ifrs: { bg: 'rgba(124,58,237,0.14)', color: '#a78bfa' },
+  sec:  { bg: 'rgba(124,58,237,0.14)', color: '#a78bfa' },
+  warn: { bg: 'rgba(251,191,36,0.12)', color: '#fbbf24' },
 }
 
 export default function MetaBadge({ label, variant }: MetaBadgeProps) {

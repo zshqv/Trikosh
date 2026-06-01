@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react'
 import { GLOSSARY as GLOSSARY_TERMS } from '@/lib/mockData'
 import TickerBadge from '@/components/ui/TickerBadge'
+import { Reveal } from '@/components/effects/Reveal'
 
 export default function GlossaryPage() {
   const [search, setSearch] = useState('')
@@ -27,19 +28,24 @@ export default function GlossaryPage() {
 
   return (
     <div style={{ backgroundColor: 'var(--bg-base)', minHeight: '100vh' }}>
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '40px 24px' }}>
-        <h1
-          style={{
-            fontFamily: 'var(--font-serif)',
-            fontSize: '32px',
-            fontWeight: 500,
-            lineHeight: 1.2,
-            color: 'var(--text-primary)',
-            marginBottom: '24px',
-          }}
-        >
-          Glossary
-        </h1>
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '56px 24px 80px' }}>
+        <Reveal>
+          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--accent-data)', marginBottom: '12px' }}>
+            Reference
+          </p>
+          <h1
+            style={{
+              fontFamily: 'var(--font-sans)',
+              fontSize: 'clamp(32px, 5vw, 46px)',
+              fontWeight: 700,
+              lineHeight: 1.1,
+              color: 'var(--text-primary)',
+              marginBottom: '24px',
+            }}
+          >
+            Glossary
+          </h1>
+        </Reveal>
 
         <input
           type="text"

@@ -2,11 +2,12 @@
 
 import { useState, useMemo, useRef, useEffect } from 'react'
 import {
-  BarChart, Bar, LineChart, Line,
+  BarChart, Bar, LineChart, Line, CartesianGrid,
   XAxis, YAxis, Tooltip, ResponsiveContainer, Legend,
 } from 'recharts'
+import CardSpotlight from '@/components/aceternity/CardSpotlight'
 
-const PALETTE = ['#2563EB', '#6366F1', '#0EA5E9', '#D97706'] as const
+const PALETTE = ['#7c3aed', '#a78bfa', '#38bdf8', '#fbbf24'] as const
 
 interface CompanyMeta {
   ticker: string
@@ -280,10 +281,13 @@ export default function ComparePage() {
   const tooltipStyle = {
     fontFamily: 'var(--font-mono)',
     fontSize: '11px',
-    backgroundColor: 'var(--bg-surface-1)',
-    border: '0.5px solid rgba(0,0,0,0.10)',
-    borderRadius: '6px',
+    backgroundColor: 'rgba(17,17,17,0.92)',
+    border: '1px solid #2a2a2a',
+    borderRadius: '8px',
+    color: 'var(--text-primary)',
+    boxShadow: '0 12px 40px -12px rgba(0,0,0,0.8)',
   }
+  const axisTick = { fontFamily: 'var(--font-mono)', fontSize: 11, fill: '#a1a1aa' }
 
   return (
     <div style={{ backgroundColor: 'var(--bg-base)', minHeight: '100vh' }}>
@@ -582,8 +586,8 @@ export default function ComparePage() {
                             const isNeg = typeof raw === 'number' && raw < 0
 
                             let cellColor = 'var(--text-primary)'
-                            if (isLeader)      cellColor = '#16a34a'
-                            else if (isLoser)  cellColor = '#dc2626'
+                            if (isLeader)      cellColor = 'var(--delta-pos)'
+                            else if (isLoser)  cellColor = 'var(--delta-neg)'
                             else if (isNeg)    cellColor = 'var(--delta-neg)'
 
                             return (
@@ -625,9 +629,9 @@ export default function ComparePage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(460px, 1fr))', gap: '16px' }}>
 
             {/* Margin bar chart */}
-            <div style={{ backgroundColor: 'var(--bg-surface-1)', border: 'var(--border-rest)', borderRadius: '12px', padding: '22px' }}>
+            <CardSpotlight style={{ padding: '22px' }}>
               <div style={{ marginBottom: '18px' }}>
-                <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', fontWeight: 500, color: 'var(--text-primary)', marginBottom: '3px' }}>
+                <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '3px' }}>
                   Margin Profile \u2014 Latest FY
                 </h2>
                 <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-tertiary)' }}>
@@ -636,25 +640,26 @@ export default function ComparePage() {
               </div>
               <ResponsiveContainer width="100%" height={240}>
                 <BarChart data={marginBarData} margin={{ top: 4, right: 8, left: 0, bottom: 4 }} barCategoryGap="28%">
-                  <XAxis dataKey="ticker" tick={{ fontFamily: 'var(--font-mono)', fontSize: 11, fill: '#9CA3AF' }} axisLine={false} tickLine={false} />
-                  <YAxis tick={{ fontFamily: 'var(--font-mono)', fontSize: 10, fill: '#9CA3AF' }} tickFormatter={v => `${v}%`} axisLine={false} tickLine={false} width={38} />
-                  <Tooltip contentStyle={tooltipStyle} formatter={(v: unknown) => [`${v}%`]} />
-                  <Legend wrapperStyle={{ fontFamily: 'var(--font-mono)', fontSize: '11px', paddingTop: '8px' }} />
-                  <Bar dataKey="Gross"     fill="#2563EB" fillOpacity={0.9} radius={[2, 2, 0, 0]} />
-                  <Bar dataKey="Operating" fill="#6366F1" fillOpacity={0.9} radius={[2, 2, 0, 0]} />
-                  <Bar dataKey="Net"       fill="#0EA5E9" fillOpacity={0.9} radius={[2, 2, 0, 0]} />
+                  <CartesianGrid vertical={false} stroke="#1f1f1f" />
+                  <XAxis dataKey="ticker" tick={axisTick} axisLine={false} tickLine={false} />
+                  <YAxis tick={{ ...axisTick, fontSize: 10 }} tickFormatter={v => `${v}%`} axisLine={false} tickLine={false} width={38} />
+                  <Tooltip contentStyle={tooltipStyle} cursor={{ fill: 'rgba(124,58,237,0.08)' }} formatter={(v: unknown) => [`${v}%`]} />
+                  <Legend wrapperStyle={{ fontFamily: 'var(--font-mono)', fontSize: '11px', paddingTop: '8px', color: 'var(--text-secondary)' }} />
+                  <Bar dataKey="Gross"     fill="#7c3aed" fillOpacity={0.95} radius={[2, 2, 0, 0]} />
+                  <Bar dataKey="Operating" fill="#a78bfa" fillOpacity={0.95} radius={[2, 2, 0, 0]} />
+                  <Bar dataKey="Net"       fill="#38bdf8" fillOpacity={0.95} radius={[2, 2, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
               <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-tertiary)', marginTop: '10px' }}>
                 Source: Trikosh database \u00b7 Note: bank gross margin may be null \u2014 shown as 0
               </p>
-            </div>
+            </CardSpotlight>
 
             {/* Trend line chart */}
-            <div style={{ backgroundColor: 'var(--bg-surface-1)', border: 'var(--border-rest)', borderRadius: '12px', padding: '22px' }}>
+            <CardSpotlight style={{ padding: '22px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '18px', gap: '12px', flexWrap: 'wrap' }}>
                 <div>
-                  <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', fontWeight: 500, color: 'var(--text-primary)', marginBottom: '3px' }}>
+                  <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '3px' }}>
                     5-Year Margin Trend
                   </h2>
                   <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-tertiary)' }}>
@@ -685,10 +690,11 @@ export default function ComparePage() {
               </div>
               <ResponsiveContainer width="100%" height={240}>
                 <LineChart data={trendData} margin={{ top: 4, right: 8, left: 0, bottom: 4 }}>
-                  <XAxis dataKey="year" tick={{ fontFamily: 'var(--font-mono)', fontSize: 10, fill: '#9CA3AF' }} axisLine={{ stroke: 'rgba(0,0,0,0.06)' }} tickLine={false} />
-                  <YAxis tick={{ fontFamily: 'var(--font-mono)', fontSize: 10, fill: '#9CA3AF' }} tickFormatter={v => `${v}%`} axisLine={false} tickLine={false} width={38} />
-                  <Tooltip contentStyle={tooltipStyle} formatter={(v: unknown) => [`${v}%`]} />
-                  <Legend wrapperStyle={{ fontFamily: 'var(--font-mono)', fontSize: '11px', paddingTop: '8px' }} />
+                  <CartesianGrid vertical={false} stroke="#1f1f1f" />
+                  <XAxis dataKey="year" tick={{ ...axisTick, fontSize: 10 }} axisLine={{ stroke: '#1f1f1f' }} tickLine={false} />
+                  <YAxis tick={{ ...axisTick, fontSize: 10 }} tickFormatter={v => `${v}%`} axisLine={false} tickLine={false} width={38} />
+                  <Tooltip contentStyle={tooltipStyle} cursor={{ stroke: 'rgba(124,58,237,0.4)' }} formatter={(v: unknown) => [`${v}%`]} />
+                  <Legend wrapperStyle={{ fontFamily: 'var(--font-mono)', fontSize: '11px', paddingTop: '8px', color: 'var(--text-secondary)' }} />
                   {activeTickers.map((ticker, i) => (
                     <Line
                       key={ticker} type="monotone" dataKey={ticker}
@@ -702,7 +708,7 @@ export default function ComparePage() {
               <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-tertiary)', marginTop: '10px' }}>
                 Source: Trikosh database \u00b7 FY2021\u2013FY2025 \u00b7 Only years with available data are plotted
               </p>
-            </div>
+            </CardSpotlight>
 
           </div>
         )}
