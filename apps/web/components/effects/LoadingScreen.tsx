@@ -62,8 +62,8 @@ export default function LoadingScreen() {
             style={{
               fontFamily: 'var(--font-display)',
               fontSize: 'clamp(40px, 8vw, 72px)',
-              fontWeight: 400,
-              letterSpacing: '0.06em',
+              fontWeight: 700,
+              letterSpacing: '0.02em',
               color: '#f5f5f5',
               lineHeight: 1,
             }}

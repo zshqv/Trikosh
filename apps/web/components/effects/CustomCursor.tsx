@@ -1,20 +1,30 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { motion, useMotionValue, useSpring } from 'motion/react'
+import { motion, useMotionValue, useSpring, useTransform } from 'motion/react'
 
 const INTERACTIVE = 'a, button, input, textarea, select, [role="button"], [data-cursor="hover"]'
+const DOT = 6
+const RING = 32
 
 export default function CustomCursor() {
   const [enabled, setEnabled] = useState(false)
   const [hovering, setHovering] = useState(false)
   const [visible, setVisible] = useState(false)
 
-  // Dot tracks exactly; ring follows with spring lag.
-  const dotX = useMotionValue(-100)
-  const dotY = useMotionValue(-100)
-  const ringX = useSpring(dotX, { damping: 28, stiffness: 380, mass: 0.6 })
-  const ringY = useSpring(dotY, { damping: 28, stiffness: 380, mass: 0.6 })
+  // Raw pointer position. Centering offsets are baked into the derived
+  // values below so we only ever drive translateX/translateY (never `x`).
+  const rawX = useMotionValue(-100)
+  const rawY = useMotionValue(-100)
+
+  const dotX = useTransform(rawX, v => v - DOT / 2)
+  const dotY = useTransform(rawY, v => v - DOT / 2)
+
+  const springCfg = { damping: 28, stiffness: 380, mass: 0.6 }
+  const springX = useSpring(rawX, springCfg)
+  const springY = useSpring(rawY, springCfg)
+  const ringX = useTransform(springX, v => v - RING / 2)
+  const ringY = useTransform(springY, v => v - RING / 2)
 
   useEffect(() => {
     const fine = window.matchMedia('(pointer: fine)')
@@ -25,57 +35,55 @@ export default function CustomCursor() {
     document.documentElement.classList.add('cursor-ready')
 
     function move(e: MouseEvent) {
-      dotX.set(e.clientX)
-      dotY.set(e.clientY)
+      rawX.set(e.clientX)
+      rawY.set(e.clientY)
       setVisible(true)
       const t = e.target as Element | null
       setHovering(!!t && !!t.closest(INTERACTIVE))
     }
-    function leave() {
-      setVisible(false)
-    }
+    function leave() { setVisible(false) }
+    function enter() { setVisible(true) }
 
-    window.addEventListener('mousemove', move)
+    window.addEventListener('mousemove', move, { passive: true })
     document.addEventListener('mouseleave', leave)
+    document.addEventListener('mouseenter', enter)
 
     return () => {
       window.removeEventListener('mousemove', move)
       document.removeEventListener('mouseleave', leave)
+      document.removeEventListener('mouseenter', enter)
       document.documentElement.classList.remove('cursor-ready')
     }
-  }, [dotX, dotY])
+  }, [rawX, rawY])
 
   if (!enabled) return null
 
   return (
     <>
-      {/* Dot */}
+      {/* Dot — tracks pointer exactly */}
       <motion.div
         aria-hidden
         style={{
           position: 'fixed',
           top: 0,
           left: 0,
-          width: 6,
-          height: 6,
+          width: DOT,
+          height: DOT,
           borderRadius: '50%',
           backgroundColor: '#ffffff',
           translateX: dotX,
           translateY: dotY,
-          x: '-50%',
-          y: '-50%',
           pointerEvents: 'none',
           zIndex: 10000,
           opacity: visible ? 1 : 0,
           mixBlendMode: 'difference',
         }}
       />
-      {/* Ring */}
+      {/* Ring — follows with spring lag, scales on interactive hover */}
       <motion.div
         aria-hidden
         animate={{
-          width: hovering ? 48 : 32,
-          height: hovering ? 48 : 32,
+          scale: hovering ? 1.5 : 1,
           opacity: visible ? (hovering ? 1 : 0.6) : 0,
           borderColor: hovering ? 'rgba(167,139,250,0.9)' : 'rgba(245,245,245,0.5)',
         }}
@@ -84,12 +92,12 @@ export default function CustomCursor() {
           position: 'fixed',
           top: 0,
           left: 0,
+          width: RING,
+          height: RING,
           borderRadius: '50%',
           border: '1px solid rgba(245,245,245,0.5)',
           translateX: ringX,
           translateY: ringY,
-          x: '-50%',
-          y: '-50%',
           pointerEvents: 'none',
           zIndex: 10000,
         }}

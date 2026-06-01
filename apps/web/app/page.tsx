@@ -66,22 +66,36 @@ export default function LandingPage() {
           justifyContent: 'center',
           textAlign: 'center',
           padding: '80px 24px 64px',
+          background: 'radial-gradient(ellipse 80% 50% at 50% 40%, rgba(124,58,237,0.08) 0%, transparent 70%)',
         }}
       >
-        {/* ambient violet glow */}
+        {/* soft violet bloom behind the wordmark — adds depth */}
         <div
           aria-hidden
           style={{
             position: 'absolute',
-            top: '18%',
+            top: '30%',
             left: '50%',
-            transform: 'translateX(-50%)',
-            width: 'min(900px, 90vw)',
-            height: '480px',
-            background: 'radial-gradient(ellipse at center, rgba(124,58,237,0.18), transparent 70%)',
-            filter: 'blur(20px)',
+            transform: 'translate(-50%, -50%)',
+            width: 'min(760px, 85vw)',
+            height: '420px',
+            background: 'radial-gradient(ellipse at center, rgba(124,58,237,0.16), transparent 70%)',
+            filter: 'blur(40px)',
             pointerEvents: 'none',
             zIndex: 0,
+          }}
+        />
+        {/* film grain / noise overlay */}
+        <div
+          aria-hidden
+          style={{
+            position: 'absolute',
+            inset: 0,
+            pointerEvents: 'none',
+            zIndex: 0,
+            opacity: 0.03,
+            mixBlendMode: 'overlay',
+            backgroundImage: `url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='160'%20height='160'%3E%3Cfilter%20id='n'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='0.85'%20numOctaves='3'%20stitchTiles='stitch'/%3E%3C/filter%3E%3Crect%20width='100%25'%20height='100%25'%20filter='url(%23n)'/%3E%3C/svg%3E")`,
           }}
         />
 
@@ -109,9 +123,9 @@ export default function LandingPage() {
             style={{
               fontFamily: 'var(--font-display)',
               fontSize: 'clamp(64px, 10vw, 128px)',
-              fontWeight: 400,
+              fontWeight: 700,
               lineHeight: 0.95,
-              letterSpacing: '0.02em',
+              letterSpacing: '-0.01em',
               color: '#ffffff',
               margin: 0,
             }}

@@ -3,30 +3,33 @@
 @tailwind utilities;
 
 /* ------------------------------------------------------------------ */
-/*  Apoc Revelations 2 — landing hero headline + loader wordmark only  */
-/*  Drop the font file at: apps/web/public/fonts/ApocRevelations2.*    */
-/*  Until then it falls back gracefully to the serif stack below.      */
+/*  Display face — hero headline + loader wordmark only.               */
+/*                                                                     */
+/*  Apoc Revelations 2 is not yet in the repo, so the hero/loader use  */
+/*  Bricolage Grotesque (loaded via next/font in layout.tsx, exposed   */
+/*  as --font-display). To switch to Apoc once the file exists:        */
+/*    1. drop ApocRevelations2.woff2 in apps/web/public/fonts/         */
+/*    2. uncomment the @font-face below                                */
+/*    3. set --font-display below to 'Apoc Revelations 2', ...         */
 /* ------------------------------------------------------------------ */
+/*
 @font-face {
   font-family: 'Apoc Revelations 2';
-  src:
-    url('/fonts/ApocRevelations2.woff2') format('woff2'),
-    url('/fonts/ApocRevelations2.woff') format('woff'),
-    url('/fonts/ApocRevelations2.otf') format('opentype'),
-    url('/fonts/ApocRevelations2.ttf') format('truetype');
+  src: url('/fonts/ApocRevelations2.woff2') format('woff2');
   font-weight: 400 700;
   font-style: normal;
   font-display: swap;
 }
+*/
 
 /* ------------------------------------------------------------------ */
 /*  Trikosh — dark, editorial, violet. White backgrounds are killed.   */
 /* ------------------------------------------------------------------ */
 :root {
   --bg-base: #0a0a0a;
-  --bg-surface-1: #111111;
-  --bg-surface-2: #161616;
-  --bg-muted: #1c1c1c;
+  --bg-surface-1: #161616;
+  --bg-surface-2: #1c1c1c;
+  --bg-muted: #222222;
 
   --text-primary: #f5f5f5;
   --text-secondary: #a1a1aa;
@@ -49,10 +52,13 @@
 
   --card-radius: 12px;
   --card-transition: all 200ms cubic-bezier(0.25, 0.1, 0.25, 1);
-  --card-meta-bg: #161616;
+  --card-meta-bg: #1c1c1c;
 
-  /* Apoc only for the hero/loader wordmark; everything else Urbanist. */
-  --font-display: 'Apoc Revelations 2', 'Playfair Display', Georgia, serif;
+  /* Display face for the hero/loader wordmark; everything else Urbanist.
+     --font-display is set by next/font (Bricolage Grotesque) on <html>;
+     this is the fallback if that variable is ever absent — a grotesque
+     sans stack, never a serif/Times fallback. */
+  --font-display: 'Bricolage Grotesque', 'Urbanist', system-ui, sans-serif;
   --font-serif: var(--font-sans, 'Urbanist'), system-ui, sans-serif;
   --font-sans: 'Urbanist', system-ui, -apple-system, sans-serif;
   --font-mono: var(--font-geist-mono, 'Geist Mono'), 'JetBrains Mono', monospace;
@@ -63,9 +69,9 @@
 /* Legacy .dark hook kept as a no-op alias so any `.dark` usage still resolves. */
 .dark {
   --bg-base: #0a0a0a;
-  --bg-surface-1: #111111;
-  --bg-surface-2: #161616;
-  --bg-muted: #1c1c1c;
+  --bg-surface-1: #161616;
+  --bg-surface-2: #1c1c1c;
+  --bg-muted: #222222;
   --text-primary: #f5f5f5;
   --text-secondary: #a1a1aa;
   --text-tertiary: #6b6b73;

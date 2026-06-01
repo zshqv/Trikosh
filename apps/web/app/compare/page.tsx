@@ -48,20 +48,20 @@ function toNum(v: unknown): number | null {
 }
 
 function fmtPct(v: number | null) {
-  if (v == null) return '\u2013'
+  if (v == null) return '–'
   return `${(v * 100).toFixed(1)}%`
 }
 function fmtMult(v: number | null) {
-  if (v == null) return '\u2013'
+  if (v == null) return '–'
   return `${v.toFixed(1)}×`
 }
 function fmtRev(v: number | null) {
-  if (v == null) return '\u2013'
+  if (v == null) return '–'
   const b = v / 1e9
   return b >= 100 ? `$${b.toFixed(0)}B` : `$${b.toFixed(1)}B`
 }
 function fmtGrowth(v: number | null) {
-  if (v == null) return '\u2013'
+  if (v == null) return '–'
   const p = (v * 100).toFixed(1)
   return v >= 0 ? `+${p}%` : `${p}%`
 }
@@ -133,7 +133,7 @@ const METRICS: MetricDef[] = [
 ]
 
 const GROUP_NOTES: Record<string, string> = {
-  'Revenue & Growth': 'Scale and pace of growth \u2014 calibrates how much the business can change in absolute terms.',
+  'Revenue & Growth': 'Scale and pace of growth — calibrates how much the business can change in absolute terms.',
   'Profitability':    'The margin waterfall from gross to FCF. Levels vary widely by sector; compare peer-relative trends.',
   'Returns':          'ROE measures profit per dollar of equity. High ROE driven by leverage needs ROIC decomposition.',
   'Valuation':        'Relative tools, not absolute judgements. Growth rate, earnings quality, and sector norms all context.',
@@ -299,7 +299,7 @@ export default function ComparePage() {
             Peer Comparison
           </h1>
           <p style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-secondary)' }}>
-            Select 2\u20134 companies to compare key financial metrics side by side. Live data from Trikosh database.
+            Select 2–4 companies to compare key financial metrics side by side. Live data from Trikosh database.
           </p>
         </div>
 
@@ -346,7 +346,7 @@ export default function ComparePage() {
                             {co.name.split(' ').slice(0, 2).join(' ')}
                           </span>
                         )}
-                        <span style={{ fontSize: '10px', color: 'var(--text-tertiary)', marginLeft: '2px' }}>{isOpen ? '\u25b2' : '\u25bc'}</span>
+                        <span style={{ fontSize: '10px', color: 'var(--text-tertiary)', marginLeft: '2px' }}>{isOpen ? '▲' : '▼'}</span>
                       </button>
 
                       {/* Remove button — only show if selected and we have more than 2 slots OR slot is filled */}
@@ -501,7 +501,7 @@ export default function ComparePage() {
         {/* Loading */}
         {isLoadingAny && (
           <div style={{ padding: '12px 0', fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-tertiary)', marginBottom: '8px' }}>
-            Loading data\u2026
+            Loading data…
           </div>
         )}
 
@@ -510,10 +510,10 @@ export default function ComparePage() {
           <div style={{ backgroundColor: 'var(--bg-surface-1)', border: 'var(--border-rest)', borderRadius: '12px', marginBottom: '20px', overflow: 'hidden' }}>
             <div style={{ padding: '18px 24px', borderBottom: 'var(--border-rest)' }}>
               <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', fontWeight: 500, color: 'var(--text-primary)', marginBottom: '3px' }}>
-                Key Metrics \u2014 Latest Fiscal Year
+                Key Metrics — Latest Fiscal Year
               </h2>
               <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-tertiary)' }}>
-                Live data from Trikosh database \u00b7 Green = best in set \u00b7 Red = lowest in set
+                Live data from Trikosh database · Green = best in set · Red = lowest in set
               </p>
             </div>
 
@@ -593,7 +593,7 @@ export default function ComparePage() {
                             return (
                               <td key={ticker} style={{ padding: '10px 20px', textAlign: 'right' }}>
                                 {loading[ticker] ? (
-                                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--text-tertiary)' }}>\u2026</span>
+                                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--text-tertiary)' }}>…</span>
                                 ) : (
                                   <span style={{
                                     fontFamily: 'var(--font-mono)', fontSize: '13px',
@@ -618,7 +618,7 @@ export default function ComparePage() {
 
             <div style={{ padding: '10px 24px', borderTop: 'var(--border-rest)', backgroundColor: 'var(--bg-surface-2)' }}>
               <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-tertiary)' }}>
-                Source: Trikosh database \u00b7 Live data \u00b7 Green = best-in-set \u00b7 Red = lowest-in-set \u00b7 \u2013 shown where data unavailable
+                Source: Trikosh database · Live data · Green = best-in-set · Red = lowest-in-set · – shown where data unavailable
               </p>
             </div>
           </div>
@@ -632,10 +632,10 @@ export default function ComparePage() {
             <CardSpotlight style={{ padding: '22px' }}>
               <div style={{ marginBottom: '18px' }}>
                 <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '3px' }}>
-                  Margin Profile \u2014 Latest FY
+                  Margin Profile — Latest FY
                 </h2>
                 <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-tertiary)' }}>
-                  Gross \u2192 Operating \u2192 Net margin per company.
+                  Gross → Operating → Net margin per company.
                 </p>
               </div>
               <ResponsiveContainer width="100%" height={240}>
@@ -651,7 +651,7 @@ export default function ComparePage() {
                 </BarChart>
               </ResponsiveContainer>
               <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-tertiary)', marginTop: '10px' }}>
-                Source: Trikosh database \u00b7 Note: bank gross margin may be null \u2014 shown as 0
+                Source: Trikosh database · Note: bank gross margin may be null — shown as 0
               </p>
             </CardSpotlight>
 
@@ -663,7 +663,7 @@ export default function ComparePage() {
                     5-Year Margin Trend
                   </h2>
                   <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-tertiary)' }}>
-                    FY2021\u2013FY2025 \u00b7 Structural vs cyclical margin movement.
+                    FY2021–FY2025 · Structural vs cyclical margin movement.
                   </p>
                 </div>
                 <div style={{ display: 'flex', gap: '4px', flexShrink: 0 }}>
@@ -706,7 +706,7 @@ export default function ComparePage() {
                 </LineChart>
               </ResponsiveContainer>
               <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-tertiary)', marginTop: '10px' }}>
-                Source: Trikosh database \u00b7 FY2021\u2013FY2025 \u00b7 Only years with available data are plotted
+                Source: Trikosh database · FY2021–FY2025 · Only years with available data are plotted
               </p>
             </CardSpotlight>
 
