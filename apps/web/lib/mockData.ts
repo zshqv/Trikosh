@@ -1509,30 +1509,178 @@ export const MOCK_CARDS: CardData[] = [
 // GLOSSARY
 // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const GLOSSARY: GlossaryTerm[] = [
+  // ── A ─────────────────────────────────────────────────────────────────────
   {
-    term: 'Return on Equity (ROE)',
-    definition: 'Net income divided by shareholders\' equity. Measures how efficiently a company uses equity capital to generate profit.',
-    analystNote: 'Banks target 12–15% through the cycle. Technology and payment companies often exceed 30% due to asset-light models.',
-    relatedTickers: ['JPM', 'V', 'MA', 'MSFT'],
+    term: 'Annual Recurring Revenue (ARR)',
+    definition: 'The annualised value of all active subscription contracts. The north-star revenue metric for SaaS businesses because it measures predictable, contracted future cash flows.',
+    analystNote: 'Salesforce (CRM) crossed $30B ARR; ServiceNow (NOW) grows ARR at 20%+ annually. Investors pay 8–15x ARR for high-growth SaaS versus 2–4x for slower growers.',
+    relatedTickers: ['MSFT', 'ADBE', 'CRM', 'NOW', 'ORCL'],
   },
   {
-    term: 'Net Interest Margin (NIM)',
-    definition: 'The difference between interest income generated and interest paid out, expressed as a percentage of interest-earning assets.',
-    analystNote: 'Indian private banks (HDFC, ICICI, Kotak) typically run NIMs of 4–5%, significantly above US and European peers at 1.5–3%.',
-    relatedTickers: ['JPM', 'HDB', 'ICICIBANK.NS', 'KOTAKBANK.NS'],
+    term: 'Average Revenue Per User (ARPU)',
+    definition: 'Total revenue divided by total active users. Tracks monetisation efficiency and is the key metric for assessing whether user growth translates into revenue growth.',
+    analystNote: "Meta's US/Canada ARPU exceeds $60 per quarter versus $4 in Asia-Pacific — the geographic mix of users dramatically affects blended ARPU and growth trajectory.",
+    relatedTickers: ['META', 'GOOGL', 'NFLX', 'AMZN', 'SHOP'],
+  },
+  // ── B ─────────────────────────────────────────────────────────────────────
+  {
+    term: 'Burn Rate',
+    definition: 'The rate at which a company spends its cash reserves in excess of revenue. Relevant for pre-profitability platforms and early-stage digital businesses.',
+    analystNote: 'Burn rate determines runway. A company with $500M cash burning $50M per month has 10 months of runway. Investors watch burn rate inflection points — decelerating burn before profitability is the key re-rating catalyst.',
+    relatedTickers: ['ZOMATO.NS', 'SNAP', 'DASH'],
+  },
+  // ── C ─────────────────────────────────────────────────────────────────────
+  {
+    term: 'Capital Expenditure (CapEx)',
+    definition: 'Cash spent on acquiring or upgrading physical and intangible assets. Separates maintenance capex (keeping the business running) from growth capex (expanding capacity).',
+    analystNote: "NVIDIA and TSMC (TSM) are in a capex supercycle driven by AI infrastructure demand. Amazon's capex consistently runs $50–60B annually across logistics and AWS infrastructure.",
+    relatedTickers: ['NVDA', 'TSM', 'AMZN', 'MSFT', 'ASML'],
   },
   {
-    term: 'Operating Margin',
-    definition: 'Operating income as a percentage of revenue. Measures the profitability of core business operations before interest and taxes.',
-    analystNote: 'Software companies (MSFT, ADBE, NOW) sustain 30–45% operating margins. Retail (WMT, TGT) typically earns 3–6%.',
-    relatedTickers: ['MSFT', 'ADBE', 'WMT', 'AMZN'],
+    term: 'CET1 Ratio',
+    definition: "Common Equity Tier 1 capital as a percentage of risk-weighted assets. The primary measure of a bank's core capital adequacy.",
+    analystNote: 'US regulators require approximately 11.5% for large banks. Banks above 13% have the flexibility to return more capital to shareholders.',
+    relatedTickers: ['JPM', 'BAC', 'GS', 'HSBC'],
   },
+  {
+    term: 'Churn Rate',
+    definition: 'The percentage of customers or revenue lost in a given period. The single most important metric for assessing the sustainability of a subscription business.',
+    analystNote: 'Best-in-class enterprise SaaS runs below 5% annual churn. Consumer subscription businesses like Netflix face 2–3% monthly churn. Net Revenue Retention above 120% means expansion outpaces churn entirely.',
+    relatedTickers: ['MSFT', 'ADBE', 'NFLX', 'CRM', 'NOW'],
+  },
+  {
+    term: 'Contribution Margin',
+    definition: 'Revenue minus variable costs, expressed as a percentage of revenue. Measures the profitability of each incremental unit of business before fixed cost allocation.',
+    analystNote: 'Zomato (ZOMATO.NS) and food delivery platforms track contribution margin per order obsessively — achieving positive contribution margin per order is the first milestone before targeting overall profitability.',
+    relatedTickers: ['ZOMATO.NS', 'MELI', 'SHOP', 'AMZN', 'DASH'],
+  },
+  {
+    term: 'Cost-to-Income Ratio',
+    definition: 'Total operating costs divided by total operating income. Measures how efficiently a bank converts revenue into profit.',
+    analystNote: 'Best-in-class banks operate at 40–50%; above 65% signals structural inefficiency. Goldman Sachs (GS) runs leaner than retail-heavy peers due to lower branch infrastructure.',
+    relatedTickers: ['JPM', 'GS', 'BAC', 'HSBC', 'HDB'],
+  },
+  {
+    term: 'Current Ratio',
+    definition: 'Current assets divided by current liabilities. Measures short-term liquidity — whether a company can cover near-term obligations with near-term assets.',
+    analystNote: 'Above 1.5x is generally healthy; below 1x warrants investigation. Retailers like Walmart intentionally run below 1x through payables management — context determines whether low current ratio is a risk or a strength.',
+    relatedTickers: ['WMT', 'COST', 'AMZN', 'MSFT', 'JPM'],
+  },
+  {
+    term: 'Customer Acquisition Cost (CAC)',
+    definition: 'The total sales and marketing spend divided by the number of new customers acquired in a period. The denominator in the unit economics equation.',
+    analystNote: 'High CAC is only justified by high LTV. Salesforce spends aggressively on sales because enterprise contracts renew for decades. Consumer apps like Meta acquire users at near-zero CAC through network effects.',
+    relatedTickers: ['META', 'GOOGL', 'MSFT', 'CRM', 'ADBE'],
+  },
+  // ── D ─────────────────────────────────────────────────────────────────────
+  {
+    term: 'Daily Active Users (DAU)',
+    definition: 'The number of unique users who engage with a platform on any given day. The primary engagement health metric for social and consumer internet platforms.',
+    analystNote: "Meta's Family DAP exceeded 3.3 billion in 2024. Plateauing DAU before monetisation matures is the classic growth trap — the platform has to extract more from existing users.",
+    relatedTickers: ['META', 'GOOGL', 'NFLX', 'SHOP', 'ZOMATO.NS'],
+  },
+  {
+    term: 'DAU/MAU Ratio',
+    definition: 'Daily active users divided by monthly active users, expressed as a percentage. Measures platform stickiness — how often monthly users return daily.',
+    analystNote: 'Facebook core app runs 65–70% DAU/MAU, exceptionally high for a mature platform. Below 20% signals the platform is used occasionally rather than habitually, limiting ad frequency and ARPU.',
+    relatedTickers: ['META', 'GOOGL', 'SNAP', 'NFLX'],
+  },
+  {
+    term: 'Days Sales Outstanding (DSO)',
+    definition: 'The average number of days a company takes to collect payment after a sale. Elevated DSO in healthcare signals payer disputes or collection inefficiency.',
+    analystNote: 'US hospital systems and device companies often carry 45–60 day DSO due to insurance reimbursement cycles. Consistent DSO expansion is an early warning of revenue quality deterioration.',
+    relatedTickers: ['LLY', 'ABBV', 'MRK', 'UNH', 'NVS'],
+  },
+  {
+    term: 'Debt-to-Equity (D/E)',
+    definition: "Total debt divided by shareholders' equity. Measures financial leverage and the degree to which a company finances operations through debt versus equity.",
+    analystNote: 'Capital-intensive businesses like telcos and utilities run D/E of 2–4x; asset-light tech companies like Google run near zero. High D/E is not inherently bad if cash flows are stable and predictable enough to service debt comfortably.',
+    relatedTickers: ['MSFT', 'GOOGL', 'JPM', 'AMZN', 'TSLA'],
+  },
+  {
+    term: 'Depreciation and Amortisation (D&A)',
+    definition: 'The non-cash accounting charge that spreads the cost of an asset over its useful life. Adding D&A back to operating income gives EBITDA.',
+    analystNote: 'High D&A relative to capex suggests a business is shrinking its asset base — capex below D&A is a classic sign of underinvestment. Data centre-heavy businesses like Microsoft and Amazon carry significant D&A from server infrastructure.',
+    relatedTickers: ['MSFT', 'AMZN', 'GOOGL', 'TSM', 'NVDA'],
+  },
+  {
+    term: 'Dividend Yield',
+    definition: 'Annual dividend per share divided by share price. For mature financial institutions, a key component of total shareholder return.',
+    analystNote: 'US banks like JPM and BAC yield 2–3%; insurance companies like Allianz (ALIZF) often yield 4–6%, reflecting their capital-return model.',
+    relatedTickers: ['JPM', 'BAC', 'MS', 'ALIZF', 'HSBC'],
+  },
+  // ── E ─────────────────────────────────────────────────────────────────────
+  {
+    term: 'EBITDA Margin',
+    definition: 'Earnings before interest, taxes, depreciation, and amortisation as a percentage of revenue. Removes capital structure and accounting policy differences to enable cleaner cross-company comparison.',
+    analystNote: 'Large-cap pharma like Eli Lilly (LLY) and AbbVie (ABBV) run 35–45% EBITDA margins. Medical device companies typically run 25–35%. Below 20% for a mature pharma signals structural cost problems.',
+    relatedTickers: ['LLY', 'ABBV', 'MRK', 'NVS', 'AZN'],
+  },
+  {
+    term: 'Enterprise Value (EV)',
+    definition: 'Market capitalisation plus total debt minus cash and cash equivalents. The theoretical takeover price of a business — what an acquirer would actually pay including assuming the debt.',
+    analystNote: 'Cash-rich companies like Apple have EV significantly below market cap. Debt-heavy companies have EV above market cap. Always use EV-based multiples (EV/EBITDA) when comparing companies with different capital structures.',
+    relatedTickers: ['MSFT', 'GOOGL', 'META', 'AMZN', 'NVDA'],
+  },
+  {
+    term: 'EV/EBITDA',
+    definition: 'Enterprise value divided by EBITDA. The most widely used acquisition valuation multiple because it is capital structure neutral and strips out depreciation policy differences.',
+    analystNote: 'Technology companies trade at 20–30x EV/EBITDA; consumer staples at 12–18x; banks are not valued on EV/EBITDA due to the role of debt in their core business model.',
+    relatedTickers: ['MSFT', 'GOOGL', 'NVDA', 'COST', 'LLY'],
+  },
+  // ── F ─────────────────────────────────────────────────────────────────────
+  {
+    term: 'Free Cash Flow (FCF) Margin',
+    definition: 'Free cash flow as a percentage of revenue. The truest measure of a technology company\'s cash generation because it strips out non-cash accounting items.',
+    analystNote: 'Apple and Microsoft sustain 25–30% FCF margins. A company with 30% revenue growth and 5% FCF margin is less valuable than one with 15% growth and 25% FCF margin.',
+    relatedTickers: ['MSFT', 'GOOGL', 'META', 'AAPL', 'ADBE'],
+  },
+  {
+    term: 'Free Cash Flow Yield',
+    definition: 'Free cash flow per share divided by share price. Tells you how much cash return you are receiving relative to what you are paying — the earnings yield equivalent for cash investors.',
+    analystNote: 'A 4–5% FCF yield on a growing business is compelling versus a 4% bond yield with no growth. Meta and Alphabet both generate FCF yields above 4% while growing earnings double digits.',
+    relatedTickers: ['META', 'GOOGL', 'MSFT', 'AAPL', 'AMZN'],
+  },
+  // ── G ─────────────────────────────────────────────────────────────────────
   {
     term: 'Gross Margin',
     definition: 'Revenue minus cost of goods sold, divided by revenue. The first profitability line that reveals pricing power and cost structure.',
-    analystNote: 'ARM\'s 96% gross margin reflects a pure IP licensing model. Retailers like Costco operate at 12–13%, relying on volume.',
+    analystNote: "ARM's 96% gross margin reflects a pure IP licensing model. Retailers like Costco operate at 12–13%, relying on volume.",
     relatedTickers: ['ARM', 'ADBE', 'COST', 'TSM'],
   },
+  {
+    term: 'Gross Merchandise Volume (GMV)',
+    definition: 'The total value of goods sold through a marketplace over a given period, before any deductions.',
+    analystNote: 'GMV is a volume metric, not a revenue metric. Always compare take rate alongside GMV to understand the actual revenue opportunity.',
+    relatedTickers: ['AMZN', 'BABA', 'MELI', 'ETSY', 'EBAY'],
+  },
+  // ── I ─────────────────────────────────────────────────────────────────────
+  {
+    term: 'Interest Coverage Ratio',
+    definition: 'Earnings before interest and taxes (EBIT) divided by interest expense. Measures how comfortably a company can service its debt from operating earnings.',
+    analystNote: 'Below 3x signals elevated credit risk; investment-grade companies typically maintain 8x+. During rate hike cycles, companies with floating-rate debt see coverage ratios compress rapidly.',
+    relatedTickers: ['JPM', 'MSFT', 'AMZN', 'GOOGL', 'ALIZF'],
+  },
+  {
+    term: 'Inventory Turnover',
+    definition: 'Cost of goods sold divided by average inventory. Measures how efficiently a retailer converts inventory into sales — high turnover means less capital tied up in stock.',
+    analystNote: 'Costco turns inventory 12–13x per year versus department stores at 3–4x. Fast fashion retailers turn 6–8x but face markdown risk when trends shift.',
+    relatedTickers: ['COST', 'WMT', 'TGT', 'HINDUNILVR.NS', 'BRITANNIA.NS'],
+  },
+  // ── L ─────────────────────────────────────────────────────────────────────
+  {
+    term: 'Lifetime Value (LTV)',
+    definition: 'The total revenue a business expects to generate from a single customer over the entire relationship. Paired with CAC to assess unit economics health.',
+    analystNote: "A healthy SaaS business targets LTV/CAC above 3x. Adobe's (ADBE) Creative Cloud model achieves exceptional LTV through deep workflow lock-in and annual price increases.",
+    relatedTickers: ['ADBE', 'MSFT', 'CRM', 'NOW', 'ORCL'],
+  },
+  {
+    term: 'Loan-to-Deposit Ratio (LDR)',
+    definition: "Total loans divided by total deposits. Measures how aggressively a bank is deploying its deposit base into loans.",
+    analystNote: 'Above 100% means the bank is funding loans from wholesale markets, increasing liquidity risk. Most regulators prefer 80–90%.',
+    relatedTickers: ['JPM', 'BAC', 'HDB', 'KOTAKBANK.NS', 'HSBC'],
+  },
+  // ── M ─────────────────────────────────────────────────────────────────────
   {
     term: 'Medical Loss Ratio (MLR)',
     definition: 'The percentage of premium revenue spent on medical claims and healthcare quality improvement. Regulated at minimum 80–85% in the US.',
@@ -1540,22 +1688,138 @@ export const GLOSSARY: GlossaryTerm[] = [
     relatedTickers: ['UNH'],
   },
   {
-    term: 'CET1 Ratio',
-    definition: 'Common Equity Tier 1 capital as a percentage of risk-weighted assets. The primary measure of a bank\'s core capital adequacy.',
-    analystNote: 'US regulators require approximately 11.5% for large banks. Banks above 13% have the flexibility to return more capital to shareholders.',
-    relatedTickers: ['JPM', 'BAC', 'GS', 'HSBC'],
+    term: 'Monthly Active Users (MAU)',
+    definition: 'Unique users active on a platform within a 30-day window. Broader than DAU and typically used for platforms with lower-frequency engagement patterns.',
+    analystNote: 'Snapchat and Pinterest report MAU because daily engagement is lower than Meta\'s core apps. Always compare DAU/MAU ratio alongside MAU to assess stickiness.',
+    relatedTickers: ['META', 'GOOGL', 'NFLX', 'AMZN', 'ZOMATO.NS'],
   },
+  // ── N ─────────────────────────────────────────────────────────────────────
+  {
+    term: 'Net Interest Margin (NIM)',
+    definition: 'The difference between interest income generated and interest paid out, expressed as a percentage of interest-earning assets.',
+    analystNote: 'Indian private banks (HDFC, ICICI, Kotak) typically run NIMs of 4–5%, significantly above US and European peers at 1.5–3%.',
+    relatedTickers: ['JPM', 'HDB', 'ICICIBANK.NS', 'KOTAKBANK.NS'],
+  },
+  {
+    term: 'Net Profit Margin',
+    definition: 'The percentage of revenue that remains as profit after all expenses, taxes, and interest. The bottom-line measure of overall profitability.',
+    analystNote: 'JPMorgan runs ~30% net margins through the cycle; Indian private banks like HDFC Bank (HDB) typically achieve 20–25%.',
+    relatedTickers: ['JPM', 'BAC', 'GS', 'HDB', 'ICICIBANK.NS'],
+  },
+  {
+    term: 'Net Revenue Retention (NRR)',
+    definition: 'Revenue from existing customers in the current period divided by their revenue in the prior period, including expansions and churn. Above 100% means the existing customer base grows without any new customer acquisition.',
+    analystNote: 'Snowflake and Datadog have historically run 130%+ NRR. ServiceNow (NOW) sustains 120%+ through upsell into workflow automation. NRR above 120% is the clearest signal of product-market fit in enterprise software.',
+    relatedTickers: ['NOW', 'MSFT', 'ADBE', 'ORCL', 'CRM'],
+  },
+  {
+    term: 'Non-Performing Loans (NPL) Ratio',
+    definition: 'The percentage of a bank\'s loan book where borrowers have stopped making payments for 90+ days. The primary asset-quality stress indicator for banks.',
+    analystNote: 'Indian banks historically carried 8–10% NPL ratios post-2016 stress cycle; JPMorgan targets below 1%. Rising NPL is the earliest warning sign of a credit cycle turning.',
+    relatedTickers: ['JPM', 'BAC', 'HDB', 'ICICIBANK.NS', 'KOTAKBANK.NS'],
+  },
+  // ── O ─────────────────────────────────────────────────────────────────────
+  {
+    term: 'Operating Margin',
+    definition: 'Operating income as a percentage of revenue. Measures the profitability of core business operations before interest and taxes.',
+    analystNote: 'Software companies (MSFT, ADBE, NOW) sustain 30–45% operating margins. Retail (WMT, TGT) typically earns 3–6%.',
+    relatedTickers: ['MSFT', 'ADBE', 'WMT', 'AMZN'],
+  },
+  // ── P ─────────────────────────────────────────────────────────────────────
+  {
+    term: 'Patent Cliff',
+    definition: "The revenue loss a pharmaceutical company faces when a blockbuster drug's patent expires and generic competitors enter the market. The primary structural risk in pharma valuation.",
+    analystNote: "AbbVie's Humira faced its US patent cliff in 2023, triggering a multi-billion revenue decline. Investors price patent cliffs 2–3 years in advance, creating predictable valuation compression.",
+    relatedTickers: ['ABBV', 'MRK', 'LLY', 'NVS', 'AZN'],
+  },
+  {
+    term: 'Pipeline Coverage Ratio',
+    definition: 'The ratio of late-stage drug candidates to near-term patent expiries. Measures whether a pharma company has enough innovation in development to replace revenue at risk.',
+    analystNote: "Eli Lilly's GLP-1 pipeline (tirzepatide, orforglipron) gives it exceptional coverage for the next decade. A company with one blockbuster and no late-stage pipeline is a value trap.",
+    relatedTickers: ['LLY', 'ABBV', 'MRK', 'NVS', 'AZN'],
+  },
+  {
+    term: 'Price-to-Book (P/B)',
+    definition: 'Share price divided by book value per share. The primary valuation anchor for banks and financial institutions where assets are marked to market.',
+    analystNote: 'US money-centre banks trade at 1.2–1.8x book; high-ROE banks like JPM command premiums. A P/B below 1x signals the market doubts the stated asset values.',
+    relatedTickers: ['JPM', 'BAC', 'GS', 'HSBC', 'HDB'],
+  },
+  {
+    term: 'Price-to-Earnings Growth (PEG)',
+    definition: 'P/E ratio divided by the earnings growth rate. Adjusts the P/E for growth to identify whether a high multiple is justified by the underlying growth trajectory.',
+    analystNote: "A PEG below 1 is traditionally considered undervalued. NVIDIA's P/E looks extreme in isolation but its PEG normalises if the AI earnings ramp sustains. Always specify the growth rate period used — trailing versus forward PEG give very different readings.",
+    relatedTickers: ['NVDA', 'MSFT', 'GOOGL', 'LLY', 'AMD'],
+  },
+  {
+    term: 'Price-to-Sales (P/S)',
+    definition: 'Market capitalisation divided by annual revenue. Used for high-growth companies with minimal or negative earnings where P/E is meaningless.',
+    analystNote: 'NVIDIA traded at 30–40x sales at peak AI enthusiasm; mature tech like MSFT trades at 12–15x. P/S compresses rapidly as growth decelerates, making entry valuation critical.',
+    relatedTickers: ['NVDA', 'MSFT', 'ADBE', 'AMD', 'TSM'],
+  },
+  // ── Q ─────────────────────────────────────────────────────────────────────
+  {
+    term: 'Quick Ratio',
+    definition: 'Current assets minus inventory, divided by current liabilities. A stricter liquidity test that excludes inventory, which may not be quickly convertible to cash.',
+    analystNote: 'Pharmaceutical and technology companies typically show strong quick ratios above 2x. Retailers show weak quick ratios because inventory dominates current assets — always pair with inventory turnover when assessing retail liquidity.',
+    relatedTickers: ['LLY', 'MSFT', 'GOOGL', 'WMT', 'COST'],
+  },
+  // ── R ─────────────────────────────────────────────────────────────────────
+  {
+    term: 'R&D as Percentage of Revenue',
+    definition: 'Research and development spend divided by revenue. Measures the innovation investment intensity relative to the business scale.',
+    analystNote: 'Pharmaceutical companies invest 15–20% of revenue in R&D; semiconductor firms like ASML and AMD invest 15–18%. Microsoft spends ~13% but benefits from scale that makes each dollar of R&D more productive.',
+    relatedTickers: ['MSFT', 'AMD', 'NVDA', 'ASML', 'ADBE'],
+  },
+  {
+    term: 'Return on Assets (ROA)',
+    definition: 'Net income divided by total assets. For banks, a more comparable metric than ROE because leverage structures differ significantly across institutions.',
+    analystNote: 'US large-cap banks target 1–1.5% ROA; Indian private banks like ICICI and HDFC consistently run 1.8–2.1%, reflecting higher-margin lending books.',
+    relatedTickers: ['JPM', 'BAC', 'HDB', 'ICICIBANK.NS', 'MS'],
+  },
+  {
+    term: 'Return on Equity (ROE)',
+    definition: "Net income divided by shareholders' equity. Measures how efficiently a company uses equity capital to generate profit.",
+    analystNote: 'Banks target 12–15% through the cycle. Technology and payment companies often exceed 30% due to asset-light models.',
+    relatedTickers: ['JPM', 'V', 'MA', 'MSFT'],
+  },
+  {
+    term: 'Return on Invested Capital (ROIC)',
+    definition: 'Net operating profit after tax divided by invested capital. The best single measure of whether a business creates or destroys value relative to its cost of capital.',
+    analystNote: 'Walmart (WMT) generates 14–16% ROIC through scale and supply chain discipline. A ROIC consistently above the cost of capital (typically 8–10%) is the hallmark of a compounding business.',
+    relatedTickers: ['WMT', 'COST', 'TGT', 'HINDUNILVR.NS', 'TATACONSUM.NS'],
+  },
+  {
+    term: 'Revenue per Square Foot',
+    definition: 'Annual revenue divided by total retail floor space. The density metric that separates efficient retailers from capital-heavy underperformers.',
+    analystNote: 'Apple Stores generate $5,000+ per square foot, the highest in retail. Costco runs $1,500+ through warehouse-format high volume. Declining revenue per square foot precedes store closure cycles.',
+    relatedTickers: ['COST', 'WMT', 'TGT', 'DMART.NS'],
+  },
+  {
+    term: 'Rule of 40',
+    definition: 'Revenue growth rate plus free cash flow margin should equal or exceed 40%. The balanced scorecard for SaaS — penalises burning cash to grow and rewards efficient scaling.',
+    analystNote: 'Microsoft (MSFT) scores 50+; early-stage hypergrowth SaaS often sacrifices FCF margin to score high on growth alone. Below 40 signals the business is neither growing fast enough nor profitable enough.',
+    relatedTickers: ['MSFT', 'ADBE', 'GOOGL', 'META', 'NOW'],
+  },
+  // ── S ─────────────────────────────────────────────────────────────────────
+  {
+    term: 'Same-Store Sales Growth (SSSG)',
+    definition: 'Revenue growth from stores open for at least 12 months, excluding new openings. Isolates organic demand from expansion-driven growth.',
+    analystNote: 'Costco (COST) consistently delivers 4–7% SSSG through membership loyalty and pricing discipline. Negative SSSG at an established retailer signals demand erosion, not just a tough comparison.',
+    relatedTickers: ['COST', 'WMT', 'TGT', 'DMART.NS', 'HINDUNILVR.NS'],
+  },
+  // ── T ─────────────────────────────────────────────────────────────────────
   {
     term: 'Take Rate',
     definition: 'The percentage of total transaction value that a marketplace or platform retains as revenue.',
     analystNote: 'Visa earns approximately 0.3% on payment volume; Booking Holdings earns 14–15% of booking value; DoorDash earns around 15%.',
     relatedTickers: ['V', 'MA', 'BKNG', 'DASH', 'ETSY'],
   },
+  // ── W ─────────────────────────────────────────────────────────────────────
   {
-    term: 'Gross Merchandise Volume (GMV)',
-    definition: 'The total value of goods sold through a marketplace over a given period, before any deductions.',
-    analystNote: 'GMV is a volume metric, not a revenue metric. Always compare take rate alongside GMV to understand the actual revenue opportunity.',
-    relatedTickers: ['AMZN', 'BABA', 'MELI', 'ETSY', 'EBAY'],
+    term: 'Working Capital',
+    definition: 'Current assets minus current liabilities. Negative working capital is a structural advantage for retailers — it means suppliers fund the business.',
+    analystNote: 'Walmart and Amazon operate with negative working capital, collecting from customers before paying suppliers. This is a competitive moat, not a solvency risk, when driven by payables management.',
+    relatedTickers: ['WMT', 'COST', 'AMZN', 'TATACONSUM.NS', 'HINDUNILVR.NS'],
   },
 ]
 
