@@ -1,46 +1,20 @@
 'use client'
-import { useState, useEffect } from 'react'
+
+import { useState } from 'react'
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
-import { motion } from 'motion/react'
-import { UserButton, SignInButton, SignedIn, SignedOut } from '@clerk/nextjs'
+import { usePathname } from 'next/navigation'
+import { UserButton, SignedIn, SignedOut } from '@clerk/nextjs'
 
 const NAV_LINKS = [
   { label: 'Companies', href: '/companies' },
   { label: 'Sectors',   href: '/sectors' },
   { label: 'Compare',   href: '/compare' },
-  { label: 'Glossary',  href: '/glossary' },
   { label: 'Research',  href: '/research' },
 ]
 
 export default function Navbar() {
   const pathname = usePathname()
-  const router = useRouter()
-  const [query, setQuery] = useState('')
   const [hovered, setHovered] = useState<string | null>(null)
-  const [companyCount, setCompanyCount] = useState<number | null>(null)
-
-  useEffect(() => {
-    fetch('/api/companies')
-      .then(res => res.json())
-      .then(data => {
-        const list = Array.isArray(data) ? data : data.companies ?? []
-        setCompanyCount(list.length)
-      })
-      .catch(() => setCompanyCount(null))
-  }, [])
-
-  function handleSearch(e: React.FormEvent) {
-    e.preventDefault()
-    const q = query.trim()
-    router.push(q ? `/companies?q=${encodeURIComponent(q)}` : '/companies')
-    setQuery('')
-  }
-
-  // The link whose underline is shown: hovered takes priority, else active route.
-  const activeHref =
-    NAV_LINKS.find(l => l.href === pathname || pathname.startsWith(l.href))?.href ?? null
-  const highlight = hovered ?? activeHref
 
   return (
     <nav
@@ -50,9 +24,7 @@ export default function Navbar() {
         zIndex: 50,
         width: '100%',
         height: 'var(--nav-h)',
-        backgroundColor: 'rgba(10,10,10,0.8)',
-        backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
+        backgroundColor: '#0a0a0a',
         borderBottom: '1px solid #1f1f1f',
         display: 'flex',
         alignItems: 'center',
@@ -70,47 +42,26 @@ export default function Navbar() {
           gap: '24px',
         }}
       >
-        {/* Left: Brand */}
+        {/* Logo */}
         <Link href="/" style={{ textDecoration: 'none', flexShrink: 0 }}>
-          <span
-            style={{
-              fontFamily: 'var(--font-sans)',
-              fontSize: '16px',
-              fontWeight: 700,
-              letterSpacing: '0.04em',
-              color: 'var(--text-primary)',
-              display: 'block',
-              lineHeight: 1.1,
-            }}
-          >
-            TRIKOSH
-          </span>
-          <span
-            style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: '10px',
-              color: 'var(--text-tertiary)',
-              display: 'block',
-            }}
-          >
-            v1.0 &middot; {companyCount !== null ? `${companyCount} companies` : 'loading...'}
+          <span style={{
+            fontFamily: 'var(--font-sans)',
+            fontSize: '15px',
+            fontWeight: 700,
+            color: '#ffffff',
+          }}>
+            Trikosh
           </span>
         </Link>
 
-        {/* Center: Navigation links */}
+        {/* Nav links + CTA */}
         <div
           onMouseLeave={() => setHovered(null)}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '4px',
-            flex: 1,
-            justifyContent: 'center',
-          }}
+          style={{ display: 'flex', alignItems: 'center', gap: '2px' }}
         >
           {NAV_LINKS.map(({ label, href }) => {
-            const isActive = href === activeHref
-            const isHot = href === highlight
+            const isActive = pathname === href || pathname.startsWith(href + '/')
+            const isHot = hovered ? hovered === href : isActive
             return (
               <Link
                 key={href}
@@ -120,78 +71,54 @@ export default function Navbar() {
                   position: 'relative',
                   fontFamily: 'var(--font-sans)',
                   fontSize: '14px',
-                  fontWeight: isActive ? 600 : 500,
-                  color: isActive || isHot ? 'var(--text-primary)' : 'var(--text-secondary)',
-                  padding: '8px 14px',
-                  transition: 'color 180ms ease',
+                  fontWeight: isActive ? 600 : 400,
+                  color: isActive || isHot ? '#ffffff' : '#8a8a8a',
+                  padding: '8px 12px',
+                  textDecoration: 'none',
+                  transition: 'color 150ms ease',
                 }}
               >
                 {label}
                 {isHot && (
-                  <motion.span
-                    layoutId="nav-underline"
-                    transition={{ type: 'spring', stiffness: 480, damping: 38 }}
-                    style={{
-                      position: 'absolute',
-                      left: 12,
-                      right: 12,
-                      bottom: -2,
-                      height: 2,
-                      borderRadius: 2,
-                      backgroundColor: 'var(--accent-primary)',
-                    }}
-                  />
+                  <span style={{
+                    position: 'absolute',
+                    left: 10,
+                    right: 10,
+                    bottom: 2,
+                    height: 1,
+                    backgroundColor: '#b300ff',
+                    display: 'block',
+                  }} />
                 )}
               </Link>
             )
           })}
-        </div>
 
-        {/* Right: Search + auth */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
-          <form onSubmit={handleSearch}>
-            <input
-              type="search"
-              placeholder="Search companies..."
-              value={query}
-              onChange={e => setQuery(e.target.value)}
+          <SignedOut>
+            <Link
+              href="/companies"
               style={{
                 fontFamily: 'var(--font-sans)',
                 fontSize: '13px',
-                color: 'var(--text-primary)',
-                backgroundColor: 'var(--bg-surface-2)',
-                border: '1px solid #1f1f1f',
-                borderRadius: '8px',
-                padding: '6px 12px',
-                width: '176px',
-                outline: 'none',
+                fontWeight: 500,
+                color: '#ffffff',
+                border: '1px solid #b300ff',
+                borderRadius: '6px',
+                padding: '7px 16px',
+                marginLeft: '10px',
+                textDecoration: 'none',
+                backgroundColor: 'transparent',
+                whiteSpace: 'nowrap',
               }}
-            />
-          </form>
-
-          <SignedOut>
-            <SignInButton mode="modal">
-              <button
-                style={{
-                  fontFamily: 'var(--font-sans)',
-                  fontSize: '13px',
-                  fontWeight: 600,
-                  color: '#ffffff',
-                  backgroundColor: 'var(--accent-primary)',
-                  border: 'none',
-                  borderRadius: '8px',
-                  padding: '7px 14px',
-                  cursor: 'pointer',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                Sign in
-              </button>
-            </SignInButton>
+            >
+              Start researching
+            </Link>
           </SignedOut>
 
           <SignedIn>
-            <UserButton afterSignOutUrl="/" />
+            <div style={{ marginLeft: '14px' }}>
+              <UserButton afterSignOutUrl="/" />
+            </div>
           </SignedIn>
         </div>
       </div>

@@ -35,10 +35,10 @@
   --text-secondary: #a1a1aa;
   --text-tertiary: #6b6b73;
 
-  --accent-primary: #7c3aed;   /* violet-700 */
-  --accent-data: #a78bfa;      /* violet-400 — sparklines / secondary lines */
-  --accent-archive: #8b5cf6;   /* violet-500 */
-  --accent-glow: rgba(124, 58, 237, 0.35);
+  --accent-primary: #b300ff;
+  --accent-data: #b300ff;
+  --accent-archive: #b300ff;
+  --accent-glow: rgba(179, 0, 255, 0.25);
 
   --delta-pos: #34d399;
   --delta-neg: #f87171;
@@ -47,7 +47,7 @@
   --delta-estimate: #a78bfa;
 
   --border-rest: 1px solid #1f1f1f;
-  --border-hover: 1px solid #7c3aed;
+  --border-hover: 1px solid #b300ff;
   --border-color: #1f1f1f;
 
   --card-radius: 12px;
@@ -58,9 +58,9 @@
      --font-display is set by next/font (Bricolage Grotesque) on <html>;
      this is the fallback if that variable is ever absent — a grotesque
      sans stack, never a serif/Times fallback. */
-  --font-display: 'Bricolage Grotesque', 'Urbanist', system-ui, sans-serif;
-  --font-serif: var(--font-sans, 'Urbanist'), system-ui, sans-serif;
-  --font-sans: 'Urbanist', system-ui, -apple-system, sans-serif;
+  --font-display: 'Bricolage Grotesque', 'Inter', system-ui, sans-serif;
+  --font-serif: var(--font-sans, 'Inter'), system-ui, sans-serif;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: var(--font-geist-mono, 'Geist Mono'), 'JetBrains Mono', monospace;
 
   --nav-h: 60px;
@@ -123,7 +123,7 @@
   }
 
   ::selection {
-    background: rgba(124, 58, 237, 0.30);
+    background: rgba(179, 0, 255, 0.30);
     color: #ffffff;
   }
 }

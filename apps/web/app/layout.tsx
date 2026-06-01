@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Urbanist, Bricolage_Grotesque } from 'next/font/google'
+import { Inter, Bricolage_Grotesque } from 'next/font/google'
 import { GeistMono } from 'geist/font/mono'
 import './globals.css'
 import { ClerkProvider } from '@clerk/nextjs'
@@ -10,14 +10,13 @@ import PageTransition from '@/components/PageTransition'
 import CustomCursor from '@/components/effects/CustomCursor'
 import LoadingScreen from '@/components/effects/LoadingScreen'
 
-const urbanist = Urbanist({
+const inter = Inter({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800'],
+  weight: ['400', '500', '600', '700'],
   variable: '--font-sans',
   display: 'swap',
 })
 
-// Temporary stand-in for Apoc Revelations 2 — hero headline + loader wordmark.
 const bricolage = Bricolage_Grotesque({
   subsets: ['latin'],
   weight: ['400', '600', '700', '800'],
@@ -41,7 +40,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <ClerkProvider>
       <html
         lang="en"
-        className={`${urbanist.variable} ${bricolage.variable} ${GeistMono.variable}`}
+        className={`${inter.variable} ${bricolage.variable} ${GeistMono.variable}`}
       >
         <body style={{ backgroundColor: 'var(--bg-base)', color: 'var(--text-primary)' }}>
           <LoadingScreen />

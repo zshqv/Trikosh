@@ -1,414 +1,312 @@
-'use client'
-
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { motion, useReducedMotion } from 'motion/react'
-import SectorPill from '@/components/data/SectorPill'
-import DataAssetCard from '@/components/ui/DataAssetCard'
 import { NumberTicker } from '@/components/ui/number-ticker'
-import { Reveal, RevealGroup, RevealItem } from '@/components/effects/Reveal'
-import { BentoGrid, BentoCard } from '@/components/ui/BentoGrid'
-import type { Sector } from '@/lib/types'
-import { MOCK_CARDS, RESEARCH_KITS } from '@/lib/mockData'
 
 const STATS = [
   { value: 102, label: 'Companies' },
   { value: 5, label: 'Sectors' },
-  { value: 15, label: 'Financial Ratios' },
+  { value: 15, label: 'Ratios per company' },
 ]
 
-const FEATURES = [
+const GS_ROWS = [
+  { metric: 'Revenue',        fy2022: '$47.4B',  fy2023: '$46.3B',  fy2024: '$53.5B',  fy2025: '$58.3B'  },
+  { metric: 'Net Income',     fy2022: '$11.3B',  fy2023: '$8.5B',   fy2024: '$14.3B',  fy2025: '$17.2B'  },
+  { metric: 'EPS (diluted)',  fy2022: '$30.06',  fy2023: '$22.87',  fy2024: '$40.54',  fy2025: '$51.32'  },
+  { metric: 'Total Assets',   fy2022: '$1.44T',  fy2023: '$1.64T',  fy2024: '$1.68T',  fy2025: '$1.81T'  },
+  { metric: 'Total Equity',   fy2022: '$117.2B', fy2023: '$116.9B', fy2024: '$122.0B', fy2025: '$125.0B' },
+  { metric: 'Free Cash Flow', fy2022: '$5.0B',   fy2023: '-$14.9B', fy2024: '-$15.3B', fy2025: '-$47.2B' },
+]
+
+const SECTORS_COVERED = [
+  { name: 'Financial Services',    count: 20 },
+  { name: 'AI & Technology',       count: 22 },
+  { name: 'Healthcare & Pharma',   count: 20 },
+  { name: 'Consumer & Retail',     count: 20 },
+  { name: 'Consumer Internet',     count: 20 },
+]
+
+const STEPS = [
   {
-    eyebrow: 'Frameworks',
-    claim: 'Understand why margins matter before you read a 10-K',
-    body: 'Ratio analysis and sector frameworks explain what the numbers mean, not just what they are. Build the mental model before you open the filing.',
+    n: '01',
+    title: 'Pick a company or sector from the directory',
+    desc: 'Browse the full list by sector, or search for a specific company or ticker.',
   },
   {
-    eyebrow: 'Peers',
-    claim: 'See how peers perform before you judge a single company',
-    body: 'No company operates in isolation. Compare gross margins, ROE, and growth across the full peer set to calibrate what good performance actually is.',
+    n: '02',
+    title: 'Read five years of standardised financials',
+    desc: 'Income statement, balance sheet, and cash flow — pulled from public filings and laid out the same way across every company.',
   },
   {
-    eyebrow: 'Method',
-    claim: 'Know what questions to ask, not just what numbers to find',
-    body: 'Research kits and sector checklists give you the investigative frame. The data answers the questions — but you have to know which to ask first.',
+    n: '03',
+    title: 'Put two companies side by side across 15 ratios',
+    desc: 'The comparison tool lets you pick any two companies and see how they measure up on the metrics that matter for their sector.',
   },
 ]
 
-const SECTORS: Sector[] = ['Financial Services', 'AI & Technology', 'Healthcare', 'Consumer & Retail', 'Consumer Internet & Digital Platforms']
+const HR = <hr style={{ border: 'none', borderTop: '1px solid #1f1f1f', margin: 0 }} />
 
-const HR: React.CSSProperties = { border: 'none', borderTop: '1px solid #1f1f1f', margin: 0 }
+const TH_COLS = ['Metric', 'FY2022', 'FY2023', 'FY2024', 'FY2025']
 
 export default function LandingPage() {
-  const router = useRouter()
-  const reduce = useReducedMotion()
-  const [activeSector, setActiveSector] = useState<Sector | null>(null)
-  const [search, setSearch] = useState('')
-
-  const filteredCards = MOCK_CARDS.filter(c => {
-    const matchSector = !activeSector || c.company.sector === activeSector
-    const matchSearch = !search || c.company.name.toLowerCase().includes(search.toLowerCase()) || c.company.ticker.toLowerCase().includes(search.toLowerCase())
-    return matchSector && matchSearch
-  }).slice(0, 6)
-
   return (
-    <div style={{ backgroundColor: 'var(--bg-base)', overflow: 'hidden' }}>
+    <div style={{ backgroundColor: '#0a0a0a' }}>
 
-      {/* ───────────────────────── Hero ───────────────────────── */}
-      <section
-        style={{
-          position: 'relative',
-          minHeight: 'calc(100vh - var(--nav-h))',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          textAlign: 'center',
-          padding: '80px 24px 64px',
-          background: 'radial-gradient(ellipse 80% 50% at 50% 40%, rgba(124,58,237,0.08) 0%, transparent 70%)',
-        }}
-      >
-        {/* soft violet bloom behind the wordmark — adds depth */}
-        <div
-          aria-hidden
-          style={{
-            position: 'absolute',
-            top: '30%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: 'min(760px, 85vw)',
-            height: '420px',
-            background: 'radial-gradient(ellipse at center, rgba(124,58,237,0.16), transparent 70%)',
-            filter: 'blur(40px)',
-            pointerEvents: 'none',
-            zIndex: 0,
-          }}
-        />
-        {/* film grain / noise overlay */}
-        <div
-          aria-hidden
-          style={{
-            position: 'absolute',
-            inset: 0,
-            pointerEvents: 'none',
-            zIndex: 0,
-            opacity: 0.03,
-            mixBlendMode: 'overlay',
-            backgroundImage: `url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='160'%20height='160'%3E%3Cfilter%20id='n'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='0.85'%20numOctaves='3'%20stitchTiles='stitch'/%3E%3C/filter%3E%3Crect%20width='100%25'%20height='100%25'%20filter='url(%23n)'/%3E%3C/svg%3E")`,
-          }}
-        />
+      {/* ── Hero ── */}
+      <section className="py-16 md:py-24">
+        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px' }}>
+          <h1 style={{
+            fontSize: 'clamp(28px, 4.5vw, 52px)',
+            fontWeight: 700,
+            color: '#ffffff',
+            lineHeight: 1.15,
+            maxWidth: 760,
+            margin: '0 0 20px',
+          }}>
+            Five years of financial data on 102 companies, structured so you can actually learn from it.
+          </h1>
 
-        <div style={{ position: 'relative', zIndex: 1, maxWidth: 880 }}>
-          <motion.p
-            initial={reduce ? false : { opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-            style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: '11px',
-              color: 'var(--accent-data)',
-              textTransform: 'uppercase',
-              letterSpacing: '0.18em',
-              marginBottom: '28px',
-            }}
-          >
-            Open-source · Free forever · MIT License
-          </motion.p>
+          <p style={{
+            fontSize: 'clamp(15px, 2vw, 18px)',
+            color: '#8a8a8a',
+            lineHeight: 1.6,
+            maxWidth: 560,
+            margin: '0 0 36px',
+          }}>
+            Trikosh pulls income statements, balance sheets, and cash flows from public filings.
+            You get the numbers — organised, comparable, and free.
+          </p>
 
-          <motion.h1
-            initial={reduce ? false : { opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1], delay: 0.05 }}
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(64px, 10vw, 128px)',
-              fontWeight: 700,
-              lineHeight: 0.95,
-              letterSpacing: '-0.01em',
-              color: '#ffffff',
-              margin: 0,
-            }}
-          >
-            TRIKOSH
-          </motion.h1>
-
-          <motion.p
-            initial={reduce ? false : { opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1], delay: 0.12 }}
-            style={{
-              fontFamily: 'var(--font-sans)',
-              fontWeight: 400,
-              fontSize: 'clamp(15px, 2vw, 19px)',
-              color: 'var(--text-secondary)',
-              maxWidth: 560,
-              lineHeight: 1.6,
-              margin: '28px auto 0',
-            }}
-          >
-            Standardised financial data for 100+ companies — built for equity research,
-            not trading. The starting point that didn&rsquo;t exist when I tried to research my first company.
-          </motion.p>
-
-          <motion.div
-            initial={reduce ? false : { opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1], delay: 0.2 }}
-            style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center', marginTop: '36px' }}
-          >
+          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '64px' }}>
             <Link
               href="/companies"
               style={{
-                fontFamily: 'var(--font-sans)',
+                display: 'inline-block',
                 fontSize: '14px',
                 fontWeight: 600,
                 color: '#ffffff',
-                backgroundColor: 'var(--accent-primary)',
+                backgroundColor: '#b300ff',
                 padding: '12px 24px',
-                borderRadius: '8px',
-                transition: 'transform 180ms ease, box-shadow 180ms ease',
-                boxShadow: '0 8px 30px -8px rgba(124,58,237,0.6)',
+                borderRadius: '6px',
+                textDecoration: 'none',
               }}
             >
-              Explore Companies
+              Browse companies
             </Link>
-            <a
-              href="https://github.com/zshqv/Trikosh"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href="/about#methodology"
               style={{
-                fontFamily: 'var(--font-sans)',
+                display: 'inline-block',
                 fontSize: '14px',
                 fontWeight: 500,
-                color: 'var(--text-primary)',
-                border: '1px solid #2a2a2a',
+                color: '#ffffff',
+                border: '1px solid #ffffff',
                 padding: '12px 24px',
-                borderRadius: '8px',
-                backgroundColor: 'var(--bg-surface-1)',
+                borderRadius: '6px',
+                textDecoration: 'none',
+                backgroundColor: 'transparent',
               }}
             >
-              View on GitHub
-            </a>
-          </motion.div>
+              Read the methodology
+            </Link>
+          </div>
 
-          {/* Stat tickers */}
-          <motion.div
-            initial={reduce ? false : { opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1], delay: 0.28 }}
-            style={{ display: 'flex', gap: 'clamp(28px, 6vw, 64px)', justifyContent: 'center', marginTop: '64px', flexWrap: 'wrap' }}
-          >
+          <div style={{ display: 'flex', gap: 'clamp(40px, 8vw, 96px)', flexWrap: 'wrap' }}>
             {STATS.map(({ value, label }) => (
-              <div key={label} style={{ textAlign: 'center' }}>
-                <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center' }}>
-                  <NumberTicker
-                    value={value}
-                    className="tabular-nums"
-                    style={{
-                      fontFamily: 'var(--font-sans)',
-                      fontSize: 'clamp(34px, 5vw, 52px)',
-                      fontWeight: 700,
-                      color: '#ffffff',
-                    }}
-                  />
-                  <span style={{ fontFamily: 'var(--font-sans)', fontSize: '28px', fontWeight: 700, color: 'var(--accent-data)' }}>+</span>
-                </div>
-                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.12em', color: 'var(--text-tertiary)', marginTop: '6px' }}>
+              <div key={label}>
+                <NumberTicker
+                  value={value}
+                  style={{
+                    fontSize: 'clamp(36px, 5vw, 56px)',
+                    fontWeight: 700,
+                    color: '#ffffff',
+                    lineHeight: 1,
+                    display: 'block',
+                  }}
+                />
+                <p style={{ fontSize: '13px', color: '#6b6b6b', marginTop: '8px', marginBottom: 0 }}>
                   {label}
                 </p>
               </div>
             ))}
-          </motion.div>
+          </div>
         </div>
       </section>
 
-      <hr style={HR} />
+      {HR}
 
-      {/* ───────────────────── Why Trikosh — Bento ───────────────────── */}
-      <section style={{ maxWidth: '1280px', margin: '0 auto', padding: '96px 24px' }}>
-        <Reveal>
-          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--accent-data)', marginBottom: '12px' }}>
-            Why Trikosh exists
+      {/* ── Proof section ── */}
+      <section className="py-16 md:py-24">
+        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px' }}>
+          <p style={{
+            fontSize: '11px',
+            color: '#b300ff',
+            textTransform: 'uppercase',
+            letterSpacing: '0.15em',
+            fontWeight: 500,
+            marginBottom: '32px',
+          }}>
+            What&apos;s actually in it
           </p>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(26px, 4vw, 40px)', fontWeight: 700, color: 'var(--text-primary)', maxWidth: 640, lineHeight: 1.15, marginBottom: '48px' }}>
-            Research infrastructure, not a data dump.
-          </h2>
-        </Reveal>
 
-        <Reveal delay={0.05}>
-          <BentoGrid className="bento">
-            <BentoCard colSpan={6}>
-              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--accent-data)', marginBottom: '14px' }}>
-                {FEATURES[0].eyebrow}
-              </p>
-              <p style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(20px, 3vw, 28px)', fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.25, marginBottom: '14px', maxWidth: 720 }}>
-                {FEATURES[0].claim}
-              </p>
-              <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.7, maxWidth: 620 }}>
-                {FEATURES[0].body}
-              </p>
-            </BentoCard>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
 
-            {FEATURES.slice(1).map(f => (
-              <BentoCard key={f.claim} colSpan={3}>
-                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--accent-data)', marginBottom: '14px' }}>
-                  {f.eyebrow}
+            {/* GS income statement table */}
+            <div style={{ border: '1px solid #1f1f1f', borderRadius: '8px', overflow: 'hidden' }}>
+              <div style={{ padding: '18px 20px 14px', borderBottom: '1px solid #1f1f1f' }}>
+                <p style={{ fontSize: '15px', fontWeight: 600, color: '#ffffff', margin: '0 0 4px' }}>
+                  Goldman Sachs (GS) — Income Statement
                 </p>
-                <p style={{ fontFamily: 'var(--font-sans)', fontSize: '18px', fontWeight: 600, color: 'var(--text-primary)', lineHeight: 1.3, marginBottom: '12px' }}>
-                  {f.claim}
+                <p style={{ fontSize: '12px', color: '#6b6b6b', margin: 0 }}>
+                  Sample from our Financial Services dataset
                 </p>
-                <p style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-secondary)', lineHeight: 1.7 }}>
-                  {f.body}
-                </p>
-              </BentoCard>
-            ))}
-          </BentoGrid>
-        </Reveal>
+              </div>
+              <div style={{ overflowX: 'auto' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'var(--font-mono)', fontSize: '12px' }}>
+                  <thead>
+                    <tr style={{ borderBottom: '1px solid #1f1f1f' }}>
+                      {TH_COLS.map((h, i) => (
+                        <th
+                          key={h}
+                          style={{
+                            color: '#b300ff',
+                            padding: '10px 14px',
+                            textAlign: i === 0 ? 'left' : 'right',
+                            fontWeight: 500,
+                            whiteSpace: 'nowrap',
+                          }}
+                        >
+                          {h}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {GS_ROWS.map((row, i) => (
+                      <tr key={row.metric} style={{ borderBottom: i < GS_ROWS.length - 1 ? '1px solid #1f1f1f' : 'none' }}>
+                        <td style={{ color: '#c4c4c4', padding: '10px 14px' }}>{row.metric}</td>
+                        {[row.fy2022, row.fy2023, row.fy2024, row.fy2025].map((v, j) => (
+                          <td key={j} style={{ color: '#ffffff', padding: '10px 14px', textAlign: 'right', whiteSpace: 'nowrap' }}>
+                            {v}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p style={{ padding: '10px 14px', fontSize: '11px', color: '#6b6b6b', borderTop: '1px solid #1f1f1f', lineHeight: 1.5, margin: 0 }}>
+                Banks report negative FCF structurally — this is correct, not a data error.
+              </p>
+            </div>
+
+            {/* Sector breakdown */}
+            <div style={{ border: '1px solid #1f1f1f', borderRadius: '8px', padding: '24px' }}>
+              <p style={{ fontSize: '15px', fontWeight: 600, color: '#ffffff', margin: '0 0 20px' }}>
+                What we cover
+              </p>
+              <div>
+                {SECTORS_COVERED.map((s, i) => (
+                  <div
+                    key={s.name}
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      padding: '13px 0',
+                      borderBottom: i < SECTORS_COVERED.length - 1 ? '1px solid #1f1f1f' : 'none',
+                    }}
+                  >
+                    <span style={{ fontSize: '14px', color: '#ffffff' }}>{s.name}</span>
+                    <span style={{ fontSize: '14px', fontWeight: 600, color: '#b300ff' }}>
+                      {s.count} companies
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <p style={{ marginTop: '20px', fontSize: '12px', color: '#6b6b6b', lineHeight: 1.6, marginBottom: 0 }}>
+                All data is sourced from public filings via Yahoo Finance. Updated annually.
+              </p>
+            </div>
+
+          </div>
+        </div>
       </section>
 
-      <hr style={HR} />
+      {HR}
 
-      {/* ───────────────────── Company preview ───────────────────── */}
-      <section style={{ maxWidth: '1280px', margin: '0 auto', padding: '96px 24px' }}>
-        <Reveal>
-          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--accent-data)', marginBottom: '12px' }}>
-            The coverage universe
+      {/* ── How it works ── */}
+      <section className="py-16 md:py-24">
+        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px' }}>
+          <p style={{
+            fontSize: '11px',
+            color: '#b300ff',
+            textTransform: 'uppercase',
+            letterSpacing: '0.15em',
+            fontWeight: 500,
+            marginBottom: '40px',
+          }}>
+            How it works
           </p>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(24px, 3.5vw, 34px)', fontWeight: 700, color: 'var(--text-primary)', maxWidth: 640, lineHeight: 1.2, marginBottom: '8px' }}>
-            Companies chosen because they define their sectors.
-          </h2>
-          <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', marginBottom: '28px' }}>
-            Not because they are the biggest.
-          </p>
-        </Reveal>
 
-        <Reveal delay={0.05}>
-          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '16px' }}>
-            {SECTORS.map(sector => (
-              <SectorPill
-                key={sector}
-                sector={sector}
-                active={activeSector === sector}
-                onClick={() => setActiveSector(activeSector === sector ? null : sector)}
-              />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+            {STEPS.map((step) => (
+              <div key={step.n}>
+                <p style={{ fontSize: '22px', fontWeight: 700, color: '#b300ff', margin: '0 0 12px' }}>
+                  {step.n}
+                </p>
+                <p style={{ fontSize: '16px', fontWeight: 600, color: '#ffffff', margin: '0 0 10px', lineHeight: 1.3 }}>
+                  {step.title}
+                </p>
+                <p style={{ fontSize: '14px', color: '#8a8a8a', lineHeight: 1.6, margin: 0 }}>
+                  {step.desc}
+                </p>
+              </div>
             ))}
           </div>
-          <input
-            type="text"
-            placeholder="Search companies or tickers..."
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            style={{
-              fontFamily: 'var(--font-sans)',
-              fontSize: '14px',
-              color: 'var(--text-primary)',
-              backgroundColor: 'var(--bg-surface-1)',
-              border: '1px solid #1f1f1f',
-              borderRadius: '8px',
-              padding: '10px 14px',
-              width: '100%',
-              maxWidth: '420px',
-              outline: 'none',
-              marginBottom: '28px',
-            }}
-          />
-        </Reveal>
+        </div>
+      </section>
 
-        <RevealGroup style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '16px' }}>
-          {filteredCards.map(card => (
-            <RevealItem key={card.company.ticker}>
-              <DataAssetCard data={card} onClick={() => router.push(`/companies/${card.company.ticker}`)} />
-            </RevealItem>
-          ))}
-        </RevealGroup>
+      {HR}
 
-        <div style={{ marginTop: '32px', textAlign: 'center' }}>
+      {/* ── Research section ── */}
+      <section className="py-16 md:py-24">
+        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px' }}>
+          <h2 style={{
+            fontSize: 'clamp(24px, 3.5vw, 36px)',
+            fontWeight: 700,
+            color: '#ffffff',
+            lineHeight: 1.2,
+            maxWidth: 580,
+            margin: '0 0 20px',
+          }}>
+            Built for learning, not for looking
+          </h2>
+          <p style={{
+            fontSize: '16px',
+            color: '#8a8a8a',
+            lineHeight: 1.6,
+            maxWidth: 580,
+            margin: '0 0 24px',
+          }}>
+            Most financial data tools give you a number and stop there. Trikosh gives you the same
+            number with the formula behind it, so you understand what you&apos;re actually reading.
+            The methodology is published and open — you can read exactly how every ratio is calculated.
+          </p>
           <Link
-            href="/companies"
+            href="/about#methodology"
             style={{
-              fontFamily: 'var(--font-sans)',
               fontSize: '14px',
               fontWeight: 500,
-              color: 'var(--accent-data)',
-              border: '1px solid #2a2a2a',
-              borderRadius: '8px',
-              padding: '10px 24px',
-              backgroundColor: 'var(--bg-surface-1)',
+              color: '#b300ff',
+              textDecoration: 'none',
+              borderBottom: '1px solid #b300ff',
+              paddingBottom: '2px',
             }}
           >
-            View all 100+ companies →
+            Read the methodology →
           </Link>
         </div>
       </section>
 
-      <hr style={HR} />
-
-      {/* ───────────────────── Research kits ───────────────────── */}
-      <section style={{ maxWidth: '1280px', margin: '0 auto', padding: '96px 24px' }}>
-        <Reveal>
-          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--accent-data)', marginBottom: '12px' }}>
-            Research kits
-          </p>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(24px, 3.5vw, 34px)', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '8px' }}>
-            Structured frameworks for analysing each sector.
-          </h2>
-          <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', marginBottom: '36px' }}>
-            From scratch.
-          </p>
-        </Reveal>
-
-        <RevealGroup style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
-          {RESEARCH_KITS.map(kit => (
-            <RevealItem key={kit.id}>
-              <div
-                style={{
-                  backgroundColor: 'var(--bg-surface-1)',
-                  border: '1px solid #1f1f1f',
-                  borderRadius: '14px',
-                  padding: '26px',
-                  height: '100%',
-                }}
-              >
-                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--accent-data)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '10px' }}>
-                  {kit.sector}
-                </p>
-                <p style={{ fontFamily: 'var(--font-sans)', fontSize: '16px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '10px', lineHeight: 1.3 }}>
-                  {kit.title}
-                </p>
-                <p style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-secondary)', lineHeight: 1.65, marginBottom: '18px' }}>
-                  {kit.description}
-                </p>
-                <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                  {kit.tickers.map(t => (
-                    <span
-                      key={t}
-                      style={{
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: '10px',
-                        color: 'var(--accent-data)',
-                        backgroundColor: 'rgba(124,58,237,0.12)',
-                        borderRadius: '4px',
-                        padding: '3px 7px',
-                      }}
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </RevealItem>
-          ))}
-        </RevealGroup>
-      </section>
-
-      <style jsx global>{`
-        @media (max-width: 760px) {
-          .bento {
-            grid-template-columns: 1fr !important;
-          }
-        }
-      `}</style>
     </div>
   )
 }
