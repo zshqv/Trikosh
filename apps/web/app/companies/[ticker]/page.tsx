@@ -6,6 +6,7 @@ import Link from 'next/link'
 import {
   AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
 } from 'recharts'
+import * as XLSX from 'xlsx'
 import TickerBadge from '@/components/ui/TickerBadge'
 import DeltaLabel from '@/components/ui/DeltaLabel'
 import { formatPercent, formatMultiple, formatCurrency } from '@/lib/utils'
@@ -332,6 +333,58 @@ export default function CompanyDetailPage() {
 
   const { company, income_statements, balance_sheets, cash_flow_statements, financial_ratios, market_data, peers } = data
 
+  function handleExport() {
+    const incomeAscEx   = [...income_statements].reverse()
+    const balanceAscEx  = [...balance_sheets].reverse()
+    const cashflowAscEx = [...cash_flow_statements].reverse()
+
+    const wb = XLSX.utils.book_new()
+
+    const incomeSheet = XLSX.utils.aoa_to_sheet([
+      ['Metric', ...incomeAscEx.map(r => `FY${r.fiscal_year}`)],
+      ['Revenue',          ...incomeAscEx.map(r => toNum(r.revenue))],
+      ['Gross Profit',     ...incomeAscEx.map(r => toNum(r.gross_profit))],
+      ['Operating Income', ...incomeAscEx.map(r => toNum(r.operating_income))],
+      ['Net Income',       ...incomeAscEx.map(r => toNum(r.net_income))],
+      ['EBITDA',           ...incomeAscEx.map(r => toNum(r.ebitda))],
+      ['EPS (diluted)',    ...incomeAscEx.map(r => toNum(r.eps))],
+    ])
+
+    const balanceSheet = XLSX.utils.aoa_to_sheet([
+      ['Metric', ...balanceAscEx.map(r => `FY${r.fiscal_year}`)],
+      ['Total Assets',       ...balanceAscEx.map(r => toNum(r.total_assets))],
+      ['Total Liabilities',  ...balanceAscEx.map(r => toNum(r.total_liabilities))],
+      ['Total Equity',       ...balanceAscEx.map(r => toNum(r.total_equity))],
+      ['Cash & Equivalents', ...balanceAscEx.map(r => toNum(r.cash_and_equivalents))],
+      ['Total Debt',         ...balanceAscEx.map(r => toNum(r.total_debt))],
+    ])
+
+    const cashFlowSheet = XLSX.utils.aoa_to_sheet([
+      ['Metric', ...cashflowAscEx.map(r => `FY${r.fiscal_year}`)],
+      ['Operating Cash Flow', ...cashflowAscEx.map(r => toNum(r.operating_cash_flow))],
+      ['Capital Expenditure', ...cashflowAscEx.map(r => toNum(r.capital_expenditure))],
+      ['Free Cash Flow',      ...cashflowAscEx.map(r => toNum(r.free_cash_flow))],
+      ['Dividends Paid',      ...cashflowAscEx.map(r => toNum(r.dividends_paid))],
+    ])
+
+    XLSX.utils.book_append_sheet(wb, incomeSheet,   'Income Statement')
+    XLSX.utils.book_append_sheet(wb, balanceSheet,  'Balance Sheet')
+    XLSX.utils.book_append_sheet(wb, cashFlowSheet, 'Cash Flow')
+
+    const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' })
+    const blob = new Blob([wbout], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `Trikosh_${ticker.toUpperCase()}_Financials.xlsx`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }
+
   const incomeAsc   = [...income_statements].reverse()
   const balanceAsc  = [...balance_sheets].reverse()
   const cashflowAsc = [...cash_flow_statements].reverse()
@@ -443,11 +496,14 @@ export default function CompanyDetailPage() {
                 </p>
               )}
             </div>
-            <button style={{
-              fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--accent-primary)',
-              border: 'var(--border-hover)', borderRadius: '6px', padding: '8px 16px',
-              backgroundColor: 'rgba(124,58,237,0.10)', cursor: 'pointer', flexShrink: 0,
-            }}>
+            <button
+              onClick={handleExport}
+              style={{
+                fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--accent-primary)',
+                border: 'var(--border-hover)', borderRadius: '6px', padding: '8px 16px',
+                backgroundColor: 'rgba(124,58,237,0.10)', cursor: 'pointer', flexShrink: 0,
+              }}
+            >
               Export for Analysis
             </button>
           </div>
