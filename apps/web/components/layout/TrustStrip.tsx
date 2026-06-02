@@ -3,23 +3,25 @@ export default function TrustStrip() {
     <div
       style={{
         width: '100%',
-        backgroundColor: 'var(--bg-surface-2)',
-        padding: '12px 24px',
+        backgroundColor: 'var(--bg-base)',
+        borderTop: '1px solid rgba(255,255,255,0.05)',
+        padding: '10px 32px',
         textAlign: 'center',
       }}
     >
       <p
         style={{
           fontFamily: 'var(--font-mono)',
-          fontSize: '11px',
+          fontSize: '10px',
           color: 'var(--text-tertiary)',
           margin: 0,
+          letterSpacing: '0.04em',
         }}
       >
-        Sources: SEC EDGAR · Annual Reports · Investor Presentations{' '}
-        | Standards: GAAP / IFRS flagged per company{' '}
-        | Coverage: FY2019 – FY2024{' '}
-        | License: MIT Open Source
+        SEC EDGAR · Annual Reports · Investor Presentations
+        {' · '}GAAP / IFRS flagged per company
+        {' · '}FY2019–FY2024
+        {' · '}MIT Open Source
       </p>
     </div>
   )

@@ -31,9 +31,9 @@ export default function RatioRail({ ratios }: RatioRailProps) {
           </span>
           <span
             style={{
-              fontFamily: 'var(--font-sans)',
+              fontFamily: 'var(--font-mono)',
               fontSize: '13px',
-              fontWeight: 500,
+              fontWeight: 400,
               fontVariantNumeric: 'tabular-nums',
               color: 'var(--text-primary)',
             }}

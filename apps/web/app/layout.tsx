@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Inter, Bricolage_Grotesque } from 'next/font/google'
+import { DM_Sans, Instrument_Serif } from 'next/font/google'
 import { GeistMono } from 'geist/font/mono'
 import './globals.css'
 import { ClerkProvider } from '@clerk/nextjs'
@@ -10,16 +10,17 @@ import PageTransition from '@/components/PageTransition'
 import CustomCursor from '@/components/effects/CustomCursor'
 import LoadingScreen from '@/components/effects/LoadingScreen'
 
-const inter = Inter({
+const dmSans = DM_Sans({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
+  weight: ['300', '400', '500'],
   variable: '--font-sans',
   display: 'swap',
 })
 
-const bricolage = Bricolage_Grotesque({
+const instrumentSerif = Instrument_Serif({
   subsets: ['latin'],
-  weight: ['400', '600', '700', '800'],
+  weight: ['400'],
+  style: ['normal', 'italic'],
   variable: '--font-display',
   display: 'swap',
 })
@@ -40,7 +41,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <ClerkProvider>
       <html
         lang="en"
-        className={`${inter.variable} ${bricolage.variable} ${GeistMono.variable}`}
+        className={`${dmSans.variable} ${instrumentSerif.variable} ${GeistMono.variable}`}
       >
         <body style={{ backgroundColor: 'var(--bg-base)', color: 'var(--text-primary)' }}>
           <LoadingScreen />

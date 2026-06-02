@@ -11,11 +11,11 @@ export default function TickerBadge({ ticker, exchange }: TickerBadgeProps) {
         fontSize: '11px',
         fontWeight: 500,
         color: 'var(--accent-data)',
-        backgroundColor: 'rgba(124,58,237,0.14)',
+        backgroundColor: 'rgba(91,142,240,0.10)',
         padding: '2px 7px',
-        borderRadius: '3px',
+        borderRadius: '2px',
         display: 'inline-block',
-        letterSpacing: '0.01em',
+        letterSpacing: '0.02em',
       }}
     >
       {ticker} · {exchange}

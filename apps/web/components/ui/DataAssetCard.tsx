@@ -177,11 +177,11 @@ export default function DataAssetCard({ data, onClick, isLoading }: DataAssetCar
               </p>
               <p
                 style={{
-                  fontFamily: 'var(--font-sans)',
+                  fontFamily: 'var(--font-mono)',
                   fontSize: '20px',
-                  fontWeight: 500,
+                  fontWeight: 400,
                   fontVariantNumeric: 'tabular-nums',
-                  color: hovered ? 'var(--accent-primary)' : 'var(--text-primary)',
+                  color: 'var(--text-primary)',
                   transition: 'color 150ms ease',
                   marginBottom: '2px',
                 }}
@@ -209,9 +209,9 @@ export default function DataAssetCard({ data, onClick, isLoading }: DataAssetCar
                 </p>
                 <p
                   style={{
-                    fontFamily: 'var(--font-sans)',
+                    fontFamily: 'var(--font-mono)',
                     fontSize: '20px',
-                    fontWeight: 500,
+                    fontWeight: 400,
                     fontVariantNumeric: 'tabular-nums',
                     color: 'var(--text-primary)',
                     marginBottom: '2px',

@@ -4,10 +4,10 @@ interface MetaBadgeProps {
 }
 
 const VARIANTS = {
-  gaap: { bg: 'rgba(52,211,153,0.12)', color: '#34d399' },
-  ifrs: { bg: 'rgba(124,58,237,0.14)', color: '#a78bfa' },
-  sec:  { bg: 'rgba(124,58,237,0.14)', color: '#a78bfa' },
-  warn: { bg: 'rgba(251,191,36,0.12)', color: '#fbbf24' },
+  gaap: { bg: 'rgba(74,222,128,0.10)',  color: '#4ade80' },
+  ifrs: { bg: 'rgba(91,142,240,0.10)',  color: '#5b8ef0' },
+  sec:  { bg: 'rgba(91,142,240,0.10)',  color: '#5b8ef0' },
+  warn: { bg: 'rgba(251,146,60,0.12)',  color: '#fb923c' },
 }
 
 export default function MetaBadge({ label, variant }: MetaBadgeProps) {
@@ -23,6 +23,7 @@ export default function MetaBadge({ label, variant }: MetaBadgeProps) {
         borderRadius: '2px',
         display: 'inline-block',
         whiteSpace: 'nowrap',
+        letterSpacing: '0.02em',
       }}
     >
       {label}
