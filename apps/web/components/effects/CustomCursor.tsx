@@ -4,28 +4,30 @@ import { useEffect, useState } from 'react'
 import { motion, useMotionValue, useSpring, useTransform } from 'motion/react'
 
 const INTERACTIVE = 'a, button, input, textarea, select, [role="button"], [data-cursor="hover"]'
-const DOT  = 5
-const RING = 28
+const DOT = 6
+const RING = 32
 
 export default function CustomCursor() {
-  const [enabled, setEnabled]   = useState(false)
+  const [enabled, setEnabled] = useState(false)
   const [hovering, setHovering] = useState(false)
-  const [visible, setVisible]   = useState(false)
+  const [visible, setVisible] = useState(false)
 
+  // Raw pointer position. Centering offsets are baked into the derived
+  // values below so we only ever drive translateX/translateY (never `x`).
   const rawX = useMotionValue(-100)
   const rawY = useMotionValue(-100)
 
   const dotX = useTransform(rawX, v => v - DOT / 2)
   const dotY = useTransform(rawY, v => v - DOT / 2)
 
-  const springCfg = { damping: 30, stiffness: 400, mass: 0.5 }
-  const springX   = useSpring(rawX, springCfg)
-  const springY   = useSpring(rawY, springCfg)
-  const ringX     = useTransform(springX, v => v - RING / 2)
-  const ringY     = useTransform(springY, v => v - RING / 2)
+  const springCfg = { damping: 28, stiffness: 380, mass: 0.6 }
+  const springX = useSpring(rawX, springCfg)
+  const springY = useSpring(rawY, springCfg)
+  const ringX = useTransform(springX, v => v - RING / 2)
+  const ringY = useTransform(springY, v => v - RING / 2)
 
   useEffect(() => {
-    const fine   = window.matchMedia('(pointer: fine)')
+    const fine = window.matchMedia('(pointer: fine)')
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)')
     if (!fine.matches || reduce.matches) return
 
@@ -58,7 +60,7 @@ export default function CustomCursor() {
 
   return (
     <>
-      {/* Dot */}
+      {/* Dot — tracks pointer exactly */}
       <motion.div
         aria-hidden
         style={{
@@ -77,17 +79,15 @@ export default function CustomCursor() {
           mixBlendMode: 'difference',
         }}
       />
-      {/* Ring */}
+      {/* Ring — follows with spring lag, scales on interactive hover */}
       <motion.div
         aria-hidden
         animate={{
-          scale: hovering ? 1.4 : 1,
-          opacity: visible ? (hovering ? 0.8 : 0.35) : 0,
-          borderColor: hovering
-            ? 'rgba(255,255,255,0.6)'
-            : 'rgba(255,255,255,0.35)',
+          scale: hovering ? 1.5 : 1,
+          opacity: visible ? (hovering ? 1 : 0.6) : 0,
+          borderColor: hovering ? 'rgba(167,139,250,0.9)' : 'rgba(245,245,245,0.5)',
         }}
-        transition={{ type: 'spring', damping: 24, stiffness: 340 }}
+        transition={{ type: 'spring', damping: 22, stiffness: 320 }}
         style={{
           position: 'fixed',
           top: 0,
@@ -95,7 +95,7 @@ export default function CustomCursor() {
           width: RING,
           height: RING,
           borderRadius: '50%',
-          border: '1px solid rgba(255,255,255,0.35)',
+          border: '1px solid rgba(245,245,245,0.5)',
           translateX: ringX,
           translateY: ringY,
           pointerEvents: 'none',

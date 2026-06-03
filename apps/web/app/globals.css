@@ -3,56 +3,78 @@
 @tailwind utilities;
 
 /* ------------------------------------------------------------------ */
-/*  Trikosh — dark editorial. Instrument Serif + DM Sans + Geist Mono. */
+/*  Display face — hero headline + loader wordmark only.               */
+/*                                                                     */
+/*  Apoc Revelations 2 is not yet in the repo, so the hero/loader use  */
+/*  Bricolage Grotesque (loaded via next/font in layout.tsx, exposed   */
+/*  as --font-display). To switch to Apoc once the file exists:        */
+/*    1. drop ApocRevelations2.woff2 in apps/web/public/fonts/         */
+/*    2. uncomment the @font-face below                                */
+/*    3. set --font-display below to 'Apoc Revelations 2', ...         */
+/* ------------------------------------------------------------------ */
+/*
+@font-face {
+  font-family: 'Apoc Revelations 2';
+  src: url('/fonts/ApocRevelations2.woff2') format('woff2');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+*/
+
+/* ------------------------------------------------------------------ */
+/*  Trikosh — dark, editorial, violet. White backgrounds are killed.   */
 /* ------------------------------------------------------------------ */
 :root {
-  --bg-base:      #080808;
-  --bg-surface-1: #0f0f0f;
-  --bg-surface-2: #141414;
-  --bg-muted:     #1a1a1a;
+  --bg-base: #0a0a0a;
+  --bg-surface-1: #161616;
+  --bg-surface-2: #1c1c1c;
+  --bg-muted: #222222;
 
-  --text-primary:   #f0f0f0;
-  --text-secondary: rgba(240, 240, 240, 0.45);
-  --text-tertiary:  rgba(240, 240, 240, 0.22);
+  --text-primary: #f5f5f5;
+  --text-secondary: #a1a1aa;
+  --text-tertiary: #6b6b73;
 
-  /* UI accent: near-white for buttons, underlines, active states */
-  --accent-primary: #e8e8e8;
-  /* Data accent: precise blue for charts, tickers, sparklines */
-  --accent-data:    #5b8ef0;
-  /* Archive/pinned: muted slate */
-  --accent-archive: #94a3b8;
-  --accent-glow:    rgba(91, 142, 240, 0.10);
+  --accent-primary: #b300ff;
+  --accent-data: #b300ff;
+  --accent-archive: #b300ff;
+  --accent-glow: rgba(179, 0, 255, 0.25);
 
-  --delta-pos:      #4ade80;
-  --delta-neg:      #f87171;
-  --delta-neutral:  rgba(240, 240, 240, 0.25);
-  --delta-warn:     #fb923c;
-  --delta-estimate: #94a3b8;
+  --delta-pos: #34d399;
+  --delta-neg: #f87171;
+  --delta-neutral: #71717a;
+  --delta-warn: #fbbf24;
+  --delta-estimate: #a78bfa;
 
-  /* Translucent borders — luminous, not opaque */
-  --border-rest:    1px solid rgba(255, 255, 255, 0.07);
-  --border-hover:   1px solid rgba(255, 255, 255, 0.20);
-  --border-color:   rgba(255, 255, 255, 0.07);
+  --border-rest: 1px solid #1f1f1f;
+  --border-hover: 1px solid #b300ff;
+  --border-color: #1f1f1f;
 
-  --card-radius:    6px;
-  --card-transition: all 180ms cubic-bezier(0.25, 0.1, 0.25, 1);
-  --card-meta-bg:  #0f0f0f;
+  --card-radius: 12px;
+  --card-transition: all 200ms cubic-bezier(0.25, 0.1, 0.25, 1);
+  --card-meta-bg: #1c1c1c;
 
-  --font-display: 'Instrument Serif', Georgia, serif;
-  --font-sans:    'DM Sans', system-ui, -apple-system, sans-serif;
-  --font-mono:    var(--font-geist-mono, 'Geist Mono'), 'JetBrains Mono', monospace;
+  /* Display face for the hero/loader wordmark; everything else Urbanist.
+     --font-display is set by next/font (Bricolage Grotesque) on <html>;
+     this is the fallback if that variable is ever absent — a grotesque
+     sans stack, never a serif/Times fallback. */
+  --font-display: 'Bricolage Grotesque', 'Inter', system-ui, sans-serif;
+  --font-serif: var(--font-sans, 'Inter'), system-ui, sans-serif;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-geist-mono, 'Geist Mono'), 'JetBrains Mono', monospace;
 
-  --nav-h: 52px;
+  --nav-h: 60px;
 }
 
+/* Legacy .dark hook kept as a no-op alias so any `.dark` usage still resolves. */
 .dark {
-  --bg-base:      #080808;
-  --bg-surface-1: #0f0f0f;
-  --bg-surface-2: #141414;
-  --bg-muted:     #1a1a1a;
-  --text-primary:   #f0f0f0;
-  --text-secondary: rgba(240, 240, 240, 0.45);
-  --text-tertiary:  rgba(240, 240, 240, 0.22);
+  --bg-base: #0a0a0a;
+  --bg-surface-1: #161616;
+  --bg-surface-2: #1c1c1c;
+  --bg-muted: #222222;
+  --text-primary: #f5f5f5;
+  --text-secondary: #a1a1aa;
+  --text-tertiary: #6b6b73;
 }
 
 @layer base {
@@ -83,7 +105,7 @@
 
   h1, h2, h3, h4, h5, h6 {
     color: var(--text-primary);
-    line-height: 1.15;
+    line-height: 1.2;
   }
 
   a {
@@ -101,16 +123,16 @@
   }
 
   ::selection {
-    background: rgba(255, 255, 255, 0.12);
+    background: rgba(179, 0, 255, 0.30);
     color: #ffffff;
   }
 }
 
 @layer utilities {
   .font-display { font-family: var(--font-display); }
-  .font-serif   { font-family: var(--font-display); }
-  .font-sans    { font-family: var(--font-sans); }
-  .font-mono    { font-family: var(--font-mono); }
+  .font-serif { font-family: var(--font-serif); }
+  .font-sans  { font-family: var(--font-sans); }
+  .font-mono  { font-family: var(--font-mono); }
 
   .tabular-nums { font-variant-numeric: tabular-nums; }
 
@@ -119,20 +141,21 @@
 }
 
 /* ------------------------------------------------------------------ */
-/*  Scrollbar                                                           */
+/*  Dark scrollbar                                                      */
 /* ------------------------------------------------------------------ */
-::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-track { background: var(--bg-base); }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.10);
-  border-radius: 4px;
+  background: #2a2a2a;
+  border-radius: 8px;
   border: 2px solid var(--bg-base);
 }
-::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.18); }
-* { scrollbar-color: rgba(255,255,255,0.10) var(--bg-base); scrollbar-width: thin; }
+::-webkit-scrollbar-thumb:hover { background: #3a3a3a; }
+* { scrollbar-color: #2a2a2a var(--bg-base); scrollbar-width: thin; }
 
 /* ------------------------------------------------------------------ */
-/*  Custom cursor                                                       */
+/*  Custom cursor — hide the native cursor on fine pointers only.       */
+/*  CustomCursor adds `.cursor-ready` to <html> after it mounts.        */
 /* ------------------------------------------------------------------ */
 @media (pointer: fine) {
   html.cursor-ready,
@@ -146,14 +169,14 @@
 /* ------------------------------------------------------------------ */
 @keyframes shimmer {
   0%   { background-position: -200% 0; }
-  100% { background-position:  200% 0; }
+  100% { background-position: 200% 0; }
 }
 
 .shimmer {
   background: linear-gradient(
     90deg,
     var(--bg-surface-2) 25%,
-    var(--bg-muted)     50%,
+    var(--bg-muted) 50%,
     var(--bg-surface-2) 75%
   );
   background-size: 400% 100%;
@@ -161,15 +184,15 @@
 }
 
 /* ------------------------------------------------------------------ */
-/*  Reduced motion                                                      */
+/*  Respect reduced motion — kill non-essential animation globally.    */
 /* ------------------------------------------------------------------ */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
-    animation-duration:        0.01ms !important;
-    animation-iteration-count: 1      !important;
-    transition-duration:       0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
   html.cursor-ready,

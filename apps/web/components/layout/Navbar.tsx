@@ -7,9 +7,9 @@ import { UserButton, SignedIn, SignedOut } from '@clerk/nextjs'
 
 const NAV_LINKS = [
   { label: 'Companies', href: '/companies' },
-  { label: 'Sectors',   href: '/sectors'   },
-  { label: 'Compare',   href: '/compare'   },
-  { label: 'Research',  href: '/research'  },
+  { label: 'Sectors',   href: '/sectors' },
+  { label: 'Compare',   href: '/compare' },
+  { label: 'Research',  href: '/research' },
 ]
 
 export default function Navbar() {
@@ -24,10 +24,8 @@ export default function Navbar() {
         zIndex: 50,
         width: '100%',
         height: 'var(--nav-h)',
-        backgroundColor: 'rgba(8,8,8,0.92)',
-        backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
-        borderBottom: '1px solid rgba(255,255,255,0.06)',
+        backgroundColor: '#0a0a0a',
+        borderBottom: '1px solid #1f1f1f',
         display: 'flex',
         alignItems: 'center',
       }}
@@ -36,31 +34,30 @@ export default function Navbar() {
         style={{
           maxWidth: '1280px',
           margin: '0 auto',
-          padding: '0 32px',
+          padding: '0 24px',
           width: '100%',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
+          gap: '24px',
         }}
       >
-        {/* Wordmark */}
+        {/* Logo */}
         <Link href="/" style={{ textDecoration: 'none', flexShrink: 0 }}>
           <span style={{
-            fontFamily: 'var(--font-display)',
-            fontStyle: 'italic',
-            fontSize: '17px',
-            fontWeight: 400,
-            color: 'var(--text-primary)',
-            letterSpacing: '0.01em',
+            fontFamily: 'var(--font-sans)',
+            fontSize: '15px',
+            fontWeight: 700,
+            color: '#ffffff',
           }}>
             Trikosh
           </span>
         </Link>
 
-        {/* Nav + auth */}
+        {/* Nav links + CTA */}
         <div
           onMouseLeave={() => setHovered(null)}
-          style={{ display: 'flex', alignItems: 'center', gap: '0' }}
+          style={{ display: 'flex', alignItems: 'center', gap: '2px' }}
         >
           {NAV_LINKS.map(({ label, href }) => {
             const isActive = pathname === href || pathname.startsWith(href + '/')
@@ -73,26 +70,24 @@ export default function Navbar() {
                 style={{
                   position: 'relative',
                   fontFamily: 'var(--font-sans)',
-                  fontSize: '13px',
-                  fontWeight: 400,
-                  color: isHot ? 'var(--text-primary)' : 'var(--text-secondary)',
-                  padding: '8px 14px',
+                  fontSize: '14px',
+                  fontWeight: isActive ? 600 : 400,
+                  color: isActive || isHot ? '#ffffff' : '#8a8a8a',
+                  padding: '8px 12px',
                   textDecoration: 'none',
                   transition: 'color 150ms ease',
-                  letterSpacing: '0.01em',
                 }}
               >
                 {label}
                 {isHot && (
                   <span style={{
                     position: 'absolute',
-                    left: 14,
-                    right: 14,
-                    bottom: 4,
-                    height: '1px',
-                    backgroundColor: 'var(--text-primary)',
+                    left: 10,
+                    right: 10,
+                    bottom: 2,
+                    height: 1,
+                    backgroundColor: '#b300ff',
                     display: 'block',
-                    opacity: 0.5,
                   }} />
                 )}
               </Link>
@@ -104,25 +99,24 @@ export default function Navbar() {
               href="/companies"
               style={{
                 fontFamily: 'var(--font-sans)',
-                fontSize: '12px',
+                fontSize: '13px',
                 fontWeight: 500,
-                color: '#080808',
-                backgroundColor: 'var(--text-primary)',
-                borderRadius: '3px',
-                padding: '6px 14px',
-                marginLeft: '12px',
+                color: '#ffffff',
+                border: '1px solid #b300ff',
+                borderRadius: '6px',
+                padding: '7px 16px',
+                marginLeft: '10px',
                 textDecoration: 'none',
-                letterSpacing: '0.01em',
+                backgroundColor: 'transparent',
                 whiteSpace: 'nowrap',
-                transition: 'opacity 150ms ease',
               }}
             >
-              Browse →
+              Start researching
             </Link>
           </SignedOut>
 
           <SignedIn>
-            <div style={{ marginLeft: '16px' }}>
+            <div style={{ marginLeft: '14px' }}>
               <UserButton afterSignOutUrl="/" />
             </div>
           </SignedIn>

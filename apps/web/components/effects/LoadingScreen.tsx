@@ -7,6 +7,7 @@ const SESSION_KEY = 'trikosh:loaded'
 
 export default function LoadingScreen() {
   const reduce = useReducedMotion()
+  // Render nothing on the server and on subsequent client navigations.
   const [show, setShow] = useState(false)
   const [mounted, setMounted] = useState(false)
 
@@ -16,9 +17,10 @@ export default function LoadingScreen() {
     if (already) return
 
     setShow(true)
+    // Lock scroll while the loader is up.
     document.body.style.overflow = 'hidden'
 
-    const dwell = reduce ? 300 : 1400
+    const dwell = reduce ? 300 : 1500
     const t = setTimeout(() => {
       sessionStorage.setItem(SESSION_KEY, '1')
       setShow(false)
@@ -40,52 +42,54 @@ export default function LoadingScreen() {
           key="loader"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+          transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
           style={{
             position: 'fixed',
             inset: 0,
             zIndex: 9999,
-            backgroundColor: '#080808',
+            backgroundColor: '#0a0a0a',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '32px',
+            gap: '28px',
           }}
         >
           <motion.span
-            initial={{ opacity: 0, y: 6 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
             style={{
               fontFamily: 'var(--font-display)',
-              fontStyle: 'italic',
-              fontSize: 'clamp(32px, 6vw, 60px)',
-              fontWeight: 400,
-              letterSpacing: '0.01em',
-              color: '#f0f0f0',
+              fontSize: 'clamp(40px, 8vw, 72px)',
+              fontWeight: 700,
+              letterSpacing: '0.02em',
+              color: '#f5f5f5',
               lineHeight: 1,
             }}
           >
-            Trikosh
+            TRIKOSH
           </motion.span>
 
+          {/* progress track */}
           <div
             style={{
-              width: 'min(160px, 50vw)',
-              height: '1px',
-              backgroundColor: 'rgba(255,255,255,0.08)',
+              width: 'min(220px, 60vw)',
+              height: '2px',
+              backgroundColor: '#1f1f1f',
+              borderRadius: '2px',
               overflow: 'hidden',
             }}
           >
             <motion.div
               initial={{ x: '-100%' }}
               animate={{ x: '0%' }}
-              transition={{ duration: reduce ? 0.3 : 1.2, ease: [0.4, 0, 0.2, 1] }}
+              transition={{ duration: reduce ? 0.3 : 1.3, ease: [0.4, 0, 0.2, 1] }}
               style={{
                 width: '100%',
                 height: '100%',
-                backgroundColor: 'rgba(255,255,255,0.55)',
+                background: 'linear-gradient(90deg, #7c3aed, #a78bfa)',
+                borderRadius: '2px',
               }}
             />
           </div>
