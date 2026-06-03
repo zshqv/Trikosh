@@ -1,144 +1,370 @@
-﻿import Link from 'next/link'
+﻿'use client'
+
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { LayoutDashboard, List, PieChart, GitCompare, BookOpen, BookMarked, FileText, GitBranch, Info } from 'lucide-react'
+
+const NAV_LINKS = [
+  { label: 'HOME',      href: '/',          Icon: LayoutDashboard },
+  { label: 'COMPANIES', href: '/companies', Icon: List            },
+  { label: 'SECTORS',   href: '/sectors',   Icon: PieChart        },
+  { label: 'COMPARE',   href: '/compare',   Icon: GitCompare      },
+  { label: 'RESEARCH',  href: '/research',  Icon: BookOpen        },
+  { label: 'GLOSSARY',  href: '/glossary',  Icon: BookMarked      },
+  { label: 'ABOUT',     href: '/about',     Icon: Info            },
+] as const
 
 export default function AboutPage() {
-  return (
-    <div style={{ backgroundColor: 'var(--bg-base)', minHeight: '100vh' }}>
-      <div style={{ maxWidth: '680px', margin: '0 auto', padding: '40px 24px 80px' }}>
-        <h1
-          style={{
-            fontFamily: 'var(--font-serif)',
-            fontSize: '32px',
-            fontWeight: 500,
-            lineHeight: 1.2,
-            color: 'var(--text-primary)',
-            marginBottom: '36px',
-          }}
-        >
-          About
-        </h1>
+  const pathname = usePathname()
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginBottom: '48px' }}>
-          <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
-            Trikosh started as a personal frustration. In 2023, trying to research Sony for the first time — not to trade it, but to genuinely understand how it works as a business — I found no useful starting point. The data was fragmented, the frameworks were implicit, and everything assumed you already knew what you were looking for. I did not know what I was looking for. That is the point.
+  return (
+    <div className="flex min-h-screen bg-[#131315]">
+
+      {/* ── Sidebar ──────────────────────────────────────────────────── */}
+      <aside style={{
+        width: '256px',
+        flexShrink: 0,
+        height: '100vh',
+        position: 'sticky',
+        top: 0,
+        backgroundColor: '#131315',
+        borderRight: '1px solid #444749',
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden',
+        zIndex: 40,
+      }}>
+        {/* Wordmark */}
+        <div style={{ padding: '20px 20px 16px', borderBottom: '1px solid rgba(68,71,73,0.5)', flexShrink: 0 }}>
+          <Link href="/" style={{ textDecoration: 'none' }}>
+            <span style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: '17px',
+              fontWeight: 700,
+              color: '#ffffff',
+              letterSpacing: '-0.01em',
+              display: 'block',
+              marginBottom: '6px',
+            }}>
+              Trikosh
+            </span>
+          </Link>
+          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.12em', color: '#8e9193', margin: '0 0 2px' }}>
+            Institutional
           </p>
-          <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
-            The financial infrastructure that professionals use every day — Bloomberg, FactSet, Capital IQ — costs thousands of dollars a month. Students and early-career analysts who are trying to learn do not have access to it. What they have is a search engine, a free tier of something, and a lot of fragmented PDFs. Trikosh is an attempt to build something that someone with a functional internet and a frontal lobe can use this, regardless of whether they have institutional access.
-          </p>
-          <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
-            The platform is not trying to replace Bloomberg. It is trying to give finance students and CFA candidates the baseline they need to start doing real research — not scraping data from tables in PDFs, but actually asking analytical questions about businesses. The 100+ companies in the coverage universe were chosen for their analytical clarity, not their market cap. They are the companies that best illustrate how their sectors work.
-          </p>
-          <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
-            Trikosh is open source and MIT licensed. The data comes from public filings — SEC EDGAR, annual reports, investor presentations. Everything is standardised on a consistent basis so you can compare companies without adjusting for different reporting formats. The source is always disclosed. The limitations are always noted. The platform does not have opinions about which companies to buy or sell. It has data, and it has frameworks for how to think about that data. What you do with it is your job.
+          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.08em', color: '#8e9193', margin: 0 }}>
+            ID: 8829-QX
           </p>
         </div>
 
-        {/* Philosophy */}
-        <section style={{ marginBottom: '48px' }}>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 500, color: 'var(--text-primary)', marginBottom: '16px' }}>
-            Platform Philosophy
-          </h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {[
-              'Data without context is noise. Every number on this platform is paired with a framework for what it means.',
-              'The goal is to make you a better analyst, not to make analysis easier. Trikosh does not tell you what to think.',
-              'Financial research is a skill, not a product. This platform teaches the skill.',
-              'Open source and free forever. MIT License. No paywalls. No signups required to read.',
-            ].map((point, i) => (
-              <div key={i} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                <span
-                  style={{
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '11px',
-                    color: 'var(--accent-primary)',
-                    flexShrink: 0,
-                    marginTop: '2px',
-                  }}
-                >
-                  0{i + 1}
-                </span>
-                <p style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-secondary)', lineHeight: 1.65 }}>
-                  {point}
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
+        {/* Nav links */}
+        <nav style={{ flex: 1, padding: '8px 0', overflowY: 'auto' }}>
+          {NAV_LINKS.map(({ label, href, Icon }) => {
+            const active = pathname === href || (href !== '/' && pathname.startsWith(href))
+            return (
+              <Link
+                key={href}
+                href={href}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  padding: '9px 18px 9px 16px',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '11px',
+                  letterSpacing: '0.06em',
+                  color: active ? '#ffffff' : '#c4c7c9',
+                  textDecoration: 'none',
+                  backgroundColor: active ? '#2a2a2c' : 'transparent',
+                  borderLeft: active ? '2px solid #ffffff' : '2px solid transparent',
+                  transition: 'background-color 150ms ease, color 150ms ease',
+                }}
+                onMouseEnter={e => {
+                  if (!active) {
+                    const el = e.currentTarget as HTMLAnchorElement
+                    el.style.backgroundColor = '#1c1b1d'
+                  }
+                }}
+                onMouseLeave={e => {
+                  if (!active) {
+                    const el = e.currentTarget as HTMLAnchorElement
+                    el.style.backgroundColor = 'transparent'
+                  }
+                }}
+              >
+                <Icon size={14} strokeWidth={1.5} />
+                {label}
+              </Link>
+            )
+          })}
+        </nav>
 
-        {/* Open source */}
-        <section style={{ marginBottom: '48px' }}>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 500, color: 'var(--text-primary)', marginBottom: '16px' }}>
-            Open Source
-          </h2>
-          <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.75, marginBottom: '16px' }}>
-            Trikosh is MIT licensed. The full codebase — Next.js frontend, FastAPI backend, Prisma schema, data pipeline — is available on GitHub. Contributions are welcome, particularly additions to the coverage universe, corrections to financial data, and improvements to the sector frameworks.
-          </p>
-
-          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
+        {/* Bottom links */}
+        <div style={{ flexShrink: 0, borderTop: '1px solid rgba(68,71,73,0.5)', padding: '10px 0' }}>
+          {([
+            { label: 'DOCS',   href: '#',                  Icon: FileText  },
+            { label: 'GITHUB', href: 'https://github.com', Icon: GitBranch },
+          ] as const).map(({ label, href, Icon }) => (
             <a
-              href="https://github.com/zshqv/Trikosh"
-              target="_blank"
-              rel="noopener noreferrer"
+              key={label}
+              href={href}
               style={{
-                fontFamily: 'var(--font-sans)',
-                fontSize: '13px',
-                fontWeight: 500,
-                color: 'var(--accent-primary)',
-                border: '1px solid var(--accent-primary)',
-                borderRadius: '6px',
-                padding: '8px 16px',
-                textDecoration: 'none',
-                display: 'inline-flex',
+                display: 'flex',
                 alignItems: 'center',
-                gap: '6px',
-                backgroundColor: 'rgba(124,58,237,0.10)',
-              }}
-            >
-              View on GitHub →
-            </a>
-
-            <span
-              style={{
+                gap: '10px',
+                padding: '8px 18px',
                 fontFamily: 'var(--font-mono)',
                 fontSize: '11px',
-                color: '#34d399',
-                backgroundColor: 'rgba(52,211,153,0.12)',
-                padding: '3px 8px',
-                borderRadius: '4px',
+                letterSpacing: '0.06em',
+                color: '#8e9193',
+                textDecoration: 'none',
+                transition: 'color 150ms ease',
               }}
+              onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = '#c4c7c9' }}
+              onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = '#8e9193' }}
             >
-              MIT License
-            </span>
+              <Icon size={14} strokeWidth={1.5} />
+              {label}
+            </a>
+          ))}
+        </div>
+      </aside>
+
+      {/* ── Main content ─────────────────────────────────────────────── */}
+      <main className="flex-1 overflow-auto">
+
+        {/* ── Section 1: Hero ─────────────────────────────────────────── */}
+        <section style={{ borderBottom: '1px solid #444748', padding: 'clamp(56px, 8vw, 96px) 0 clamp(48px, 7vw, 80px)' }}>
+          <div style={{ maxWidth: '860px', margin: '0 auto', padding: '0 32px' }}>
+            <p style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: '10px',
+              textTransform: 'uppercase',
+              letterSpacing: '0.14em',
+              color: '#8e9192',
+              marginBottom: '20px',
+            }}>
+              Origin Story
+            </p>
+            <h1 style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: 'clamp(28px, 4vw, 44px)',
+              fontWeight: 700,
+              color: '#e5e2e1',
+              letterSpacing: '-0.02em',
+              lineHeight: 1.1,
+              marginBottom: '24px',
+              maxWidth: '680px',
+            }}>
+              Honestly, it started with a rejection.
+            </h1>
+            <p style={{
+              fontFamily: 'var(--font-sans)',
+              fontSize: '16px',
+              color: '#c4c7c8',
+              lineHeight: 1.75,
+              maxWidth: '672px',
+              margin: 0,
+            }}>
+              Earlier this year I interviewed at Third Bridge — a financial research firm. Didn&apos;t get the job. But going through the process made me look closely at what they actually do: structured, institutional-grade financial intelligence, built for professionals who know exactly where to look and what to ask. Students don&apos;t have that. I didn&apos;t have that.
+            </p>
           </div>
         </section>
 
-        {/* Data sources */}
-        <section id="data">
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 500, color: 'var(--text-primary)', marginBottom: '16px' }}>
-            Data Sources
-          </h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            {[
-              ['SEC EDGAR', 'Primary source for all US-listed companies. 10-K and 10-Q filings.'],
-              ['Annual Reports', 'English-language annual reports for international companies.'],
-              ['Investor Presentations', 'Management-prepared slides for supplemental segment data.'],
-              ['Coverage Period', 'FY2019 – FY2024 (5 fiscal years).'],
-              ['Accounting Standard', 'GAAP for US companies, IFRS for international. Flagged per company.'],
-              ['Currency', 'USD for all US companies. Originating currency for international companies, with USD conversion noted.'],
-            ].map(([label, value]) => (
-              <div key={label} style={{ display: 'flex', gap: '16px', paddingBottom: '8px', borderBottom: 'var(--border-rest)' }}>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text-tertiary)', minWidth: '160px', flexShrink: 0, paddingTop: '2px' }}>
-                  {label}
-                </span>
-                <span style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-                  {value}
-                </span>
-              </div>
-            ))}
+        {/* ── Section 2: The Problem ──────────────────────────────────── */}
+        <section style={{ borderBottom: '1px solid #444748', padding: 'clamp(48px, 7vw, 80px) 0' }}>
+          <div style={{ maxWidth: '860px', margin: '0 auto', padding: '0 32px' }}>
+            <p style={{
+              fontFamily: 'var(--font-sans)',
+              fontSize: '16px',
+              color: '#c4c7c8',
+              lineHeight: 1.75,
+              maxWidth: '672px',
+              margin: 0,
+            }}>
+              When I tried writing my own equity research report I had no idea where to start. The data was everywhere but unusable — scattered across PDFs, locked behind paywalls, inconsistent formats, no framework. I could&apos;ve buried myself in tutorials for weeks. Or I could&apos;ve just asked an AI to write it for me. I didn&apos;t want either of those things. An AI-generated report I don&apos;t understand is worthless. And I shouldn&apos;t need a Bloomberg terminal subscription to learn how to read a balance sheet.
+            </p>
           </div>
         </section>
-      </div>
+
+        {/* ── Section 3: What Trikosh Is ──────────────────────────────── */}
+        <section style={{ borderBottom: '1px solid #444748', padding: 'clamp(48px, 7vw, 80px) 0' }}>
+          <div style={{ maxWidth: '860px', margin: '0 auto', padding: '0 32px' }}>
+            <h2 style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: 'clamp(22px, 3vw, 32px)',
+              fontWeight: 700,
+              color: '#e5e2e1',
+              letterSpacing: '-0.02em',
+              lineHeight: 1.15,
+              marginBottom: '20px',
+            }}>
+              So I built Trikosh.
+            </h2>
+            <p style={{
+              fontFamily: 'var(--font-sans)',
+              fontSize: '16px',
+              color: '#c4c7c8',
+              lineHeight: 1.75,
+              maxWidth: '672px',
+              marginBottom: '48px',
+            }}>
+              Not to replace thinking — to make thinking possible. A free, open-source library of standardised financial data across 100+ companies spanning different sectors, with a published methodology so you know exactly how every number was calculated. No paywalls. No AI doing the work for you. Just the blueprint — the thinking is yours.
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {[
+                {
+                  title: 'Open Infrastructure',
+                  body:  'Financial data should be a public good, not a competitive advantage for institutions with Bloomberg terminals.',
+                },
+                {
+                  title: 'Standardised, Not Summarised',
+                  body:  'We give you the numbers and the framework. You build the understanding. No pre-digested answers.',
+                },
+                {
+                  title: 'Built for Students',
+                  body:  'Finance students, CFA candidates, and aspiring analysts who deserve the same data quality as the institutions they want to work for.',
+                },
+              ].map(card => (
+                <div
+                  key={card.title}
+                  style={{
+                    border: '1px solid #444748',
+                    backgroundColor: '#1c1b1b',
+                    borderRadius: '10px',
+                    padding: '32px',
+                  }}
+                >
+                  <p style={{
+                    fontFamily: 'var(--font-display)',
+                    fontSize: '17px',
+                    fontWeight: 700,
+                    color: '#e5e2e1',
+                    lineHeight: 1.25,
+                    marginBottom: '12px',
+                  }}>
+                    {card.title}
+                  </p>
+                  <p style={{
+                    fontFamily: 'var(--font-sans)',
+                    fontSize: '14px',
+                    color: '#c4c7c8',
+                    lineHeight: 1.7,
+                    margin: 0,
+                  }}>
+                    {card.body}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── Section 4: The Name ─────────────────────────────────────── */}
+        <section style={{ borderBottom: '1px solid #444748', padding: 'clamp(48px, 7vw, 80px) 0' }}>
+          <div style={{ maxWidth: '860px', margin: '0 auto', padding: '0 32px' }}>
+            <h2 style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: 'clamp(22px, 3vw, 32px)',
+              fontWeight: 700,
+              color: '#e5e2e1',
+              letterSpacing: '-0.02em',
+              lineHeight: 1.15,
+              marginBottom: '20px',
+            }}>
+              The Name
+            </h2>
+            <p style={{
+              fontFamily: 'var(--font-sans)',
+              fontSize: '16px',
+              color: '#c4c7c8',
+              lineHeight: 1.75,
+              maxWidth: '672px',
+              margin: 0,
+            }}>
+              Trikosh comes from Sanskrit. Tri maps to three — the three financial statements, and to Tripathi. Kosha means a structured treasury of knowledge. The name is rooted in the Pancha Kosha philosophy — five layers of understanding, each deeper than the last.
+            </p>
+          </div>
+        </section>
+
+        {/* ── Section 5: Open Source ──────────────────────────────────── */}
+        <section style={{ padding: 'clamp(48px, 7vw, 80px) 0' }}>
+          <div style={{ maxWidth: '860px', margin: '0 auto', padding: '0 32px' }}>
+            <h2 style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: 'clamp(22px, 3vw, 32px)',
+              fontWeight: 700,
+              color: '#e5e2e1',
+              letterSpacing: '-0.02em',
+              lineHeight: 1.15,
+              marginBottom: '20px',
+            }}>
+              Open Source Forever
+            </h2>
+            <p style={{
+              fontFamily: 'var(--font-sans)',
+              fontSize: '16px',
+              color: '#c4c7c8',
+              lineHeight: 1.75,
+              maxWidth: '672px',
+              marginBottom: '36px',
+            }}>
+              Trikosh is MIT licensed. The methodology is published. The pipeline is on GitHub. If you find an error, open an issue. If you want to add a company, submit a PR.
+            </p>
+            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+              <a
+                href="https://github.com/Trikosh"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em',
+                  color: '#131313',
+                  backgroundColor: '#ffffff',
+                  padding: '12px 32px',
+                  borderRadius: '6px',
+                  textDecoration: 'none',
+                  transition: 'opacity 150ms ease',
+                }}
+                onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.opacity = '0.88' }}
+                onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.opacity = '1' }}
+              >
+                View on GitHub
+              </a>
+              <Link
+                href="/research"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '11px',
+                  fontWeight: 500,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em',
+                  color: '#e5e2e1',
+                  backgroundColor: 'transparent',
+                  border: '1px solid #444748',
+                  padding: '12px 32px',
+                  borderRadius: '6px',
+                  textDecoration: 'none',
+                  transition: 'background-color 150ms ease',
+                }}
+                onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.backgroundColor = '#1c1b1b' }}
+                onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.backgroundColor = 'transparent' }}
+              >
+                Read the Methodology
+              </Link>
+            </div>
+          </div>
+        </section>
+
+      </main>
     </div>
   )
 }
-
-

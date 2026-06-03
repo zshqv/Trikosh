@@ -4,10 +4,37 @@ import { useState, useMemo } from 'react'
 import { GLOSSARY as GLOSSARY_TERMS } from '@/lib/mockData'
 import TickerBadge from '@/components/ui/TickerBadge'
 import { Reveal } from '@/components/effects/Reveal'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { LayoutDashboard, List, PieChart, GitCompare, BookOpen, BookMarked, FileText, GitBranch, Info } from 'lucide-react'
 
+/* ── Stable sequential numbers for the full sorted glossary ─────────── */
+const SORTED_ALL = [...GLOSSARY_TERMS].sort((a, b) => a.term.localeCompare(b.term))
+const TERM_NUMBERS = new Map(SORTED_ALL.map((t, i) => [t.term, i + 1]))
+
+function fmtN(n: number) { return `#${String(n).padStart(3, '0')}` }
+
+/* ── Alphabet ────────────────────────────────────────────────────────── */
+const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
+
+/* ── Sidebar nav ─────────────────────────────────────────────────────── */
+const NAV_LINKS = [
+  { label: 'HOME',      href: '/',          Icon: LayoutDashboard },
+  { label: 'COMPANIES', href: '/companies', Icon: List            },
+  { label: 'SECTORS',   href: '/sectors',   Icon: PieChart        },
+  { label: 'COMPARE',   href: '/compare',   Icon: GitCompare      },
+  { label: 'RESEARCH',  href: '/research',  Icon: BookOpen        },
+  { label: 'GLOSSARY',  href: '/glossary',  Icon: BookMarked      },
+  { label: 'ABOUT',     href: '/about',     Icon: Info            },
+] as const
+
+/* ── Page ────────────────────────────────────────────────────────────── */
 export default function GlossaryPage() {
-  const [search, setSearch] = useState('')
+  const pathname = usePathname()
+  const [search, setSearch]           = useState('')
+  const [activeLetter, setActiveLetter] = useState<string | null>(null)
 
+  /* ── existing search + grouping logic (unchanged) ─────────────────── */
   const filtered = useMemo(() => {
     const q = search.toLowerCase()
     const terms = q
@@ -25,152 +52,454 @@ export default function GlossaryPage() {
     }
     return Object.entries(map).sort(([a], [b]) => a.localeCompare(b))
   }, [filtered])
+  /* ─────────────────────────────────────────────────────────────────── */
+
+  const availableLetters = useMemo(() => new Set(grouped.map(([l]) => l)), [grouped])
+
+  const visibleGroups = useMemo(
+    () => activeLetter ? grouped.filter(([l]) => l === activeLetter) : grouped,
+    [grouped, activeLetter]
+  )
 
   return (
-    <div style={{ backgroundColor: 'var(--bg-base)', minHeight: '100vh' }}>
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '56px 24px 80px' }}>
-        <Reveal>
-          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--accent-data)', marginBottom: '12px' }}>
-            Reference
-          </p>
-          <h1
-            style={{
-              fontFamily: 'var(--font-sans)',
-              fontSize: 'clamp(32px, 5vw, 46px)',
+    <div className="flex min-h-screen bg-[#131315]">
+      <style>{`
+        .glossary-search::placeholder { color: #8e9193; }
+      `}</style>
+
+      {/* ── Sidebar ──────────────────────────────────────────────────── */}
+      <aside style={{
+        width: '256px',
+        flexShrink: 0,
+        height: '100vh',
+        position: 'sticky',
+        top: 0,
+        backgroundColor: '#131315',
+        borderRight: '1px solid #444749',
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden',
+        zIndex: 40,
+      }}>
+        {/* Wordmark */}
+        <div style={{ padding: '20px 20px 16px', borderBottom: '1px solid rgba(68,71,73,0.5)', flexShrink: 0 }}>
+          <Link href="/" style={{ textDecoration: 'none' }}>
+            <span style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: '17px',
               fontWeight: 700,
-              lineHeight: 1.1,
-              color: 'var(--text-primary)',
-              marginBottom: '24px',
-            }}
-          >
-            Glossary
-          </h1>
-        </Reveal>
-
-        <input
-          type="text"
-          placeholder="Search terms…"
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          style={{
-            fontFamily: 'var(--font-sans)',
-            fontSize: '14px',
-            color: 'var(--text-primary)',
-            backgroundColor: 'var(--bg-surface-1)',
-            border: 'var(--border-rest)',
-            borderRadius: '8px',
-            padding: '10px 14px',
-            width: '100%',
-            maxWidth: '400px',
-            outline: 'none',
-            marginBottom: '36px',
-          }}
-        />
-
-        {grouped.length === 0 && (
-          <p style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-tertiary)' }}>
-            No terms match &ldquo;{search}&rdquo;.
+              color: '#ffffff',
+              letterSpacing: '-0.01em',
+              display: 'block',
+              marginBottom: '6px',
+            }}>
+              Trikosh
+            </span>
+          </Link>
+          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.12em', color: '#8e9193', margin: '0 0 2px' }}>
+            Institutional
           </p>
-        )}
+          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.08em', color: '#8e9193', margin: 0 }}>
+            ID: 8829-QX
+          </p>
+        </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
-          {grouped.map(([letter, terms]) => (
-            <div key={letter}>
-              <div
+        {/* Nav links */}
+        <nav style={{ flex: 1, padding: '8px 0', overflowY: 'auto' }}>
+          {NAV_LINKS.map(({ label, href, Icon }) => {
+            const active = pathname === href || (href !== '/' && pathname.startsWith(href))
+            return (
+              <Link
+                key={href}
+                href={href}
                 style={{
-                  fontFamily: 'var(--font-serif)',
-                  fontSize: '20px',
-                  fontWeight: 500,
-                  color: 'var(--accent-primary)',
-                  marginBottom: '16px',
-                  paddingBottom: '8px',
-                  borderBottom: 'var(--border-rest)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  padding: '9px 18px 9px 16px',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '11px',
+                  letterSpacing: '0.06em',
+                  color: active ? '#ffffff' : '#c4c7c9',
+                  textDecoration: 'none',
+                  backgroundColor: active ? '#2a2a2c' : 'transparent',
+                  borderLeft: active ? '2px solid #ffffff' : '2px solid transparent',
+                  transition: 'background-color 150ms ease, color 150ms ease',
+                }}
+                onMouseEnter={e => {
+                  if (!active) {
+                    const el = e.currentTarget as HTMLAnchorElement
+                    el.style.backgroundColor = '#1c1b1d'
+                  }
+                }}
+                onMouseLeave={e => {
+                  if (!active) {
+                    const el = e.currentTarget as HTMLAnchorElement
+                    el.style.backgroundColor = 'transparent'
+                  }
                 }}
               >
-                {letter}
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                {terms.map(term => (
-                  <div
-                    key={term.term}
-                    style={{
-                      backgroundColor: 'var(--bg-surface-1)',
-                      border: 'var(--border-rest)',
-                      borderRadius: '8px',
-                      padding: '20px',
-                    }}
-                  >
-                    <p
-                      style={{
-                        fontFamily: 'var(--font-sans)',
-                        fontSize: '15px',
-                        fontWeight: 500,
-                        color: 'var(--text-primary)',
-                        marginBottom: '8px',
-                      }}
-                    >
-                      {term.term}
-                    </p>
-                    <p
-                      style={{
-                        fontFamily: 'var(--font-sans)',
-                        fontSize: '14px',
-                        color: 'var(--text-secondary)',
-                        lineHeight: 1.65,
-                        marginBottom: term.analystNote || (term.relatedTickers && term.relatedTickers.length > 0) ? '14px' : 0,
-                      }}
-                    >
-                      {term.definition}
-                    </p>
+                <Icon size={14} strokeWidth={1.5} />
+                {label}
+              </Link>
+            )
+          })}
+        </nav>
 
-                    {term.analystNote && (
-                      <div
-                        style={{
-                          backgroundColor: 'var(--bg-surface-2)',
-                          borderRadius: '6px',
-                          padding: '14px',
-                          marginBottom: term.relatedTickers && term.relatedTickers.length > 0 ? '12px' : 0,
-                        }}
-                      >
-                        <p
-                          style={{
-                            fontFamily: 'var(--font-mono)',
-                            fontSize: '11px',
-                            color: 'var(--accent-archive)',
-                            marginBottom: '6px',
-                            letterSpacing: '0.04em',
-                          }}
-                        >
-                          Analyst Note
-                        </p>
-                        <p
-                          style={{
-                            fontFamily: 'var(--font-sans)',
-                            fontSize: '13px',
-                            color: 'var(--text-secondary)',
-                            lineHeight: 1.65,
-                          }}
-                        >
-                          {term.analystNote}
-                        </p>
-                      </div>
-                    )}
-
-                    {term.relatedTickers && term.relatedTickers.length > 0 && (
-                      <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                        {term.relatedTickers.map(t => {
-                          const exchange = t === 'MSFT' || t === 'NVDA' || t === 'AAPL' || t === 'GOOGL' || t === 'META' || t === 'AMZN' || t === 'ADBE' || t === 'INTC' || t === 'AMGN' ? 'NASDAQ' : 'NYSE'
-                          return <TickerBadge key={t} ticker={t} exchange={exchange} />
-                        })}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
+        {/* Bottom links */}
+        <div style={{ flexShrink: 0, borderTop: '1px solid rgba(68,71,73,0.5)', padding: '10px 0' }}>
+          {([
+            { label: 'DOCS',   href: '#',                  Icon: FileText  },
+            { label: 'GITHUB', href: 'https://github.com', Icon: GitBranch },
+          ] as const).map(({ label, href, Icon }) => (
+            <a
+              key={label}
+              href={href}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                padding: '8px 18px',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '11px',
+                letterSpacing: '0.06em',
+                color: '#8e9193',
+                textDecoration: 'none',
+                transition: 'color 150ms ease',
+              }}
+              onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = '#c4c7c9' }}
+              onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = '#8e9193' }}
+            >
+              <Icon size={14} strokeWidth={1.5} />
+              {label}
+            </a>
           ))}
         </div>
-      </div>
+      </aside>
+
+      {/* ── Main content ─────────────────────────────────────────────── */}
+      <main className="flex-1 overflow-auto">
+
+        {/* Hero / header */}
+        <div style={{ borderBottom: '1px solid #444749', backgroundColor: '#131315' }}>
+          <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '40px 24px 0' }}>
+            <Reveal>
+              {/* Archive / Glossary label */}
+              <p style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '10px',
+                textTransform: 'uppercase',
+                letterSpacing: '0.14em',
+                color: '#8e9193',
+                marginBottom: '12px',
+              }}>
+                Archive / Glossary
+              </p>
+
+              {/* Heading + term count */}
+              <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px', marginBottom: '12px' }}>
+                <h1 style={{
+                  fontFamily: 'var(--font-display)',
+                  fontSize: 'clamp(28px, 4.5vw, 42px)',
+                  fontWeight: 700,
+                  lineHeight: 1.1,
+                  letterSpacing: '-0.02em',
+                  color: '#e5e1e4',
+                  marginBottom: 0,
+                }}>
+                  Financial Dictionary
+                </h1>
+                <span style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '11px',
+                  color: '#c4c7c9',
+                  backgroundColor: '#1c1b1d',
+                  padding: '3px 10px',
+                  borderRadius: '4px',
+                  marginBottom: 4,
+                }}>
+                  {filtered.length} terms
+                </span>
+              </div>
+
+              {/* Subtitle */}
+              <p style={{
+                fontFamily: 'var(--font-sans)',
+                fontSize: '14px',
+                color: '#c4c7c9',
+                lineHeight: 1.65,
+                maxWidth: '580px',
+                margin: '0 0 20px',
+              }}>
+                Definitions, analyst notes, and sector context for the metrics and ratios used in equity research.
+              </p>
+
+              {/* Search — underline style */}
+              <div style={{ position: 'relative', maxWidth: '480px' }}>
+                <input
+                  type="text"
+                  placeholder="Search terms or definitions…"
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
+                  className="glossary-search"
+                  style={{
+                    fontFamily: 'var(--font-sans)',
+                    fontSize: '14px',
+                    color: '#e5e1e4',
+                    backgroundColor: 'transparent',
+                    border: 'none',
+                    borderBottom: '1px solid #444749',
+                    padding: '10px 32px 10px 0',
+                    width: '100%',
+                    outline: 'none',
+                    transition: 'border-color 150ms',
+                  }}
+                  onFocus={e => (e.target.style.borderBottomColor = '#ffffff')}
+                  onBlur={e => (e.target.style.borderBottomColor = '#444749')}
+                />
+                {search && (
+                  <button
+                    onClick={() => setSearch('')}
+                    style={{
+                      position: 'absolute',
+                      right: 0,
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      background: 'none',
+                      border: 'none',
+                      color: '#8e9193',
+                      cursor: 'pointer',
+                      fontSize: '18px',
+                      lineHeight: 1,
+                      padding: '2px 4px',
+                    }}
+                  >×</button>
+                )}
+              </div>
+            </Reveal>
+
+            {/* Alphabet filter row */}
+            <div style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              marginTop: '20px',
+              borderTop: '1px solid #444749',
+              paddingTop: '4px',
+              paddingBottom: '0',
+            }}>
+              {ALPHABET.map(letter => {
+                const hasTerms = availableLetters.has(letter)
+                const isActive  = activeLetter === letter
+                return (
+                  <button
+                    key={letter}
+                    disabled={!hasTerms}
+                    onClick={() => setActiveLetter(isActive ? null : letter)}
+                    style={{
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '11px',
+                      letterSpacing: '0.08em',
+                      padding: '6px 8px',
+                      background: 'none',
+                      border: 'none',
+                      borderBottom: isActive ? '2px solid #ffffff' : '2px solid transparent',
+                      color: isActive ? '#ffffff' : hasTerms ? '#8e9193' : '#2a2a2c',
+                      cursor: hasTerms ? 'pointer' : 'default',
+                      transition: 'color 150ms ease, border-color 150ms ease',
+                    }}
+                    onMouseEnter={e => {
+                      if (hasTerms && !isActive)
+                        (e.currentTarget as HTMLButtonElement).style.color = '#e5e1e4'
+                    }}
+                    onMouseLeave={e => {
+                      if (hasTerms && !isActive)
+                        (e.currentTarget as HTMLButtonElement).style.color = '#8e9193'
+                    }}
+                  >
+                    {letter}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        </div>
+
+        {/* Cards content area */}
+        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '28px 24px 80px' }}>
+
+          {visibleGroups.length === 0 && (
+            <div style={{
+              padding: '60px 24px',
+              textAlign: 'center',
+              border: '1px solid #444749',
+              borderRadius: '10px',
+              backgroundColor: '#1c1b1d',
+            }}>
+              <p style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '11px',
+                textTransform: 'uppercase',
+                letterSpacing: '0.1em',
+                color: '#8e9193',
+              }}>
+                No terms match &ldquo;{search}&rdquo;
+              </p>
+            </div>
+          )}
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
+            {visibleGroups.map(([letter, terms]) => (
+              <div key={letter}>
+
+                {/* Letter section header */}
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  marginBottom: '16px',
+                  paddingBottom: '10px',
+                  borderBottom: '1px solid #444749',
+                }}>
+                  <span style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '18px',
+                    fontWeight: 600,
+                    color: '#8e9193',
+                    letterSpacing: '-0.01em',
+                  }}>
+                    {letter}
+                  </span>
+                  <span style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '9.5px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.1em',
+                    color: '#c4c7c9',
+                    backgroundColor: '#1c1b1d',
+                    padding: '2px 8px',
+                    borderRadius: '3px',
+                  }}>
+                    {terms.length} {terms.length === 1 ? 'term' : 'terms'}
+                  </span>
+                </div>
+
+                {/* 3-column card grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {terms.map(term => {
+                    const n = TERM_NUMBERS.get(term.term) ?? 0
+                    return (
+                      <div
+                        key={term.term}
+                        style={{
+                          border: '1px solid #444749',
+                          borderRadius: '9px',
+                          padding: '18px 20px',
+                          backgroundColor: '#131315',
+                          transition: 'background-color 200ms ease',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: '12px',
+                        }}
+                        onMouseEnter={e => (e.currentTarget as HTMLElement).style.backgroundColor = '#1c1b1d'}
+                        onMouseLeave={e => (e.currentTarget as HTMLElement).style.backgroundColor = '#131315'}
+                      >
+                        {/* Top row: category badge + term number */}
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <span style={{
+                            fontFamily: 'var(--font-mono)',
+                            fontSize: '9px',
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.1em',
+                            color: '#e5e1e4',
+                            border: '1px solid #444749',
+                            borderRadius: '3px',
+                            padding: '2px 8px',
+                          }}>
+                            {letter}
+                          </span>
+                          <span style={{
+                            fontFamily: 'var(--font-mono)',
+                            fontSize: '10px',
+                            color: '#8e9193',
+                            letterSpacing: '0.04em',
+                          }}>
+                            {fmtN(n)}
+                          </span>
+                        </div>
+
+                        {/* Term name */}
+                        <p style={{
+                          fontFamily: 'var(--font-display)',
+                          fontSize: '17px',
+                          fontWeight: 700,
+                          color: '#e5e1e4',
+                          lineHeight: 1.2,
+                          margin: 0,
+                        }}>
+                          {term.term}
+                        </p>
+
+                        {/* Definition */}
+                        <p style={{
+                          fontFamily: 'var(--font-sans)',
+                          fontSize: '13px',
+                          color: '#c4c7c9',
+                          lineHeight: 1.65,
+                          margin: 0,
+                        }}>
+                          {term.definition}
+                        </p>
+
+                        {/* Analyst note */}
+                        {term.analystNote && (
+                          <div style={{
+                            backgroundColor: '#1c1b1d',
+                            border: '1px solid #444749',
+                            borderRadius: '6px',
+                            padding: '12px 14px',
+                          }}>
+                            <p style={{
+                              fontFamily: 'var(--font-mono)',
+                              fontSize: '9px',
+                              color: '#8e9193',
+                              textTransform: 'uppercase',
+                              letterSpacing: '0.1em',
+                              marginBottom: '6px',
+                              margin: '0 0 6px',
+                            }}>
+                              Analyst Note
+                            </p>
+                            <p style={{
+                              fontFamily: 'var(--font-sans)',
+                              fontSize: '12px',
+                              color: '#c4c7c9',
+                              lineHeight: 1.65,
+                              margin: 0,
+                            }}>
+                              {term.analystNote}
+                            </p>
+                          </div>
+                        )}
+
+                        {/* Related tickers */}
+                        {term.relatedTickers && term.relatedTickers.length > 0 && (
+                          <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                            {term.relatedTickers.map(t => {
+                              const exchange = ['MSFT','NVDA','AAPL','GOOGL','META','AMZN','ADBE','INTC','AMGN'].includes(t) ? 'NASDAQ' : 'NYSE'
+                              return <TickerBadge key={t} ticker={t} exchange={exchange} />
+                            })}
+                          </div>
+                        )}
+                      </div>
+                    )
+                  })}
+                </div>
+
+              </div>
+            ))}
+          </div>
+        </div>
+      </main>
     </div>
   )
 }

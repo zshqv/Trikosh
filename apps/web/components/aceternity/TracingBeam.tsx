@@ -57,8 +57,7 @@ export default function TracingBeam({ children }: { children: ReactNode }) {
             inset: 0,
             transformOrigin: 'top',
             scaleY: reduce ? 1 : fill,
-            background: 'linear-gradient(180deg, #7c3aed, #a78bfa)',
-            boxShadow: '0 0 12px rgba(124,58,237,0.6)',
+            background: '#444749',
           }}
         />
       </div>
@@ -75,8 +74,7 @@ export default function TracingBeam({ children }: { children: ReactNode }) {
             width: 12,
             height: 12,
             borderRadius: '50%',
-            backgroundColor: '#a78bfa',
-            boxShadow: '0 0 14px 2px rgba(124,58,237,0.8)',
+            backgroundColor: '#ffffff',
             y: tipY,
           }}
         />

@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState, useMemo, useRef, useEffect } from 'react'
 import {
@@ -6,8 +6,11 @@ import {
   XAxis, YAxis, Tooltip, ResponsiveContainer, Legend,
 } from 'recharts'
 import CardSpotlight from '@/components/aceternity/CardSpotlight'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { LayoutDashboard, List, PieChart, GitCompare, BookOpen, BookMarked, FileText, GitBranch, Info } from 'lucide-react'
 
-const PALETTE = ['#7c3aed', '#a78bfa', '#38bdf8', '#fbbf24'] as const
+const PALETTE = ['#ffffff', '#a0a0a0', '#38bdf8', '#fbbf24'] as const
 
 interface CompanyMeta {
   ticker: string
@@ -134,7 +137,7 @@ const METRICS: MetricDef[] = [
 
 const GROUP_NOTES: Record<string, string> = {
   'Revenue & Growth': 'Scale and pace of growth — calibrates how much the business can change in absolute terms.',
-  'Profitability':    'The margin waterfall from gross to FCF. Levels vary widely by sector; compare peer-relative trends.',
+  'Profitability':    'The margin waterfall from gross to FCF. Levels vary by sector; compare peer-relative trends.',
   'Returns':          'ROE measures profit per dollar of equity. High ROE driven by leverage needs ROIC decomposition.',
   'Valuation':        'Relative tools, not absolute judgements. Growth rate, earnings quality, and sector norms all context.',
 }
@@ -150,6 +153,7 @@ const SECTORS = [
 const NULL_TICKER = ''
 
 export default function ComparePage() {
+  const pathname = usePathname()
   const [allCompanies, setAllCompanies] = useState<CompanyMeta[]>([])
   const [tickers, setTickers] = useState<string[]>([NULL_TICKER, NULL_TICKER])
   const [details, setDetails] = useState<Record<string, CompanyDetail>>({})
@@ -281,31 +285,170 @@ export default function ComparePage() {
   const tooltipStyle = {
     fontFamily: 'var(--font-mono)',
     fontSize: '11px',
-    backgroundColor: 'rgba(17,17,17,0.92)',
-    border: '1px solid #2a2a2a',
+    backgroundColor: 'rgba(19,19,19,0.96)',
+    border: '1px solid #444748',
     borderRadius: '8px',
     color: 'var(--text-primary)',
     boxShadow: '0 12px 40px -12px rgba(0,0,0,0.8)',
   }
-  const axisTick = { fontFamily: 'var(--font-mono)', fontSize: 11, fill: '#a1a1aa' }
+  const axisTick = { fontFamily: 'var(--font-mono)', fontSize: 10, fill: '#8e9192' }
 
   return (
-    <div style={{ backgroundColor: 'var(--bg-base)', minHeight: '100vh' }}>
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '40px 24px' }}>
+    <div className="flex min-h-screen bg-[#131315]">
 
-        {/* Page header */}
-        <div style={{ marginBottom: '28px' }}>
-          <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '32px', fontWeight: 500, color: 'var(--text-primary)', marginBottom: '6px' }}>
-            Peer Comparison
-          </h1>
-          <p style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-secondary)' }}>
-            Select 2–4 companies to compare key financial metrics side by side. Live data from Trikosh database.
+      {/* ── Sidebar ──────────────────────────────────────────────────── */}
+      <aside style={{
+        width: '256px',
+        flexShrink: 0,
+        height: '100vh',
+        position: 'sticky',
+        top: 0,
+        backgroundColor: '#131315',
+        borderRight: '1px solid #444749',
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden',
+        zIndex: 40,
+      }}>
+        {/* Wordmark + identity block */}
+        <div style={{ padding: '20px 20px 16px', borderBottom: '1px solid rgba(68,71,73,0.5)', flexShrink: 0 }}>
+          <Link href="/" style={{ textDecoration: 'none' }}>
+            <span style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: '17px',
+              fontWeight: 700,
+              color: '#ffffff',
+              letterSpacing: '-0.01em',
+              display: 'block',
+              marginBottom: '6px',
+            }}>
+              Trikosh
+            </span>
+          </Link>
+          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.12em', color: '#8e9193', margin: '0 0 2px' }}>
+            Institutional
+          </p>
+          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.08em', color: '#8e9193', margin: 0 }}>
+            ID: 8829-QX
           </p>
         </div>
 
-        {/* Selector row */}
-        <div style={{ backgroundColor: 'var(--bg-surface-1)', border: 'var(--border-rest)', borderRadius: '12px', padding: '20px', marginBottom: '16px' }}>
+        {/* Nav links */}
+        <nav style={{ flex: 1, padding: '8px 0', overflowY: 'auto' }}>
+          {([
+            { label: 'HOME',      href: '/',          Icon: LayoutDashboard },
+            { label: 'COMPANIES', href: '/companies', Icon: List            },
+            { label: 'SECTORS',   href: '/sectors',   Icon: PieChart        },
+            { label: 'COMPARE',   href: '/compare',   Icon: GitCompare      },
+            { label: 'RESEARCH',  href: '/research',  Icon: BookOpen        },
+            { label: 'GLOSSARY',  href: '/glossary',  Icon: BookMarked      },
+            { label: 'ABOUT',     href: '/about',     Icon: Info            },
+          ] as const).map(({ label, href, Icon }) => {
+            const active = pathname === href || (href !== '/' && pathname.startsWith(href))
+            return (
+              <Link
+                key={href}
+                href={href}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  padding: '9px 18px 9px 16px',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '11px',
+                  letterSpacing: '0.06em',
+                  color: active ? '#ffffff' : '#c4c7c9',
+                  textDecoration: 'none',
+                  backgroundColor: active ? '#2a2a2c' : 'transparent',
+                  borderLeft: active ? '2px solid #ffffff' : '2px solid transparent',
+                  transition: 'background-color 150ms ease, color 150ms ease',
+                }}
+                onMouseEnter={e => {
+                  if (!active) {
+                    const el = e.currentTarget as HTMLAnchorElement
+                    el.style.backgroundColor = '#1c1b1d'
+                  }
+                }}
+                onMouseLeave={e => {
+                  if (!active) {
+                    const el = e.currentTarget as HTMLAnchorElement
+                    el.style.backgroundColor = 'transparent'
+                  }
+                }}
+              >
+                <Icon size={14} strokeWidth={1.5} />
+                {label}
+              </Link>
+            )
+          })}
+        </nav>
 
+        {/* Bottom links */}
+        <div style={{ flexShrink: 0, borderTop: '1px solid rgba(68,71,73,0.5)', padding: '10px 0' }}>
+          {([
+            { label: 'DOCS',   href: '#',                  Icon: FileText  },
+            { label: 'GITHUB', href: 'https://github.com', Icon: GitBranch },
+          ] as const).map(({ label, href, Icon }) => (
+            <a
+              key={label}
+              href={href}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                padding: '8px 18px',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '11px',
+                letterSpacing: '0.06em',
+                color: '#8e9193',
+                textDecoration: 'none',
+                transition: 'color 150ms ease',
+              }}
+              onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = '#c4c7c9' }}
+              onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = '#8e9193' }}
+            >
+              <Icon size={14} strokeWidth={1.5} />
+              {label}
+            </a>
+          ))}
+        </div>
+      </aside>
+
+      {/* ── Main content (unchanged) ──────────────────────────────────── */}
+      <main className="flex-1 overflow-auto">
+        <div style={{ backgroundColor: 'var(--bg-base)', minHeight: '100vh' }}>
+
+      {/* Page header */}
+      <div style={{ borderBottom: '1px solid #444748', backgroundColor: 'var(--bg-base)' }}>
+        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '40px 24px 28px' }}>
+          <p style={{
+            fontFamily: 'var(--font-mono)', fontSize: '10.5px',
+            textTransform: 'uppercase', letterSpacing: '0.14em',
+            color: '#e5e2e1', marginBottom: '10px',
+          }}>
+            Quantitative tool
+          </p>
+          <h1 style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: 'clamp(28px, 4.5vw, 42px)',
+            fontWeight: 700, lineHeight: 1.1, letterSpacing: '-0.02em',
+            color: 'var(--text-primary)', marginBottom: '6px',
+          }}>
+            Peer Comparison
+          </h1>
+          <p style={{ fontFamily: 'var(--font-sans)', fontSize: '13.5px', color: '#8e9192' }}>
+            Select 2–4 companies to compare key financial metrics side by side.
+          </p>
+        </div>
+      </div>
+
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '28px 24px 80px' }}>
+
+        {/* Selector */}
+        <div style={{
+          backgroundColor: 'var(--bg-surface-1)', border: '1px solid #444748',
+          borderRadius: '12px', padding: '20px', marginBottom: '16px',
+        }}>
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', flexWrap: 'wrap' }}>
 
             {/* Company slots */}
@@ -319,37 +462,47 @@ export default function ComparePage() {
                 return (
                   <div key={slotIdx} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     {slotIdx > 0 && (
-                      <span style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-tertiary)' }}>vs</span>
+                      <span style={{
+                        fontFamily: 'var(--font-mono)', fontSize: '11px',
+                        color: '#8e9192',
+                      }}>vs</span>
                     )}
 
                     <div style={{ position: 'relative' }} ref={el => { dropdownRefs.current[slotIdx] = el }}>
-                      {/* Slot button */}
                       <button
                         onClick={() => setOpenDropdown(isOpen ? null : slotIdx)}
                         style={{
                           display: 'flex', alignItems: 'center', gap: '8px',
                           padding: '8px 12px',
                           backgroundColor: ticker ? `${color}10` : 'var(--bg-surface-2)',
-                          border: ticker ? `1px solid ${color}40` : 'var(--border-rest)',
+                          border: ticker ? `1px solid ${color}35` : '1px solid #2a2a2a',
                           borderRadius: '8px', cursor: 'pointer',
-                          minWidth: '180px',
+                          minWidth: '180px', transition: 'border-color 150ms',
                         }}
                       >
                         {ticker && (
-                          <span style={{ width: '7px', height: '7px', borderRadius: '50%', backgroundColor: color, flexShrink: 0 }} />
+                          <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: color, flexShrink: 0 }} />
                         )}
-                        <span style={{ fontFamily: ticker ? 'var(--font-mono)' : 'var(--font-sans)', fontSize: '13px', color: ticker ? color : 'var(--text-tertiary)', fontWeight: ticker ? 500 : 400, flex: 1, textAlign: 'left' }}>
+                        <span style={{
+                          fontFamily: ticker ? 'var(--font-mono)' : 'var(--font-sans)',
+                          fontSize: '13px',
+                          color: ticker ? color : '#8e9192',
+                          fontWeight: ticker ? 600 : 400, flex: 1, textAlign: 'left',
+                        }}>
                           {ticker ? ticker : 'Select company'}
                         </span>
                         {ticker && co && (
-                          <span style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', color: 'var(--text-tertiary)', maxWidth: '100px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          <span style={{
+                            fontFamily: 'var(--font-sans)', fontSize: '11px',
+                            color: '#8e9192', maxWidth: '90px',
+                            overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                          }}>
                             {co.name.split(' ').slice(0, 2).join(' ')}
                           </span>
                         )}
-                        <span style={{ fontSize: '10px', color: 'var(--text-tertiary)', marginLeft: '2px' }}>{isOpen ? '▲' : '▼'}</span>
+                        <span style={{ fontSize: '10px', color: '#3a3a3a' }}>{isOpen ? '▲' : '▼'}</span>
                       </button>
 
-                      {/* Remove button — only show if selected and we have more than 2 slots OR slot is filled */}
                       {ticker && (
                         <button
                           onClick={() => removeTicker(slotIdx)}
@@ -357,32 +510,39 @@ export default function ComparePage() {
                           style={{
                             position: 'absolute', top: '-7px', right: '-7px',
                             width: '18px', height: '18px', borderRadius: '50%',
-                            backgroundColor: 'var(--bg-surface-2)', border: 'var(--border-rest)',
-                            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            fontSize: '11px', color: 'var(--text-tertiary)', lineHeight: 1,
+                            backgroundColor: 'var(--bg-surface-2)',
+                            border: '1px solid #444748',
+                            cursor: 'pointer', display: 'flex',
+                            alignItems: 'center', justifyContent: 'center',
+                            fontSize: '11px', color: '#8e9192', lineHeight: 1,
                           }}
                         >×</button>
                       )}
 
-                      {/* Dropdown */}
                       {isOpen && (
                         <div style={{
                           position: 'absolute', top: 'calc(100% + 6px)', left: 0, zIndex: 50,
-                          backgroundColor: 'var(--bg-surface-1)', border: 'var(--border-rest)',
+                          backgroundColor: 'var(--bg-surface-1)', border: '1px solid #444748',
                           borderRadius: '10px', width: '300px', maxHeight: '380px',
-                          overflowY: 'auto', boxShadow: '0 6px 28px rgba(0,0,0,0.12)',
+                          overflowY: 'auto', boxShadow: '0 16px 48px rgba(0,0,0,0.4)',
                         }}>
-                          {/* Sector filter pills inside dropdown */}
-                          <div style={{ padding: '10px 12px', borderBottom: 'var(--border-rest)', display: 'flex', flexWrap: 'wrap', gap: '5px', position: 'sticky', top: 0, backgroundColor: 'var(--bg-surface-1)', zIndex: 1 }}>
+                          <div style={{
+                            padding: '10px 12px', borderBottom: '1px solid #1a1a1a',
+                            display: 'flex', flexWrap: 'wrap', gap: '5px',
+                            position: 'sticky', top: 0,
+                            backgroundColor: 'var(--bg-surface-1)', zIndex: 1,
+                          }}>
                             {['All', ...SECTORS].map(s => (
                               <button
                                 key={s}
                                 onClick={e => { e.stopPropagation(); setSectorFilter(s) }}
                                 style={{
                                   fontFamily: 'var(--font-sans)', fontSize: '11px',
-                                  padding: '3px 8px', borderRadius: '4px', border: 'var(--border-rest)',
-                                  backgroundColor: sectorFilter === s ? 'var(--accent-primary)' : 'var(--bg-surface-2)',
-                                  color: sectorFilter === s ? '#fff' : 'var(--text-secondary)',
+                                  padding: '3px 8px', borderRadius: '4px',
+                                  border: '1px solid',
+                                  borderColor: sectorFilter === s ? 'rgba(255,255,255,0.4)' : '#444748',
+                                  backgroundColor: sectorFilter === s ? 'rgba(255,255,255,0.06)' : 'transparent',
+                                  color: sectorFilter === s ? '#ffffff' : '#8e9192',
                                   cursor: 'pointer',
                                 }}
                               >
@@ -392,7 +552,7 @@ export default function ComparePage() {
                           </div>
 
                           {filteredCompanies.length === 0 && (
-                            <div style={{ padding: '16px', fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-tertiary)' }}>
+                            <div style={{ padding: '16px', fontFamily: 'var(--font-mono)', fontSize: '11px', color: '#3a3a3a' }}>
                               No companies in this sector.
                             </div>
                           )}
@@ -408,17 +568,17 @@ export default function ComparePage() {
                                 style={{
                                   width: '100%', textAlign: 'left', display: 'flex',
                                   alignItems: 'center', gap: '10px', padding: '8px 14px',
-                                  background: isCurrent ? 'var(--bg-surface-2)' : 'none',
+                                  background: isCurrent ? 'rgba(255,255,255,0.05)' : 'none',
                                   border: 'none', cursor: already ? 'default' : 'pointer',
-                                  opacity: already ? 0.35 : 1,
+                                  opacity: already ? 0.3 : 1,
                                 }}
-                                onMouseEnter={e => { if (!already && !isCurrent) (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'var(--bg-surface-2)' }}
+                                onMouseEnter={e => { if (!already && !isCurrent) (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'rgba(255,255,255,0.03)' }}
                                 onMouseLeave={e => { if (!isCurrent) (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'transparent' }}
                               >
                                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--accent-primary)', minWidth: '52px' }}>
                                   {co.ticker}
                                 </span>
-                                <span style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-primary)' }}>
+                                <span style={{ fontFamily: 'var(--font-sans)', fontSize: '12.5px', color: 'var(--text-primary)' }}>
                                   {co.name}
                                 </span>
                               </button>
@@ -431,37 +591,40 @@ export default function ComparePage() {
                 )
               })}
 
-              {/* Add company button */}
               {tickers.length < 4 && (
                 <button
                   onClick={addSlot}
                   title="Add company"
                   style={{
                     width: '34px', height: '34px', borderRadius: '8px',
-                    backgroundColor: 'var(--bg-surface-2)', border: 'var(--border-rest)',
-                    cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: '20px', color: 'var(--text-tertiary)', lineHeight: 1,
-                    flexShrink: 0,
+                    backgroundColor: 'var(--bg-surface-2)', border: '1px solid #444748',
+                    cursor: 'pointer', display: 'flex', alignItems: 'center',
+                    justifyContent: 'center', fontSize: '20px', color: '#8e9192', lineHeight: 1,
                   }}
                 >+</button>
               )}
             </div>
 
-            {/* Sector filter — right side */}
+            {/* Sector filter */}
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '6px', flexShrink: 0 }}>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.07em', color: 'var(--text-tertiary)' }}>
+              <span style={{
+                fontFamily: 'var(--font-mono)', fontSize: '9.5px',
+                textTransform: 'uppercase', letterSpacing: '0.1em', color: '#8e9192',
+              }}>
                 Filter by sector
               </span>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px', justifyContent: 'flex-end' }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', justifyContent: 'flex-end' }}>
                 {['All', ...SECTORS].map(s => (
                   <button
                     key={s}
                     onClick={() => setSectorFilter(s)}
                     style={{
                       fontFamily: 'var(--font-sans)', fontSize: '11px',
-                      padding: '4px 10px', borderRadius: '5px', border: 'var(--border-rest)',
-                      backgroundColor: sectorFilter === s ? 'var(--accent-primary)' : 'var(--bg-surface-2)',
-                      color: sectorFilter === s ? '#fff' : 'var(--text-secondary)',
+                      padding: '4px 9px', borderRadius: '4px',
+                      border: '1px solid',
+                      borderColor: sectorFilter === s ? 'rgba(255,255,255,0.4)' : '#444748',
+                      backgroundColor: sectorFilter === s ? 'rgba(255,255,255,0.06)' : 'transparent',
+                      color: sectorFilter === s ? '#ffffff' : '#8e9192',
                       cursor: 'pointer',
                     }}
                   >
@@ -477,11 +640,12 @@ export default function ComparePage() {
         {/* Cross-sector warning */}
         {crossSector && hasEnoughToCompare && (
           <div style={{
-            backgroundColor: "rgba(217,119,6,0.07)", border: "1px solid rgba(217,119,6,0.25)",
-            borderRadius: "8px", padding: "12px 16px", marginBottom: "16px",
+            backgroundColor: 'rgba(217,119,6,0.05)',
+            border: '1px solid rgba(217,119,6,0.2)',
+            borderRadius: '8px', padding: '11px 16px', marginBottom: '16px',
           }}>
-            <p style={{ fontFamily: "var(--font-sans)", fontSize: "13px", color: "var(--delta-warn)" }}>
-              <strong>Heads up:</strong> These companies are from different sectors. Their numbers may not be directly comparable — use this view for broad context, not side-by-side benchmarking.
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12.5px', color: 'var(--delta-warn)' }}>
+              <strong>Heads up:</strong> These companies are from different sectors. Numbers may not be directly comparable — use this for broad context, not benchmarking.
             </p>
           </div>
         )}
@@ -489,56 +653,62 @@ export default function ComparePage() {
         {/* Empty state */}
         {!hasEnoughToCompare && (
           <div style={{
-            backgroundColor: 'var(--bg-surface-1)', border: 'var(--border-rest)',
-            borderRadius: '12px', padding: '48px 24px', textAlign: 'center', marginBottom: '20px',
+            backgroundColor: 'var(--bg-surface-1)', border: '1px solid #444748',
+            borderRadius: '12px', padding: '60px 24px',
+            textAlign: 'center', marginBottom: '20px',
           }}>
-            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-tertiary)' }}>
-              Select at least 2 companies above to begin comparison.
+            <p style={{
+              fontFamily: 'var(--font-mono)', fontSize: '10.5px',
+              textTransform: 'uppercase', letterSpacing: '0.1em', color: '#8e9192',
+            }}>
+              Select at least 2 companies above to begin comparison
             </p>
           </div>
         )}
 
-        {/* Loading */}
         {isLoadingAny && (
-          <div style={{ padding: '12px 0', fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-tertiary)', marginBottom: '8px' }}>
+          <div style={{ padding: '10px 0', fontFamily: 'var(--font-mono)', fontSize: '11px', color: '#8e9192', marginBottom: '8px' }}>
             Loading data…
           </div>
         )}
 
         {/* Metrics table */}
         {hasEnoughToCompare && (
-          <div style={{ backgroundColor: 'var(--bg-surface-1)', border: 'var(--border-rest)', borderRadius: '12px', marginBottom: '20px', overflow: 'hidden' }}>
-            <div style={{ padding: '18px 24px', borderBottom: 'var(--border-rest)' }}>
-              <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', fontWeight: 500, color: 'var(--text-primary)', marginBottom: '3px' }}>
+          <div style={{
+            backgroundColor: 'var(--bg-surface-1)', border: '1px solid #444748',
+            borderRadius: '12px', marginBottom: '20px', overflow: 'hidden',
+          }}>
+            <div style={{ padding: '16px 22px', borderBottom: '1px solid #1a1a1a' }}>
+              <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '2px' }}>
                 Key Metrics — Latest Fiscal Year
               </h2>
-              <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-tertiary)' }}>
-                Live data from Trikosh database · Green = best in set · Red = lowest in set
+              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: '#3a3a3a' }}>
+                Live data · Green = best in set · Red = lowest in set
               </p>
             </div>
 
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <thead>
-                  <tr style={{ backgroundColor: 'var(--bg-surface-2)' }}>
+                  <tr style={{ backgroundColor: 'rgba(0,0,0,0.2)' }}>
                     <th style={{
-                      padding: '10px 20px', textAlign: 'left',
-                      fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 500,
-                      textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-tertiary)',
-                      minWidth: '176px', borderRight: 'var(--border-rest)',
+                      padding: '10px 18px', textAlign: 'left',
+                      fontFamily: 'var(--font-mono)', fontSize: '10px', fontWeight: 500,
+                      textTransform: 'uppercase', letterSpacing: '0.07em', color: '#8e9192',
+                      minWidth: '176px', borderRight: '1px solid #1a1a1a',
                     }}>Metric</th>
                     {activeTickers.map((ticker, i) => {
                       const co = allCompanies.find(c => c.ticker === ticker)
                       return (
-                        <th key={ticker} style={{ padding: '10px 20px', textAlign: 'right', minWidth: '140px' }}>
+                        <th key={ticker} style={{ padding: '10px 18px', textAlign: 'right', minWidth: '130px' }}>
                           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '3px' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                              <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: PALETTE[i] }} />
-                              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', fontWeight: 500, color: PALETTE[i] }}>
+                              <span style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: PALETTE[i] }} />
+                              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', fontWeight: 600, color: PALETTE[i] }}>
                                 {ticker}
                               </span>
                             </div>
-                            <span style={{ fontFamily: 'var(--font-sans)', fontSize: '10px', color: 'var(--text-tertiary)', fontWeight: 400 }}>
+                            <span style={{ fontFamily: 'var(--font-sans)', fontSize: '10px', color: '#8e9192', fontWeight: 400 }}>
                               {co?.name.split(' ').slice(0, 2).join(' ') ?? ''}
                             </span>
                           </div>
@@ -557,14 +727,21 @@ export default function ComparePage() {
                         rows.push(
                           <tr key={`g-${metric.group}`}>
                             <td colSpan={activeTickers.length + 1} style={{
-                              padding: '12px 20px 6px',
-                              backgroundColor: 'var(--bg-base)',
-                              borderTop: ri > 0 ? 'var(--border-rest)' : 'none',
+                              padding: '10px 18px 5px',
+                              backgroundColor: 'rgba(0,0,0,0.12)',
+                              borderTop: ri > 0 ? '1px solid #1a1a1a' : 'none',
                             }}>
-                              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.07em', color: 'var(--text-secondary)', fontWeight: 500 }}>
+                              <span style={{
+                                fontFamily: 'var(--font-mono)', fontSize: '9.5px',
+                                textTransform: 'uppercase', letterSpacing: '0.09em',
+                                color: '#8e9192', fontWeight: 600,
+                              }}>
                                 {metric.group}
                               </span>
-                              <span style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', color: 'var(--text-tertiary)', marginLeft: '12px', fontStyle: 'italic' }}>
+                              <span style={{
+                                fontFamily: 'var(--font-sans)', fontSize: '11px',
+                                color: '#8e9192', marginLeft: '10px', fontStyle: 'italic',
+                              }}>
                                 {GROUP_NOTES[metric.group]}
                               </span>
                             </td>
@@ -574,8 +751,17 @@ export default function ComparePage() {
                       const leader = leaderIdx(metric)
                       const loser  = loserIdx(metric)
                       rows.push(
-                        <tr key={metric.label} style={{ backgroundColor: ri % 2 === 0 ? 'var(--bg-surface-1)' : 'transparent' }}>
-                          <td style={{ padding: '10px 20px', fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-secondary)', borderRight: 'var(--border-rest)' }}>
+                        <tr
+                          key={metric.label}
+                          style={{ borderBottom: '1px solid rgba(255,255,255,0.02)' }}
+                          onMouseEnter={e => ((e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.025)')}
+                          onMouseLeave={e => ((e.currentTarget as HTMLElement).style.backgroundColor = 'transparent')}
+                        >
+                          <td style={{
+                            padding: '9px 18px', fontFamily: 'var(--font-sans)',
+                            fontSize: '12.5px', color: '#8e9192',
+                            borderRight: '1px solid #1a1a1a',
+                          }}>
                             {metric.label}
                           </td>
                           {activeTickers.map((ticker, ci) => {
@@ -586,20 +772,19 @@ export default function ComparePage() {
                             const isNeg = typeof raw === 'number' && raw < 0
 
                             let cellColor = 'var(--text-primary)'
-                            if (isLeader)      cellColor = 'var(--delta-pos)'
-                            else if (isLoser)  cellColor = 'var(--delta-neg)'
-                            else if (isNeg)    cellColor = 'var(--delta-neg)'
+                            if (isLeader)     cellColor = 'var(--delta-pos)'
+                            else if (isLoser) cellColor = 'var(--delta-neg)'
+                            else if (isNeg)   cellColor = 'var(--delta-neg)'
 
                             return (
-                              <td key={ticker} style={{ padding: '10px 20px', textAlign: 'right' }}>
+                              <td key={ticker} style={{ padding: '9px 18px', textAlign: 'right' }}>
                                 {loading[ticker] ? (
-                                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--text-tertiary)' }}>…</span>
+                                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: '#3a3a3a' }}>…</span>
                                 ) : (
                                   <span style={{
-                                    fontFamily: 'var(--font-mono)', fontSize: '13px',
-                                    fontVariantNumeric: 'tabular-nums',
-                                    color: cellColor,
-                                    fontWeight: (isLeader || isLoser) ? 500 : 400,
+                                    fontFamily: 'var(--font-mono)', fontSize: '12.5px',
+                                    fontVariantNumeric: 'tabular-nums', color: cellColor,
+                                    fontWeight: (isLeader || isLoser) ? 600 : 400,
                                   }}>
                                     {metric.format(raw)}
                                   </span>
@@ -616,57 +801,55 @@ export default function ComparePage() {
               </table>
             </div>
 
-            <div style={{ padding: '10px 24px', borderTop: 'var(--border-rest)', backgroundColor: 'var(--bg-surface-2)' }}>
-              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-tertiary)' }}>
-                Source: Trikosh database · Live data · Green = best-in-set · Red = lowest-in-set · – shown where data unavailable
+            <div style={{ padding: '9px 22px', borderTop: '1px solid #1a1a1a', backgroundColor: 'rgba(0,0,0,0.15)' }}>
+              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: '#3a3a3a' }}>
+                Source: Trikosh database · Live data · – shown where data unavailable
               </p>
             </div>
           </div>
         )}
 
-        {/* Charts — only show when enough data */}
+        {/* Charts */}
         {hasEnoughToCompare && (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(460px, 1fr))', gap: '16px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(440px, 1fr))', gap: '16px' }}>
 
-            {/* Margin bar chart */}
-            <CardSpotlight style={{ padding: '22px' }}>
-              <div style={{ marginBottom: '18px' }}>
-                <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '3px' }}>
+            <CardSpotlight style={{ padding: '20px' }}>
+              <div style={{ marginBottom: '16px' }}>
+                <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '2px' }}>
                   Margin Profile — Latest FY
                 </h2>
-                <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-tertiary)' }}>
+                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: '#3a3a3a' }}>
                   Gross → Operating → Net margin per company.
                 </p>
               </div>
               <ResponsiveContainer width="100%" height={240}>
                 <BarChart data={marginBarData} margin={{ top: 4, right: 8, left: 0, bottom: 4 }} barCategoryGap="28%">
-                  <CartesianGrid vertical={false} stroke="#1f1f1f" />
+                  <CartesianGrid vertical={false} stroke="#1a1a1a" />
                   <XAxis dataKey="ticker" tick={axisTick} axisLine={false} tickLine={false} />
-                  <YAxis tick={{ ...axisTick, fontSize: 10 }} tickFormatter={v => `${v}%`} axisLine={false} tickLine={false} width={38} />
-                  <Tooltip contentStyle={tooltipStyle} cursor={{ fill: 'rgba(124,58,237,0.08)' }} formatter={(v: unknown) => [`${v}%`]} />
-                  <Legend wrapperStyle={{ fontFamily: 'var(--font-mono)', fontSize: '11px', paddingTop: '8px', color: 'var(--text-secondary)' }} />
-                  <Bar dataKey="Gross"     fill="#7c3aed" fillOpacity={0.95} radius={[2, 2, 0, 0]} />
-                  <Bar dataKey="Operating" fill="#a78bfa" fillOpacity={0.95} radius={[2, 2, 0, 0]} />
-                  <Bar dataKey="Net"       fill="#38bdf8" fillOpacity={0.95} radius={[2, 2, 0, 0]} />
+                  <YAxis tick={{ ...axisTick }} tickFormatter={v => `${v}%`} axisLine={false} tickLine={false} width={36} />
+                  <Tooltip contentStyle={tooltipStyle} cursor={{ fill: 'rgba(255,255,255,0.04)' }} formatter={(v: unknown) => [`${v}%`]} />
+                  <Legend wrapperStyle={{ fontFamily: 'var(--font-mono)', fontSize: '10px', paddingTop: '8px', color: '#8e9192' }} />
+                  <Bar dataKey="Gross"     fill="#ffffff" fillOpacity={0.85} radius={[2, 2, 0, 0]} />
+                  <Bar dataKey="Operating" fill="#a0a0a0" fillOpacity={0.85} radius={[2, 2, 0, 0]} />
+                  <Bar dataKey="Net"       fill="#38bdf8" fillOpacity={0.9} radius={[2, 2, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
-              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-tertiary)', marginTop: '10px' }}>
-                Source: Trikosh database · Note: bank gross margin may be null — shown as 0
+              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '9.5px', color: '#8e9192', marginTop: '10px' }}>
+                Note: bank gross margin may be null — shown as 0
               </p>
             </CardSpotlight>
 
-            {/* Trend line chart */}
-            <CardSpotlight style={{ padding: '22px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '18px', gap: '12px', flexWrap: 'wrap' }}>
+            <CardSpotlight style={{ padding: '20px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px', gap: '12px', flexWrap: 'wrap' }}>
                 <div>
-                  <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '3px' }}>
+                  <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '2px' }}>
                     5-Year Margin Trend
                   </h2>
-                  <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-tertiary)' }}>
-                    FY2021–FY2025 · Structural vs cyclical margin movement.
+                  <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: '#3a3a3a' }}>
+                    FY2021–FY2025
                   </p>
                 </div>
-                <div style={{ display: 'flex', gap: '4px', flexShrink: 0 }}>
+                <div style={{ display: 'flex', gap: '3px', flexShrink: 0 }}>
                   {([
                     { key: 'gross_margin' as const,     label: 'Gross' },
                     { key: 'operating_margin' as const, label: 'Operating' },
@@ -677,9 +860,11 @@ export default function ComparePage() {
                       onClick={() => setTrendMetric(opt.key)}
                       style={{
                         fontFamily: 'var(--font-sans)', fontSize: '11px',
-                        padding: '4px 10px', borderRadius: '5px', border: 'var(--border-rest)',
-                        backgroundColor: trendMetric === opt.key ? 'var(--bg-muted)' : 'var(--bg-surface-2)',
-                        color: trendMetric === opt.key ? 'var(--text-primary)' : 'var(--text-secondary)',
+                        padding: '4px 9px', borderRadius: '4px',
+                        border: '1px solid',
+                        borderColor: trendMetric === opt.key ? 'rgba(255,255,255,0.4)' : '#444748',
+                        backgroundColor: trendMetric === opt.key ? 'rgba(255,255,255,0.06)' : 'transparent',
+                        color: trendMetric === opt.key ? '#ffffff' : '#8e9192',
                         cursor: 'pointer',
                       }}
                     >
@@ -690,11 +875,11 @@ export default function ComparePage() {
               </div>
               <ResponsiveContainer width="100%" height={240}>
                 <LineChart data={trendData} margin={{ top: 4, right: 8, left: 0, bottom: 4 }}>
-                  <CartesianGrid vertical={false} stroke="#1f1f1f" />
-                  <XAxis dataKey="year" tick={{ ...axisTick, fontSize: 10 }} axisLine={{ stroke: '#1f1f1f' }} tickLine={false} />
-                  <YAxis tick={{ ...axisTick, fontSize: 10 }} tickFormatter={v => `${v}%`} axisLine={false} tickLine={false} width={38} />
-                  <Tooltip contentStyle={tooltipStyle} cursor={{ stroke: 'rgba(124,58,237,0.4)' }} formatter={(v: unknown) => [`${v}%`]} />
-                  <Legend wrapperStyle={{ fontFamily: 'var(--font-mono)', fontSize: '11px', paddingTop: '8px', color: 'var(--text-secondary)' }} />
+                  <CartesianGrid vertical={false} stroke="#1a1a1a" />
+                  <XAxis dataKey="year" tick={{ ...axisTick }} axisLine={{ stroke: '#383838' }} tickLine={false} />
+                  <YAxis tick={{ ...axisTick }} tickFormatter={v => `${v}%`} axisLine={false} tickLine={false} width={36} />
+                  <Tooltip contentStyle={tooltipStyle} cursor={{ stroke: 'rgba(255,255,255,0.15)' }} formatter={(v: unknown) => [`${v}%`]} />
+                  <Legend wrapperStyle={{ fontFamily: 'var(--font-mono)', fontSize: '10px', paddingTop: '8px', color: '#8e9192' }} />
                   {activeTickers.map((ticker, i) => (
                     <Line
                       key={ticker} type="monotone" dataKey={ticker}
@@ -705,17 +890,16 @@ export default function ComparePage() {
                   ))}
                 </LineChart>
               </ResponsiveContainer>
-              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-tertiary)', marginTop: '10px' }}>
-                Source: Trikosh database · FY2021–FY2025 · Only years with available data are plotted
+              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '9.5px', color: '#8e9192', marginTop: '10px' }}>
+                FY2021–FY2025 · Only years with available data are plotted
               </p>
             </CardSpotlight>
 
           </div>
         )}
-
       </div>
+        </div>
+      </main>
     </div>
   )
 }
-
-

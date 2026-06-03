@@ -1,20 +1,34 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { UserButton, SignedIn, SignedOut } from '@clerk/nextjs'
+import { UserButton, SignedIn, SignedOut, SignInButton } from '@clerk/nextjs'
 
 const NAV_LINKS = [
+  { label: 'Home',      href: '/' },
   { label: 'Companies', href: '/companies' },
   { label: 'Sectors',   href: '/sectors' },
   { label: 'Compare',   href: '/compare' },
   { label: 'Research',  href: '/research' },
+  { label: 'Glossary',  href: '/glossary' },
+  { label: 'About',     href: '/about' },
 ]
 
 export default function Navbar() {
   const pathname = usePathname()
-  const [hovered, setHovered] = useState<string | null>(null)
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  function isActive(href: string) {
+    if (href === '/') return pathname === '/'
+    return pathname === href || pathname.startsWith(href + '/')
+  }
 
   return (
     <nav
@@ -24,8 +38,11 @@ export default function Navbar() {
         zIndex: 50,
         width: '100%',
         height: 'var(--nav-h)',
-        backgroundColor: '#0a0a0a',
-        borderBottom: '1px solid #1f1f1f',
+        backgroundColor: scrolled ? 'rgba(19,19,19,0.8)' : '#131313',
+        backdropFilter: scrolled ? 'blur(12px)' : 'none',
+        WebkitBackdropFilter: scrolled ? 'blur(12px)' : 'none',
+        borderBottom: '1px solid #444748',
+        transition: 'background-color 200ms ease, backdrop-filter 200ms ease',
         display: 'flex',
         alignItems: 'center',
       }}
@@ -39,54 +56,53 @@ export default function Navbar() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          gap: '24px',
         }}
       >
-        {/* Logo */}
+        {/* Wordmark */}
         <Link href="/" style={{ textDecoration: 'none', flexShrink: 0 }}>
           <span style={{
-            fontFamily: 'var(--font-sans)',
-            fontSize: '15px',
+            fontFamily: 'var(--font-display)',
+            fontSize: '17px',
             fontWeight: 700,
             color: '#ffffff',
+            letterSpacing: '-0.01em',
           }}>
             Trikosh
           </span>
         </Link>
 
-        {/* Nav links + CTA */}
-        <div
-          onMouseLeave={() => setHovered(null)}
-          style={{ display: 'flex', alignItems: 'center', gap: '2px' }}
-        >
+        {/* Nav links */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
           {NAV_LINKS.map(({ label, href }) => {
-            const isActive = pathname === href || pathname.startsWith(href + '/')
-            const isHot = hovered ? hovered === href : isActive
+            const active = isActive(href)
             return (
               <Link
                 key={href}
                 href={href}
-                onMouseEnter={() => setHovered(href)}
                 style={{
                   position: 'relative',
                   fontFamily: 'var(--font-sans)',
-                  fontSize: '14px',
-                  fontWeight: isActive ? 600 : 400,
-                  color: isActive || isHot ? '#ffffff' : '#8a8a8a',
-                  padding: '8px 12px',
+                  fontSize: '11px',
+                  fontWeight: active ? 500 : 400,
+                  color: active ? '#ffffff' : '#8e9192',
+                  padding: '8px 10px',
                   textDecoration: 'none',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em',
                   transition: 'color 150ms ease',
                 }}
+                onMouseEnter={e => { if (!active) (e.currentTarget as HTMLAnchorElement).style.color = '#c4c7c8' }}
+                onMouseLeave={e => { if (!active) (e.currentTarget as HTMLAnchorElement).style.color = '#8e9192' }}
               >
                 {label}
-                {isHot && (
+                {active && (
                   <span style={{
                     position: 'absolute',
                     left: 10,
                     right: 10,
                     bottom: 2,
-                    height: 1,
-                    backgroundColor: '#b300ff',
+                    height: '1px',
+                    backgroundColor: '#ffffff',
                     display: 'block',
                   }} />
                 )}
@@ -95,28 +111,34 @@ export default function Navbar() {
           })}
 
           <SignedOut>
-            <Link
-              href="/companies"
-              style={{
-                fontFamily: 'var(--font-sans)',
-                fontSize: '13px',
-                fontWeight: 500,
-                color: '#ffffff',
-                border: '1px solid #b300ff',
-                borderRadius: '6px',
-                padding: '7px 16px',
-                marginLeft: '10px',
-                textDecoration: 'none',
-                backgroundColor: 'transparent',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              Start researching
-            </Link>
+            <SignInButton mode="modal">
+              <button
+                style={{
+                  fontFamily: 'var(--font-sans)',
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  color: '#000000',
+                  border: '1px solid #ffffff',
+                  borderRadius: '4px',
+                  padding: '6px 14px',
+                  marginLeft: '8px',
+                  backgroundColor: '#ffffff',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.08em',
+                  whiteSpace: 'nowrap',
+                  transition: 'opacity 150ms',
+                  cursor: 'pointer',
+                }}
+                onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.opacity = '0.85' }}
+                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.opacity = '1' }}
+              >
+                Sign in
+              </button>
+            </SignInButton>
           </SignedOut>
 
           <SignedIn>
-            <div style={{ marginLeft: '14px' }}>
+            <div style={{ marginLeft: '12px' }}>
               <UserButton afterSignOutUrl="/" />
             </div>
           </SignedIn>

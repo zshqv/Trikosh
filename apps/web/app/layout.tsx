@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
-import { Inter, Bricolage_Grotesque } from 'next/font/google'
-import { GeistMono } from 'geist/font/mono'
+import { Bodoni_Moda, DM_Sans, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import { ClerkProvider } from '@clerk/nextjs'
 import Navbar from '@/components/layout/Navbar'
@@ -10,17 +9,25 @@ import PageTransition from '@/components/PageTransition'
 import CustomCursor from '@/components/effects/CustomCursor'
 import LoadingScreen from '@/components/effects/LoadingScreen'
 
-const inter = Inter({
+const bodoniModa = Bodoni_Moda({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
+  weight: ['400', '600', '700', '900'],
+  style: ['normal'],
+  variable: '--font-display',
+  display: 'swap',
+})
+
+const dmSans = DM_Sans({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600'],
   variable: '--font-sans',
   display: 'swap',
 })
 
-const bricolage = Bricolage_Grotesque({
+const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
-  weight: ['400', '600', '700', '800'],
-  variable: '--font-display',
+  weight: ['400', '500', '700'],
+  variable: '--font-mono',
   display: 'swap',
 })
 
@@ -40,7 +47,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <ClerkProvider>
       <html
         lang="en"
-        className={`${inter.variable} ${bricolage.variable} ${GeistMono.variable}`}
+        className={`${bodoniModa.variable} ${dmSans.variable} ${jetbrainsMono.variable}`}
       >
         <body style={{ backgroundColor: 'var(--bg-base)', color: 'var(--text-primary)' }}>
           <LoadingScreen />
