@@ -9,9 +9,9 @@ import { NumberTicker } from '@/components/ui/number-ticker'
 /* ── Data ─────────────────────────────────────────────────────────── */
 
 const STATS = [
-  { value: 102, label: 'Companies' },
-  { value: 5,   label: 'Sectors' },
-  { value: 15,  label: 'Ratios tracked' },
+  { value: 102, label: 'Companies',    startValue: 90 },
+  { value: 5,   label: 'Sectors',      startValue: 0  },
+  { value: 15,  label: 'Ratios tracked', startValue: 0 },
 ]
 
 const JPM_REVENUE = [
@@ -292,7 +292,7 @@ export default function LandingPage() {
             borderRadius: '8px',
             overflow: 'hidden',
           }}>
-            {STATS.map(({ value, label }, i) => (
+            {STATS.map(({ value, label, startValue }, i) => (
               <div
                 key={label}
                 style={{
@@ -304,6 +304,7 @@ export default function LandingPage() {
               >
                 <NumberTicker
                   value={value}
+                  startValue={startValue}
                   style={{
                     fontFamily: 'var(--font-mono)',
                     fontSize: 'clamp(28px, 4.5vw, 44px)',

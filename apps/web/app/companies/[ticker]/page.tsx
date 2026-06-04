@@ -21,6 +21,8 @@ interface CompanyRow {
   currency: string | null
   description: string | null
   website: string | null
+  reporting_standard: string | null
+  revenue_cagr_5yr: number | null
 }
 
 interface IncomeRow {
@@ -68,6 +70,8 @@ interface RatioRow {
   ev_to_ebitda: number | null
   free_cash_flow_yield: number | null
   earnings_yield: number | null
+  pe_ratio: number | null
+  ev_ebitda: number | null
 }
 
 interface MarketDataRow {
@@ -122,7 +126,7 @@ function yoyDelta(current: unknown, prev: unknown): number | null {
 
 function fmtRatio(value: unknown, unit: 'PCT' | 'MULTIPLE' | 'RATIO'): string {
   const n = toNum(value)
-  if (n == null) return '—'
+  if (n == null) return 'N/A'
   if (unit === 'PCT')      return formatPercent(n)
   if (unit === 'MULTIPLE') return formatMultiple(n)
   return n.toFixed(2)
@@ -139,9 +143,9 @@ const RATIO_MAP: { label: string; key: keyof RatioRow; unit: 'PCT' | 'MULTIPLE' 
   { label: 'Debt / Assets',       key: 'debt_to_assets',       unit: 'RATIO'    },
   { label: 'Asset Turnover',      key: 'asset_turnover',       unit: 'RATIO'    },
   { label: 'Interest Coverage',   key: 'interest_coverage',    unit: 'RATIO'    },
-  { label: 'P/E',                 key: 'price_to_earnings',    unit: 'MULTIPLE' },
+  { label: 'P/E Ratio',            key: 'pe_ratio',             unit: 'MULTIPLE' },
   { label: 'P/B',                 key: 'price_to_book',        unit: 'MULTIPLE' },
-  { label: 'EV/EBITDA',           key: 'ev_to_ebitda',         unit: 'MULTIPLE' },
+  { label: 'EV/EBITDA',           key: 'ev_ebitda',            unit: 'MULTIPLE' },
   { label: 'FCF Yield',           key: 'free_cash_flow_yield', unit: 'PCT'      },
   { label: 'Earnings Yield',      key: 'earnings_yield',       unit: 'PCT'      },
 ]
@@ -552,36 +556,58 @@ export default function CompanyDetailPage() {
               <div style={{ marginBottom: '10px' }}>
                 <TickerBadge ticker={company.ticker} exchange={company.exchange ?? ''} />
               </div>
-              <h1 style={{
-                fontFamily: 'var(--font-display)', fontSize: 'clamp(22px, 4vw, 34px)',
-                fontWeight: 700, lineHeight: 1.15, letterSpacing: '-0.02em',
-                color: 'var(--text-primary)', marginBottom: '6px',
-              }}>
-                {company.name || company.ticker}
-              </h1>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px', flexWrap: 'wrap' }}>
+                <h1 style={{
+                  fontFamily: 'var(--font-display)', fontSize: 'clamp(22px, 4vw, 34px)',
+                  fontWeight: 700, lineHeight: 1.15, letterSpacing: '-0.02em',
+                  color: 'var(--text-primary)', margin: 0,
+                }}>
+                  {company.name || company.ticker}
+                </h1>
+                {company.reporting_standard && (
+                  <span style={{
+                    fontFamily: 'var(--font-mono)', fontSize: '10px', fontWeight: 600,
+                    padding: '3px 7px', borderRadius: '4px', flexShrink: 0,
+                    backgroundColor: company.reporting_standard === 'GAAP'
+                      ? 'rgba(37,99,235,0.12)' : 'rgba(217,119,6,0.12)',
+                    color: company.reporting_standard === 'GAAP' ? 'var(--accent-primary)' : '#d97706',
+                    border: `1px solid ${company.reporting_standard === 'GAAP' ? 'rgba(37,99,235,0.25)' : 'rgba(217,119,6,0.25)'}`,
+                  }}>
+                    {company.reporting_standard}
+                  </span>
+                )}
+              </div>
               <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12.5px', color: '#5a5a5a', marginBottom: '8px' }}>
                 {[company.sector, company.industry].filter(Boolean).join(' · ')}
                 {company.country ? ` · ${company.country}` : ''}
               </p>
-              {market_data && (
-                <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', marginTop: '8px' }}>
-                  {toNum(market_data.price) != null && (
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: '#6a6a6a' }}>
-                      Price <strong style={{ color: 'var(--text-primary)' }}>${toNum(market_data.price)!.toFixed(2)}</strong>
-                    </span>
-                  )}
-                  {toNum(market_data.market_cap) != null && (
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: '#6a6a6a' }}>
-                      Mkt Cap <strong style={{ color: 'var(--text-primary)' }}>{formatCurrency(toNum(market_data.market_cap)!)}</strong>
-                    </span>
-                  )}
-                  {toNum(market_data.beta) != null && (
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: '#6a6a6a' }}>
-                      Beta <strong style={{ color: 'var(--text-primary)' }}>{toNum(market_data.beta)!.toFixed(2)}</strong>
-                    </span>
-                  )}
-                </div>
-              )}
+              <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', marginTop: '8px' }}>
+                {market_data && toNum(market_data.price) != null && (
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: '#6a6a6a' }}>
+                    Price <strong style={{ color: 'var(--text-primary)' }}>${toNum(market_data.price)!.toFixed(2)}</strong>
+                  </span>
+                )}
+                {market_data && toNum(market_data.market_cap) != null && (
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: '#6a6a6a' }}>
+                    Mkt Cap <strong style={{ color: 'var(--text-primary)' }}>{formatCurrency(toNum(market_data.market_cap)!)}</strong>
+                  </span>
+                )}
+                {market_data && toNum(market_data.beta) != null && (
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: '#6a6a6a' }}>
+                    Beta <strong style={{ color: 'var(--text-primary)' }}>{toNum(market_data.beta)!.toFixed(2)}</strong>
+                  </span>
+                )}
+                {toNum(company.revenue_cagr_5yr) != null && (
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: '#6a6a6a' }}>
+                    Rev CAGR (5yr){' '}
+                    <strong style={{
+                      color: (toNum(company.revenue_cagr_5yr) ?? 0) >= 0 ? 'var(--delta-pos)' : 'var(--delta-neg)',
+                    }}>
+                      {toNum(company.revenue_cagr_5yr)!.toFixed(1)}%
+                    </strong>
+                  </span>
+                )}
+              </div>
               {company.description && (
                 <p style={{
                   fontFamily: 'var(--font-sans)', fontSize: '12.5px', color: '#5a5a5a',

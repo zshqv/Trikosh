@@ -12,7 +12,7 @@ Trikosh is built on a simple observation: financial information exists, but fina
 
 ## What Trikosh Is
 
-Trikosh is a structured financial research platform covering 50 companies across five sectors — Financial Services, Artificial Intelligence, and Healthcare — with five years of standardised financial data, ratio analysis, peer comparison, and research starter frameworks.
+Trikosh is a structured financial research platform covering 102 companies across five sectors — Financial Services, AI & Technology, Healthcare, Consumer & Retail, and Consumer Internet & Digital Platforms — with five years of standardised financial data, ratio analysis, peer comparison, and research starter frameworks.
 
 It is not a data vendor. It is not an AI tool. It is infrastructure — the foundation on which a student builds their own understanding.
 
@@ -52,11 +52,12 @@ Download any company or comparison view as PDF or Excel for use in your own rese
 
 | Sector | Companies |
 |---|---|
-| Financial Services | 10 companies |
-| Artificial Intelligence | 10 companies |
-| Healthcare | 10 companies |
-
-Full company list will be published at v0.1.0 release.
+| Financial Services | 20 companies |
+| AI & Technology | 22 companies |
+| Healthcare | 20 companies |
+| Consumer & Retail | 20 companies |
+| Consumer Internet & Digital Platforms | 20 companies |
+| **Total** | **102 companies** |
 
 ---
 
@@ -66,7 +67,7 @@ Full company list will be published at v0.1.0 release.
 |---|---|
 | Frontend | Next.js, Recharts |
 | Backend | Python FastAPI |
-| Database | MySQL |
+| Database | PostgreSQL |
 | Authentication | Clerk |
 | Deployment | Vercel |
 | Repository | Open-source, MIT License |
@@ -75,18 +76,19 @@ Full company list will be published at v0.1.0 release.
 
 ## Project Status
 
-Trikosh is currently in active development. This is v0.0.1 — the founding commit.
+Trikosh is live and in active development.
 
 | Milestone | Status |
 |---|---|
 | Repository and architecture | ✅ Complete |
-| Database schema | 🔄 In progress |
-| Data loading — 50 companies | ⏳ Upcoming |
-| Frontend — company pages | ⏳ Upcoming |
-| Peer comparison tool | ⏳ Upcoming |
-| Research frameworks | ⏳ Upcoming |
-| Export functionality | ⏳ Upcoming |
-| Public launch | ⏳ Upcoming |
+| Database schema | ✅ Complete |
+| Data loading — 102 companies, 5 sectors | ✅ Complete |
+| Frontend — company pages | ✅ Complete |
+| Peer comparison tool | ✅ Complete |
+| Research frameworks | ✅ Live |
+| Excel export template | ✅ Live |
+| Authentication (Clerk) | ✅ Integrated |
+| Public launch | ✅ Live |
 
 ---
 
