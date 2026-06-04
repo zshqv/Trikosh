@@ -1,9 +1,9 @@
 ﻿import type { Company, CardData, GlossaryTerm, SectorSnapshot, ResearchKit } from './types'
 
 // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-// COMPANIES — 101 companies across 5 sectors (mirrors config.py exactly)
+// COMPANIES — 111 companies across 6 sectors (mirrors config.py exactly)
 // Sectors: Financial Services (21) | AI & Technology (20) | Healthcare (20)
-//          Consumer & Retail (20)  | Consumer Internet & Digital Platforms (20)
+//          Consumer & Retail (20)  | Consumer Internet & Digital Platforms (20) | Industrials (10)
 // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const COMPANIES: Company[] = [
 
@@ -117,9 +117,21 @@ export const COMPANIES: Company[] = [
   { ticker: 'GRAB',          exchange: 'NASDAQ', name: 'Grab Holdings Ltd.',             sector: 'Consumer Internet & Digital Platforms', industry: 'Super-App & Digital Platforms', analyticalLens: 'Southeast Asia\'s super-app — Grab\'s ride-hailing, food delivery, and financial services combination illustrates the capital intensity of building a multi-vertical platform across fragmented emerging markets.' },
   { ticker: 'TCOM',          exchange: 'NASDAQ', name: 'Trip.com Group Ltd.',            sector: 'Consumer Internet & Digital Platforms', industry: 'Online Travel',                 analyticalLens: 'China\'s dominant online travel platform going global — Trip.com\'s international expansion strategy illustrates how a domestic travel OTA leverages Chinese outbound tourism recovery to build a global platform.' },
   { ticker: 'ZOMATO.NS',     exchange: 'NSE',    name: 'Zomato Ltd.',                    sector: 'Consumer Internet & Digital Platforms', industry: 'Food Delivery',                 analyticalLens: 'India\'s leading food delivery and quick commerce platform — Zomato\'s Blinkit hyperpurchase integration illustrates how a food delivery company pivots toward instant commerce to deepen consumer wallet share in urban India.' },
+
+  // ── Industrials (10) ────────────────────────────────────────────────────────
+  { ticker: 'CAT',         exchange: 'NYSE',   name: 'Caterpillar Inc.',             sector: 'Industrials', industry: 'Construction & Mining Equipment',  analyticalLens: 'The global heavy equipment bellwether — Caterpillar\'s order backlog and dealer inventory cycles are the most reliable leading indicators for global construction and mining capex activity.' },
+  { ticker: 'HON',         exchange: 'NASDAQ', name: 'Honeywell International Inc.', sector: 'Industrials', industry: 'Industrial Conglomerates',          analyticalLens: 'The diversified industrial technology platform — Honeywell\'s software-defined automation and aerospace units illustrate how a conglomerate can reposition around higher-margin technology services.' },
+  { ticker: 'GE',          exchange: 'NYSE',   name: 'GE Aerospace',                 sector: 'Industrials', industry: 'Aerospace & Defence',               analyticalLens: 'The post-Vernova pure-play aerospace company — GE Aerospace\'s LEAP engine installed base and services revenue illustrate the razor-and-blades economics of aviation propulsion.' },
+  { ticker: 'SIEGY',       exchange: 'OTC',    name: 'Siemens AG',                   sector: 'Industrials', industry: 'Industrial Automation',             analyticalLens: 'Europe\'s leading industrial automation and digitalisation company — Siemens\' factory automation and smart infrastructure businesses illustrate how industrial incumbents embed software to defend margin and create switching costs.' },
+  { ticker: 'ABB',         exchange: 'NYSE',   name: 'ABB Ltd.',                     sector: 'Industrials', industry: 'Electrical Equipment',              analyticalLens: 'The global leader in electrification and industrial automation — ABB\'s decentralised business model and robotics exposure illustrate the intersection of energy transition demand and factory digitisation.' },
+  { ticker: 'RYCEY',       exchange: 'OTC',    name: 'Rolls-Royce Holdings plc',     sector: 'Industrials', industry: 'Aerospace & Defence',               analyticalLens: 'The aerospace turnaround story — Rolls-Royce\'s power-by-the-hour engine services model and post-COVID recovery illustrate how an aerospace OEM rebuilds margins through a flying-hours-driven annuity revenue base.' },
+  { ticker: 'LT.NS',       exchange: 'NSE',    name: 'Larsen & Toubro Ltd.',         sector: 'Industrials', industry: 'Engineering & Construction',        analyticalLens: 'India\'s premier engineering conglomerate — L&T\'s order book and government infrastructure capex exposure make it the primary lens for understanding India\'s industrial investment cycle.' },
+  { ticker: 'MMM',         exchange: 'NYSE',   name: '3M Co.',                       sector: 'Industrials', industry: 'Industrial Conglomerates',          analyticalLens: 'The diversified industrial technology company under litigation-driven restructuring — 3M\'s PFAS and Combat Arms liabilities and subsequent separation illustrate the financial and strategic cost of legacy product liability at conglomerate scale.' },
+  { ticker: 'EMR',         exchange: 'NYSE',   name: 'Emerson Electric Co.',         sector: 'Industrials', industry: 'Industrial Automation',             analyticalLens: 'The process automation pure-play post-AspenTech integration — Emerson\'s software-enriched process control systems illustrate how an industrial company uses acquisitions to shift revenue mix toward higher-margin software and services.' },
+  { ticker: 'DE',          exchange: 'NYSE',   name: 'Deere & Company',              sector: 'Industrials', industry: 'Agricultural Machinery',            analyticalLens: 'Precision agriculture monetised through data — Deere\'s JDLink telematics and John Deere Operations Center show how an equipment OEM builds a recurring software layer on top of its physical installed base.' },
 ]
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────────────────────
 // SECTOR SNAPSHOTS — counts match config.py exactly
 // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const SECTOR_SNAPSHOTS: SectorSnapshot[] = [
@@ -172,6 +184,16 @@ export const SECTOR_SNAPSHOTS: SectorSnapshot[] = [
     analyticalFramework: 'GMV Growth, Take Rate, Monthly Active Users, Customer Acquisition Cost, Contribution Margin per Order',
     keyValueDrivers: ['Network Effects', 'Monetisation Rate', 'User Engagement Depth', 'Platform Take Rate', 'Unit Economics at Scale'],
     sectorRisks: ['Regulatory antitrust risk, digital advertising cycle sensitivity, gig economy labour classification, geopolitical risk for China-linked platforms, and profitability timeline uncertainty.'],
+  },
+  {
+    sector: 'Industrials',
+    companyCount: 10,
+    avgGrossMargin: 0.34,
+    avgROE: 0.148,
+    avgRevenueGrowth: 0.058,
+    analyticalFramework: 'Order Backlog, Operating Leverage, CapEx Intensity, Return on Invested Capital, Free Cash Flow Conversion',
+    keyValueDrivers: ['Infrastructure Spending Cycle', 'Energy Transition Demand', 'Aftermarket Services Revenue', 'Automation & Robotics Adoption', 'Pricing Power on Long-Cycle Contracts'],
+    sectorRisks: ['Global manufacturing slowdown, raw material cost inflation, supply chain disruption, currency headwinds on international revenues, and cyclical order book contraction.'],
   },
 ]
 
@@ -1524,6 +1546,12 @@ export const GLOSSARY: GlossaryTerm[] = [
   },
   // ── B ─────────────────────────────────────────────────────────────────────
   {
+    term: 'Beta',
+    definition: "A measure of a stock's volatility relative to the market (typically the S&P 500). Beta > 1 means the stock is more volatile than the market; Beta < 1 means less volatile; Beta = 1 means it moves in line with the market. A negative beta means the stock moves inversely to the market.",
+    analystNote: 'Beta is used in the CAPM formula to derive the cost of equity: Re = Rf + β × (Rm − Rf). High-growth tech stocks typically carry betas of 1.2–1.8; utilities and healthcare often run 0.5–0.8. Beta is backward-looking — use levered and unlevered beta calculations carefully when comparing companies with different capital structures.',
+    relatedTickers: ['NVDA', 'MSFT', 'GOOGL', 'JPM', 'LLY'],
+  },
+  {
     term: 'Burn Rate',
     definition: 'The rate at which a company spends its cash reserves in excess of revenue. Relevant for pre-profitability platforms and early-stage digital businesses.',
     analystNote: 'Burn rate determines runway. A company with $500M cash burning $50M per month has 10 months of runway. Investors watch burn rate inflection points — decelerating burn before profitability is the key re-rating catalyst.',
@@ -1573,6 +1601,18 @@ export const GLOSSARY: GlossaryTerm[] = [
     relatedTickers: ['META', 'GOOGL', 'MSFT', 'CRM', 'ADBE'],
   },
   // ── D ─────────────────────────────────────────────────────────────────────
+  {
+    term: 'DCF (Discounted Cash Flow)',
+    definition: 'A valuation method that estimates the intrinsic value of an investment based on its expected future free cash flows, discounted back to present value using the WACC. Intrinsic Value = Σ (FCF_t / (1 + WACC)^t) + Terminal Value / (1 + WACC)^n.',
+    analystNote: 'Terminal value typically represents 60–80% of total DCF output — which is why your terminal growth rate assumption is the single most important and most scrutinised input. Always cross-check your DCF output against a trading multiple. If they diverge by more than 30%, your assumptions are likely inconsistent.',
+    relatedTickers: ['MSFT', 'GOOGL', 'NVDA', 'LLY', 'AAPL'],
+  },
+  {
+    term: 'Discount Rate',
+    definition: 'The rate used to convert future cash flows into their present value. In DCF analysis, the discount rate is the WACC. A higher discount rate means future cash flows are worth less today — reflecting higher risk or the time value of money.',
+    analystNote: 'A 1% change in the discount rate can move a DCF-derived valuation by 10–20%. Growth stocks with cash flows far in the future are disproportionately sensitive to discount rate changes, which is why high-multiple tech stocks sold off sharply when interest rates rose in 2022–23.',
+    relatedTickers: ['NVDA', 'MSFT', 'AMZN', 'NFLX', 'SNOW'],
+  },
   {
     term: 'Daily Active Users (DAU)',
     definition: 'The number of unique users who engage with a platform on any given day. The primary engagement health metric for social and consumer internet platforms.',
@@ -1809,12 +1849,24 @@ export const GLOSSARY: GlossaryTerm[] = [
   },
   // ── T ─────────────────────────────────────────────────────────────────────
   {
+    term: 'Terminal Value',
+    definition: 'The estimated value of a business beyond the explicit forecast period in a DCF model. Represents the present value of all cash flows after year N. Typically calculated using either the Gordon Growth Model (TV = FCF_N × (1 + g) / (WACC − g)) or an exit multiple method (TV = EBITDA_N × EV/EBITDA_peer).',
+    analystNote: 'Terminal value typically accounts for 60–80% of total DCF enterprise value. Two methods: (1) Gordon Growth Model — sensitive to the terminal growth rate assumption; never use a growth rate above long-run GDP. (2) Exit multiple — anchors to current market prices and may embed the same overvaluation you are trying to avoid. Cross-check both.',
+    relatedTickers: ['MSFT', 'AAPL', 'NVDA', 'GOOGL', 'AMZN'],
+  },
+  {
     term: 'Take Rate',
     definition: 'The percentage of total transaction value that a marketplace or platform retains as revenue.',
     analystNote: 'Visa earns approximately 0.3% on payment volume; Booking Holdings earns 14–15% of booking value; DoorDash earns around 15%.',
     relatedTickers: ['V', 'MA', 'BKNG', 'DASH', 'ETSY'],
   },
   // ── W ─────────────────────────────────────────────────────────────────────
+  {
+    term: 'WACC',
+    definition: 'Weighted Average Cost of Capital — the blended rate a company must earn on its assets to satisfy all its capital providers. Formula: (E/V × Re) + (D/V × Rd × (1 − Tc)), where E is equity, D is debt, V is total capital, Re is cost of equity, Rd is cost of debt, and Tc is the corporate tax rate.',
+    analystNote: "WACC is the discount rate in a DCF model. A higher WACC lowers the present value of future cash flows. Use Damodaran's sector-level WACC estimates (pages.stern.nyu.edu/~adamodar) as a calibration starting point. For emerging-market companies, add a country risk premium of 1–3%.",
+    relatedTickers: ['MSFT', 'GOOGL', 'JPM', 'LLY'],
+  },
   {
     term: 'Working Capital',
     definition: 'Current assets minus current liabilities. Negative working capital is a structural advantage for retailers — it means suppliers fund the business.',

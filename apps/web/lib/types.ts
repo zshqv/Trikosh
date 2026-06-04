@@ -1,4 +1,4 @@
-export type Sector = 'Financial Services' | 'AI & Technology' | 'Healthcare' | 'Consumer & Retail' | 'Consumer Internet & Digital Platforms'
+export type Sector = 'Financial Services' | 'AI & Technology' | 'Healthcare' | 'Consumer & Retail' | 'Consumer Internet & Digital Platforms' | 'Industrials'
 export type Standard = 'GAAP' | 'IFRS' | 'Non-GAAP'
 export type Currency = 'USD' | 'EUR' | 'GBP' | 'JPY'
 export type MetricUnit = 'USD' | 'PCT' | 'RATIO' | 'MULTIPLE'

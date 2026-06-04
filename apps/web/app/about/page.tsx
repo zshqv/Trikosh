@@ -187,7 +187,7 @@ export default function AboutPage() {
             </p>
             <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
               <a
-                href="https://github.com/Trikosh"
+                href="https://github.com/zshqv/Trikosh"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{

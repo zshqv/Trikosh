@@ -12,9 +12,10 @@ const SECTOR_ICONS: Record<string, string> = {
   'Healthcare': '◍',
   'Consumer & Retail': '◻',
   'Consumer Internet & Digital Platforms': '◎',
+  'Industrials': '◧',
 }
 
-const SECTOR_NUMS = ['01', '02', '03', '04', '05']
+const SECTOR_NUMS = ['01', '02', '03', '04', '05', '06']
 
 export default function SectorsPage() {
   const reduce = useReducedMotion()
@@ -46,7 +47,7 @@ export default function SectorsPage() {
                 fontFamily: 'var(--font-sans)', fontSize: '14px',
                 color: '#8e9192', marginBottom: 0, maxWidth: '420px',
               }}>
-                Five sector frameworks — metrics, value drivers, and risks.
+                Six sector frameworks — metrics, value drivers, and risks.
               </p>
             </div>
           </Reveal>

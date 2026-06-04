@@ -29,6 +29,11 @@ const STEPS = [
       'Key risk factors highlighted and ranked by probability',
       'Business model change or pivot in last 5 years identified',
     ],
+    sectorCallouts: {
+      'Financial Services': 'Focus on business model type — retail bank, investment bank, insurance, or asset manager. Note the regulatory environment (Basel III for global banks, RBI norms for Indian banks). The business model determines which metrics matter most.',
+      'Healthcare': 'Distinguish between sub-sectors: pharma (patent-driven, R&D-intensive), medtech (capex-heavy, device cycles), and health insurance (volume-driven, medical loss ratio). Each has a fundamentally different analytical framework.',
+      'AI & Technology': 'Identify the revenue model precisely — SaaS (recurring, predictable), hardware (cyclical, lumpy), or services (project-based, lower margin). This single classification determines which ratios are primary and which are irrelevant.',
+    },
   },
   {
     number: '02',
@@ -51,6 +56,11 @@ const STEPS = [
       'Secular tailwinds vs. cyclical upswings distinguished',
     ],
     warning: 'Do not conflate industry growth with company-level opportunity. A fast-growing market with low barriers is often more competitive, not less.',
+    sectorCallouts: {
+      'Financial Services': 'Regulatory environment is a first-order variable, not a footnote. For US banks, Basel III endgame and stress test results directly cap capital return capacity. For Indian banks, RBI guidelines on priority sector lending and capital adequacy ratios shape strategic options.',
+      'Healthcare': 'Regulatory approval timelines (FDA, EMA) are binary risk events that must be modelled explicitly. A Phase III trial failure or a Complete Response Letter from the FDA can remove 30–60% of an equity value overnight.',
+      'Industrials': 'Map exposure to the global capex cycle — is the company selling into infrastructure (government-funded, countercyclical) or industrial equipment (corporate-funded, procyclical)? This distinction determines defensiveness through a recession.',
+    },
   },
   {
     number: '03',
@@ -74,6 +84,11 @@ const STEPS = [
       'Free cash flow calculated and reconciled to net income',
       'Off-balance-sheet obligations quantified from footnotes',
     ],
+    sectorCallouts: {
+      'Financial Services': 'For banks, replace standard margin analysis with NIM (Net Interest Margin), NPL ratio, and CET1 Capital Ratio. Gross margin is not a meaningful concept for a bank. The income statement structure is fundamentally different — interest income and non-interest income are the two revenue lines.',
+      'Healthcare': 'R&D as a percentage of revenue is a first-order profitability metric, not a footnote item. Watch for one-time charges from patent cliff write-downs, litigation reserves, or pipeline impairments — these can distort the underlying margin picture significantly.',
+      'Consumer & Retail': 'Alongside standard margins, focus on same-store sales growth (organic demand proxy) and inventory turnover (operational efficiency). Rising inventory days relative to peers is an early warning of demand erosion or markdown risk.',
+    },
   },
   {
     number: '04',
@@ -94,6 +109,11 @@ const STEPS = [
       'Outlier ratios (>1 SD from peer median) flagged and explained',
       'Sector-specific primary ratio set applied',
     ],
+    sectorCallouts: {
+      'Financial Services': 'Price-to-Book is the primary valuation anchor for banks, not P/E. A bank trading below 1× book signals the market doubts stated asset values. Use ROE and ROA as the primary profitability metrics — operating margin is not meaningful when interest expense is a core revenue driver.',
+      'AI & Technology': 'EV/EBITDA and EV/Revenue are the standard multiples. P/E is often misleading for high-growth companies with heavy R&D investment or stock-based compensation. For pre-profit companies, use EV/Revenue or EV/Gross Profit instead.',
+      'Consumer & Retail': 'Asset turnover and working capital efficiency ratios (DSO, DIO, DPO, cash conversion cycle) are as important as margins for retailers. Negative working capital is often a sign of competitive strength in retail, not financial distress.',
+    },
   },
   {
     number: '05',
@@ -115,6 +135,10 @@ const STEPS = [
       'Growth-adjusted multiple (PEG or EV/EBITDA-to-growth) computed',
       'Re-rating catalysts documented with probability and timeline',
     ],
+    sectorCallouts: {
+      'Sub-sector discipline': 'Always compare within the same sub-sector. Do not compare a retail bank with an investment bank, or a drug developer with a medical device company — the business models, risk profiles, and appropriate valuation metrics are fundamentally different.',
+      'Indian & Emerging-Market Companies': 'For Indian-listed companies, compare with Indian peers first before applying global benchmarks. Accounting standard differences (Ind AS vs. IFRS vs. US GAAP), regulatory environments, and market structures make cross-geography comparisons unreliable without adjustment.',
+    },
   },
   {
     number: '06',
@@ -124,7 +148,7 @@ const STEPS = [
     tagColor: '#c4c7c9',
     body: [
       "Build a five-year explicit forecast period using bottom-up revenue drivers — volume, price, mix — not top-down percentage growth assumptions. Your forecast is only as good as the operating assumptions beneath it.",
-      "Derive the WACC from first principles: risk-free rate (use 10-year government bond yield), equity risk premium (Damodaran's country-adjusted estimate), beta (regressed against a relevant index, 5-year weekly), and after-tax cost of debt from the latest bond offering or credit facility.",
+      "Derive the WACC from first principles: risk-free rate (use 10-year government bond yield), equity risk premium (Damodaran's country-adjusted estimate), beta (regressed against a relevant index, 5-year weekly), and after-tax cost of debt from the latest bond offering or credit facility. Damodaran publishes free WACC estimates by sector and country at pages.stern.nyu.edu/~adamodar — use these as a calibration benchmark, not a substitute for your own derivation.",
       "Terminal value typically represents sixty to eighty percent of a DCF output. Apply both the Gordon Growth Model and an exit multiple method; if they diverge by more than twenty percent, your growth assumptions are inconsistent with the market.",
       "Run three scenarios minimum: base case (management guidance haircut by 15%), bull case (consensus analyst estimates), bear case (mean-reversion to sector median margins). Weight them explicitly: do not average equally.",
       "Perform a two-way sensitivity table on WACC and terminal growth rate. If your buy thesis only holds in a narrow band of that table, the conviction level should be reduced regardless of the base case output.",
@@ -138,6 +162,11 @@ const STEPS = [
       'Implied share price vs. current price gap documented',
     ],
     warning: 'A DCF output is not a price target. It is a sensitivity framework. Quote a range, not a point estimate, and always disclose your key assumptions.',
+    sectorCallouts: {
+      'WACC Reference': 'Use Damodaran\'s free sector-level WACC dataset as your starting calibration point: pages.stern.nyu.edu/~adamodar. Typical ranges: Financial Services 8–11%, Technology 9–12%, Healthcare 7–10%, Consumer 7–10%, Digital Platforms 9–13%. The Excel template\'s Sector Ratio Reference sheet includes this table.',
+      'Indian & Emerging-Market Companies': 'For Indian or other emerging-market companies, add a country risk premium (CRP) of approximately 2–3% to the base WACC. Damodaran publishes CRP by country at the same site. Ignoring the CRP understates the discount rate and overstates intrinsic value.',
+      'Terminal Growth Rate': 'The terminal growth rate must not exceed the long-run nominal GDP growth rate of the country where the company primarily generates cash flows. For the US and Europe: ≤ 2.5%. For India and high-growth emerging markets: ≤ 5%. A terminal growth rate above long-run GDP implies the company will eventually become larger than the entire economy.',
+    },
   },
   {
     number: '07',
@@ -160,6 +189,11 @@ const STEPS = [
       'Three specific, quantified risks included with probability and impact',
       'Note reviewed for logical consistency between thesis and valuation',
     ],
+    sectorCallouts: {
+      'Investment Thesis': 'Lead with the investment thesis in one sentence — Buy, Hold, or Sell and why. If you cannot articulate the thesis in one sentence, the research process is not complete. The thesis should contain: the company name, the recommendation, and the single most important reason.',
+      'Financial Services': 'Your key risks section for any financial institution must explicitly include: (1) credit risk — deterioration in loan book quality, (2) interest rate risk — NIM sensitivity to rate movements, and (3) regulatory risk — capital requirement changes or consent orders.',
+      'Reporting Standard': 'Always state the reporting standard (GAAP or IFRS) and the reporting currency in the header of your research note. For non-US companies, note any significant accounting policy differences from US GAAP that affect cross-company comparability — particularly revenue recognition, lease accounting, and goodwill treatment.',
+    },
   },
 ]
 
@@ -183,6 +217,10 @@ const SECTOR_RATIOS = {
   'Consumer Internet & Digital Platforms': {
     primary: ['Revenue Growth YoY', 'EBITDA Margin', 'FCF Margin', 'User Metrics', 'EV/Revenue'],
     avoid: ['P/E in early growth phase (often not profitable)', 'Traditional liquidity ratios'],
+  },
+  'Industrials': {
+    primary: ['ROIC', 'Order Backlog Growth', 'FCF Conversion', 'Operating Margin', 'EV/EBITDA'],
+    avoid: ['EV/Revenue (low margins distort)', 'Gross margin in isolation (mix is complex)'],
   },
 } as const
 
@@ -505,6 +543,55 @@ export default function ResearchPage() {
                               </p>
                             ))}
                           </div>
+
+                          {step.sectorCallouts && Object.keys(step.sectorCallouts).length > 0 && (
+                            <div style={{
+                              marginTop: 20,
+                              background: 'rgba(255,255,255,0.02)',
+                              border: '1px solid #2e2e30',
+                              borderLeft: `3px solid ${step.tagColor}60`,
+                              borderRadius: 7,
+                              padding: '14px 16px',
+                              display: 'flex',
+                              flexDirection: 'column',
+                              gap: 12,
+                            }}>
+                              <div style={{
+                                fontFamily: 'var(--font-mono)',
+                                fontSize: 9,
+                                textTransform: 'uppercase' as const,
+                                letterSpacing: '0.12em',
+                                color: step.tagColor,
+                                opacity: 0.7,
+                                marginBottom: 2,
+                              }}>
+                                Sector Notes
+                              </div>
+                              {Object.entries(step.sectorCallouts).map(([sector, note]) => (
+                                <div key={sector}>
+                                  <span style={{
+                                    fontFamily: 'var(--font-mono)',
+                                    fontSize: 10,
+                                    fontWeight: 600,
+                                    color: step.tagColor,
+                                    display: 'block',
+                                    marginBottom: 4,
+                                  }}>
+                                    {sector}
+                                  </span>
+                                  <p style={{
+                                    fontFamily: 'var(--font-sans)',
+                                    fontSize: 12.5,
+                                    color: '#8e9192',
+                                    lineHeight: 1.65,
+                                    margin: 0,
+                                  }}>
+                                    {note}
+                                  </p>
+                                </div>
+                              ))}
+                            </div>
+                          )}
 
                           <div style={{ marginTop: 22 }}>
                             <div style={{
