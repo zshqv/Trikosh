@@ -1,5 +1,38 @@
 'use client'
 
+const AUDIT_SECTIONS = [
+  {
+    number: '01',
+    title: 'Scope of Testing',
+    items: [
+      'Authentication flow (Clerk integration)',
+      'API route protection and unauthorized access attempts',
+      'Database connection security (SSL-enforced Neon.tech PostgreSQL)',
+      'Environment variable exposure checks',
+      'Dependency vulnerability scan',
+    ],
+  },
+  {
+    number: '02',
+    title: 'Findings & Resolutions',
+    items: [
+      'All API routes returning financial data are protected and return 401 for unauthenticated requests where applicable',
+      'Database credentials are stored exclusively as environment variables and are never exposed in client-side code',
+      'SSL is enforced on all database connections (sslmode=require)',
+      'No critical or high-severity vulnerabilities found in production dependencies at time of audit',
+    ],
+  },
+  {
+    number: '03',
+    title: 'Ongoing Practices',
+    items: [
+      'Dependencies reviewed on each pipeline update',
+      'No user financial data is stored — the platform only serves pre-computed public market data',
+      'Responsible disclosure: security issues can be reported via GitHub Issues marked [SECURITY]',
+    ],
+  },
+]
+
 const PILLARS = [
   {
     label: '01',
@@ -110,6 +143,76 @@ export default function SecurityPage() {
                   }}>
                     {pillar.body}
                   </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Security & Data Integrity audit summary */}
+      <section style={{ borderBottom: '1px solid #444748', padding: 'clamp(48px, 7vw, 80px) 0' }}>
+        <div style={{ maxWidth: '860px', margin: '0 auto', padding: '0 32px' }}>
+          <p style={{
+            fontFamily: 'var(--font-mono)', fontSize: '10px', textTransform: 'uppercase',
+            letterSpacing: '0.14em', color: '#8e9192', marginBottom: '16px',
+          }}>
+            Security Audit
+          </p>
+          <h2 style={{
+            fontFamily: 'var(--font-display)', fontSize: 'clamp(20px, 2.5vw, 28px)',
+            fontWeight: 700, color: '#e5e2e1', letterSpacing: '-0.02em',
+            lineHeight: 1.15, marginBottom: '10px',
+          }}>
+            Security &amp; Data Integrity
+          </h2>
+          <p style={{
+            fontFamily: 'var(--font-sans)', fontSize: '15px', color: '#8e9192',
+            lineHeight: 1.7, maxWidth: '600px', marginBottom: '36px',
+          }}>
+            A summary of the security review conducted on the Trikosh platform, covering authentication, database access, API protection, and dependency hygiene.
+          </p>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
+            {AUDIT_SECTIONS.map((section, i) => (
+              <div
+                key={section.number}
+                style={{
+                  display: 'flex', gap: '32px', alignItems: 'flex-start',
+                  padding: '28px 0',
+                  borderBottom: i < AUDIT_SECTIONS.length - 1 ? '1px solid rgba(68,71,72,0.4)' : 'none',
+                }}
+              >
+                <span style={{
+                  fontFamily: 'var(--font-mono)', fontSize: '10px', color: '#8e9192',
+                  paddingTop: '3px', flexShrink: 0, width: '24px', letterSpacing: '0.08em',
+                }}>
+                  {section.number}
+                </span>
+                <div>
+                  <p style={{
+                    fontFamily: 'var(--font-display)', fontSize: '16px', fontWeight: 700,
+                    color: '#e5e2e1', lineHeight: 1.25, marginBottom: '14px',
+                  }}>
+                    {section.title}
+                  </p>
+                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    {section.items.map((item, j) => (
+                      <li key={j} style={{
+                        fontFamily: 'var(--font-sans)', fontSize: '14px', color: '#c4c7c8',
+                        lineHeight: 1.65, paddingLeft: '16px', position: 'relative',
+                        maxWidth: '560px',
+                      }}>
+                        <span style={{
+                          position: 'absolute', left: 0, color: '#8e9192',
+                          fontSize: '10px', top: '5px',
+                        }}>
+                          ·
+                        </span>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
             ))}

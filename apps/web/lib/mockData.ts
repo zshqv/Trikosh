@@ -1571,6 +1571,11 @@ export const GLOSSARY: GlossaryTerm[] = [
     relatedTickers: ['JPM', 'BAC', 'GS', 'HSBC'],
   },
   {
+    term: 'Circuit Breaker',
+    definition: 'A mechanism on Indian stock exchanges (NSE/BSE) that automatically halts trading in a stock if its price moves beyond a predefined limit — typically 5%, 10%, or 20% — in a single session. Designed to prevent panic-driven crashes.',
+    analystNote: 'India uses both index-level circuit breakers (15%, 20%, 25% for the Nifty/Sensex) and stock-level price bands. A stock hitting its upper circuit means buyers outnumber sellers and no trades can execute above that price — a sign of very strong demand or speculative frenzy.',
+  },
+  {
     term: 'Churn Rate',
     definition: 'The percentage of customers or revenue lost in a given period. The single most important metric for assessing the sustainability of a subscription business.',
     analystNote: 'Best-in-class enterprise SaaS runs below 5% annual churn. Consumer subscription businesses like Netflix face 2–3% monthly churn. Net Revenue Retention above 120% means expansion outpaces churn entirely.',
@@ -1632,6 +1637,18 @@ export const GLOSSARY: GlossaryTerm[] = [
     relatedTickers: ['LLY', 'ABBV', 'MRK', 'UNH', 'NVS'],
   },
   {
+    term: 'Demat Account',
+    definition: 'A dematerialised account that holds shares and securities in electronic form in India, replacing physical share certificates. Required for trading on NSE and BSE. Equivalent to a brokerage/custodian account in Western markets.',
+    analystNote: 'India had over 150 million demat accounts as of 2024, a figure that quadrupled post-COVID as retail investor participation surged. Rising demat account openings are a leading indicator of retail equity market participation.',
+    relatedTickers: ['KOTAKBANK.NS', 'ICICIBANK.NS', 'HDB'],
+  },
+  {
+    term: 'Delivery Volume',
+    definition: 'The portion of total traded volume where shares are actually transferred to the buyer\'s demat account, as opposed to intraday trades that are squared off the same day. High delivery volume signals genuine investor interest rather than speculative activity.',
+    analystNote: 'Delivery percentage above 40–50% on heavy volume days is considered a signal of institutional accumulation. Conversely, very high volume with low delivery percentage signals speculative intraday trading with little long-term investor conviction.',
+    relatedTickers: ['RELIANCE.NS', 'DMART.NS', 'INFY'],
+  },
+  {
     term: 'Debt-to-Equity (D/E)',
     definition: "Total debt divided by shareholders' equity. Measures financial leverage and the degree to which a company finances operations through debt versus equity.",
     analystNote: 'Capital-intensive businesses like telcos and utilities run D/E of 2–4x; asset-light tech companies like Google run near zero. High D/E is not inherently bad if cash flows are stable and predictable enough to service debt comfortably.',
@@ -1669,6 +1686,12 @@ export const GLOSSARY: GlossaryTerm[] = [
     relatedTickers: ['MSFT', 'GOOGL', 'NVDA', 'COST', 'LLY'],
   },
   // ── F ─────────────────────────────────────────────────────────────────────
+  {
+    term: 'FII/FPI',
+    definition: 'Foreign Institutional Investor / Foreign Portfolio Investor — overseas entities (funds, pension managers, hedge funds) registered to invest in Indian securities markets. FII is the older term; FPI is the current SEBI designation post-2014.',
+    analystNote: 'FPI flows are a key macro indicator in India. Net FPI buying correlates with rupee strength and market momentum; FPI selling often precedes corrections. Monthly FPI data is published by SEBI and tracked obsessively by Indian market participants.',
+    relatedTickers: ['INFY', 'HDB', 'ICICIBANK.NS', 'KOTAKBANK.NS'],
+  },
   {
     term: 'Free Cash Flow (FCF) Margin',
     definition: 'Free cash flow as a percentage of revenue. The truest measure of a technology company\'s cash generation because it strips out non-cash accounting items.',
@@ -1753,6 +1776,18 @@ export const GLOSSARY: GlossaryTerm[] = [
     relatedTickers: ['NOW', 'MSFT', 'ADBE', 'ORCL', 'CRM'],
   },
   {
+    term: 'Nifty 50',
+    definition: 'The benchmark index of the National Stock Exchange (NSE) of India, comprising the 50 largest and most liquid Indian companies across 13 sectors. The primary reference index for institutional investors tracking Indian equities.',
+    analystNote: "The Nifty 50's sector composition is heavily weighted toward Financial Services (~35%), IT (~13%), and Energy (~12%). Understanding the index's sectoral skew is critical when interpreting India-specific FPI flows and comparing an Indian company's performance versus the benchmark.",
+    relatedTickers: ['INFY', 'HDB', 'ICICIBANK.NS', 'KOTAKBANK.NS', 'RELIANCE.NS'],
+  },
+  {
+    term: 'NSE/BSE',
+    definition: "National Stock Exchange (NSE) and Bombay Stock Exchange (BSE) — India's two primary stock exchanges. NSE's benchmark index is the Nifty 50; BSE's is the Sensex (30 companies). Most large-cap Indian companies are listed on both.",
+    analystNote: 'NSE accounts for approximately 90% of India\'s equity trading volume due to its superior technology infrastructure and liquidity. BSE is older (est. 1875, the first stock exchange in Asia) and has a larger number of listed companies — over 5,000 versus NSE\'s ~2,000.',
+    relatedTickers: ['INFY', 'HDB', 'ICICIBANK.NS', 'KOTAKBANK.NS', 'SUNPHARMA.NS'],
+  },
+  {
     term: 'Non-Performing Loans (NPL) Ratio',
     definition: 'The percentage of a bank\'s loan book where borrowers have stopped making payments for 90+ days. The primary asset-quality stress indicator for banks.',
     analystNote: 'Indian banks historically carried 8–10% NPL ratios post-2016 stress cycle; JPMorgan targets below 1%. Rising NPL is the earliest warning sign of a credit cycle turning.',
@@ -1795,6 +1830,12 @@ export const GLOSSARY: GlossaryTerm[] = [
     definition: 'Market capitalisation divided by annual revenue. Used for high-growth companies with minimal or negative earnings where P/E is meaningless.',
     analystNote: 'NVIDIA traded at 30–40x sales at peak AI enthusiasm; mature tech like MSFT trades at 12–15x. P/S compresses rapidly as growth decelerates, making entry valuation critical.',
     relatedTickers: ['NVDA', 'MSFT', 'ADBE', 'AMD', 'TSM'],
+  },
+  {
+    term: 'Promoter Holding',
+    definition: "The percentage of a company's shares held by its founders, founding families, or controlling entities (promoters). Disclosed quarterly in Indian regulatory filings. High promoter holding (above 50%) often signals founder confidence but reduces the free float available to public investors.",
+    analystNote: 'A declining promoter holding — especially via pledged share sales — is a key risk signal in Indian markets. Promoter pledge percentage (shares pledged as collateral for loans) is disclosed separately; above 30% pledged is considered high risk. SEBI mandates disclosure of promoter holding and pledge data.',
+    relatedTickers: ['DMART.NS', 'BRITANNIA.NS', 'SUNPHARMA.NS', 'KOTAKBANK.NS'],
   },
   // ── Q ─────────────────────────────────────────────────────────────────────
   {
@@ -1841,6 +1882,12 @@ export const GLOSSARY: GlossaryTerm[] = [
     relatedTickers: ['MSFT', 'ADBE', 'GOOGL', 'META', 'NOW'],
   },
   // ── S ─────────────────────────────────────────────────────────────────────
+  {
+    term: 'SEBI',
+    definition: "Securities and Exchange Board of India — India's capital markets regulator, established in 1992 under the SEBI Act. Equivalent to the SEC in the United States. Regulates stock exchanges, brokers, mutual funds, investment advisors, and listed companies.",
+    analystNote: "SEBI's regulatory actions directly affect listed Indian companies. Key areas: insider trading enforcement, promoter disclosure norms, IPO regulations, and increasingly, algorithmic trading oversight. SEBI circulars and consultation papers are primary sources for understanding regulatory risk for Indian-listed companies.",
+    relatedTickers: ['INFY', 'HDB', 'ICICIBANK.NS', 'KOTAKBANK.NS', 'DMART.NS'],
+  },
   {
     term: 'Same-Store Sales Growth (SSSG)',
     definition: 'Revenue growth from stores open for at least 12 months, excluding new openings. Isolates organic demand from expansion-driven growth.',

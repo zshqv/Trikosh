@@ -846,6 +846,38 @@ export default function CompanyDetailPage() {
             </p>
           </div>
         )}
+
+        {/* Data Notes — always visible, outside tab conditionals */}
+        <div style={{ marginTop: '48px', paddingTop: '20px', borderTop: '1px solid #1a1a1a' }}>
+          <p style={{
+            fontFamily: 'var(--font-mono)', fontSize: '9px', textTransform: 'uppercase',
+            letterSpacing: '0.12em', color: '#2a2a2a', marginBottom: '10px',
+          }}>
+            Data Notes
+          </p>
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '5px' }}>
+            {[
+              'Financial data is sourced from yFinance and may reflect a lag of 1–2 quarters behind the most recent filing.',
+              'US companies report under GAAP; non-US companies (marked IFRS) report under IFRS. Direct ratio comparisons across standards should be made with caution.',
+              'All non-USD figures are converted at the exchange rate prevailing at the time of the fiscal year end. Currency fluctuations may affect comparability.',
+              'Certain line items (e.g. Non-Interest Income for banks, R&D for Indian pharma) are structurally unavailable from the data source and will display as N/A.',
+            ].map((note, i) => (
+              <li key={i} style={{
+                fontFamily: 'var(--font-sans)', fontSize: '11px', color: '#2a2a2a',
+                lineHeight: 1.6, paddingLeft: '12px', position: 'relative',
+              }}>
+                <span style={{ position: 'absolute', left: 0 }}>·</span>
+                {note}
+              </li>
+            ))}
+          </ul>
+          <p style={{
+            fontFamily: 'var(--font-mono)', fontSize: '9px', color: '#2a2a2a',
+            marginTop: '10px', letterSpacing: '0.04em',
+          }}>
+            Data as of June 2026
+          </p>
+        </div>
       </div>
     </div>
   )
