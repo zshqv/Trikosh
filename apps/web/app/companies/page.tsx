@@ -1,21 +1,9 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { COMPANIES, MOCK_CARDS } from '@/lib/mockData'
 import type { Sector, CardData } from '@/lib/types'
-
-/* ── Navigation ────────────────────────────────────────────────────── */
-
-const NAV_LINKS = [
-  { label: 'Companies', href: '/companies' },
-  { label: 'Sectors',   href: '/sectors'   },
-  { label: 'Compare',   href: '/compare'   },
-  { label: 'Research',  href: '/research'  },
-  { label: 'Glossary',  href: '/glossary'  },
-  { label: 'About',     href: '/about'     },
-]
 
 /* ── Filter / sort options ─────────────────────────────────────────── */
 
@@ -96,8 +84,7 @@ const selectStyle: React.CSSProperties = {
 /* ── Page ──────────────────────────────────────────────────────────── */
 
 export default function CompaniesPage() {
-  const pathname  = usePathname()
-  const router    = useRouter()
+  const router = useRouter()
   const [search,  setSearch]  = useState('')
   const [sector,  setSector]  = useState<Sector | 'all'>('all')
   const [sort,    setSort]    = useState<SortOption>('pe_desc')
@@ -148,117 +135,7 @@ export default function CompaniesPage() {
   const sectorLabel = SECTOR_OPTIONS.find(o => o.value === sector)?.label ?? ''
 
   return (
-    <div style={{
-      display: 'flex',
-      height: 'calc(100vh - var(--nav-h))',
-      overflow: 'hidden',
-      backgroundColor: '#131315',
-    }}>
-
-      {/* ── Sidebar ──────────────────────────────────────────────── */}
-      <aside style={{
-        width: '256px',
-        flexShrink: 0,
-        borderRight: '1px solid #444749',
-        display: 'flex',
-        flexDirection: 'column',
-        backgroundColor: '#131315',
-        overflow: 'hidden',
-      }}>
-        {/* Wordmark */}
-        <div style={{
-          padding: '20px 20px 18px',
-          borderBottom: '1px solid rgba(68,71,73,0.5)',
-          flexShrink: 0,
-        }}>
-          <Link href="/" style={{ textDecoration: 'none' }}>
-            <span style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: '16px',
-              fontWeight: 700,
-              color: '#ffffff',
-              letterSpacing: '-0.01em',
-            }}>
-              Trikosh
-            </span>
-          </Link>
-        </div>
-
-        {/* Nav links */}
-        <nav style={{ flex: 1, padding: '8px 0', overflowY: 'auto' }}>
-          {NAV_LINKS.map(({ label, href }) => {
-            const active = pathname === href || (href !== '/' && pathname.startsWith(href + '/'))
-            return (
-              <Link
-                key={href}
-                href={href}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  padding: '9px 20px 9px 18px',
-                  fontFamily: 'var(--font-sans)',
-                  fontSize: '13px',
-                  fontWeight: active ? 500 : 400,
-                  color: active ? '#ffffff' : '#8e9192',
-                  textDecoration: 'none',
-                  backgroundColor: active ? '#353534' : 'transparent',
-                  borderLeft: active ? '2px solid #ffffff' : '2px solid transparent',
-                  transition: 'background-color 150ms ease, color 150ms ease',
-                }}
-                onMouseEnter={e => {
-                  if (!active) {
-                    const el = e.currentTarget as HTMLAnchorElement
-                    el.style.backgroundColor = 'rgba(255,255,255,0.04)'
-                    el.style.color = '#c4c7c8'
-                  }
-                }}
-                onMouseLeave={e => {
-                  if (!active) {
-                    const el = e.currentTarget as HTMLAnchorElement
-                    el.style.backgroundColor = 'transparent'
-                    el.style.color = '#8e9192'
-                  }
-                }}
-              >
-                {label}
-              </Link>
-            )
-          })}
-        </nav>
-
-        {/* Bottom links */}
-        <div style={{
-          flexShrink: 0,
-          borderTop: '1px solid rgba(68,71,73,0.5)',
-          padding: '10px 0',
-        }}>
-          {[
-            { label: 'Docs',   href: '#' },
-            { label: 'GitHub', href: 'https://github.com' },
-          ].map(({ label, href }) => (
-            <a
-              key={label}
-              href={href}
-              style={{
-                display: 'block',
-                padding: '8px 20px',
-                fontFamily: 'var(--font-sans)',
-                fontSize: '12px',
-                color: '#8e9192',
-                textDecoration: 'none',
-                transition: 'color 150ms ease',
-              }}
-              onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = '#c4c7c8' }}
-              onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = '#8e9192' }}
-            >
-              {label}
-            </a>
-          ))}
-        </div>
-      </aside>
-
-      {/* ── Main ─────────────────────────────────────────────────── */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', minWidth: 0 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - var(--nav-h))', overflow: 'hidden', backgroundColor: '#131315' }}>
 
         {/* Filter bar */}
         <div style={{
@@ -540,7 +417,6 @@ export default function CompaniesPage() {
             </tbody>
           </table>
         </div>
-      </div>
     </div>
   )
 }

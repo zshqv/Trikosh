@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { UserButton, SignedIn, SignedOut, SignInButton } from '@clerk/nextjs'
+import { GitBranch } from 'lucide-react'
 
 const NAV_LINKS = [
   { label: 'Home',      href: '/' },
@@ -109,6 +110,25 @@ export default function Navbar() {
               </Link>
             )
           })}
+
+          <a
+            href="https://github.com/zshqv/Trikosh"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '8px 10px',
+              color: '#8e9192',
+              transition: 'color 150ms ease',
+              cursor: 'pointer',
+            }}
+            onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = '#c4c7c8' }}
+            onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = '#8e9192' }}
+          >
+            <GitBranch size={16} strokeWidth={1.5} />
+          </a>
 
           <SignedOut>
             <SignInButton mode="modal">

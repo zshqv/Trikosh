@@ -4,9 +4,6 @@ import { useState } from 'react'
 import { motion, useReducedMotion } from 'motion/react'
 import TracingBeam from '@/components/aceternity/TracingBeam'
 import { Reveal } from '@/components/effects/Reveal'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { LayoutDashboard, List, PieChart, GitCompare, BookOpen, BookMarked, FileText, GitBranch, Info } from 'lucide-react'
 
 /* ── Step data — tagColors updated to muted palette ─────────────────── */
 
@@ -191,142 +188,15 @@ const SECTOR_RATIOS = {
 
 type SectorKey = keyof typeof SECTOR_RATIOS
 
-/* ── Sidebar nav definition ──────────────────────────────────────────── */
-
-const NAV_LINKS = [
-  { label: 'HOME',      href: '/',          Icon: LayoutDashboard },
-  { label: 'COMPANIES', href: '/companies', Icon: List            },
-  { label: 'SECTORS',   href: '/sectors',   Icon: PieChart        },
-  { label: 'COMPARE',   href: '/compare',   Icon: GitCompare      },
-  { label: 'RESEARCH',  href: '/research',  Icon: BookOpen        },
-  { label: 'GLOSSARY',  href: '/glossary',  Icon: BookMarked      },
-  { label: 'ABOUT',     href: '/about',     Icon: Info            },
-] as const
-
 /* ── Page ────────────────────────────────────────────────────────────── */
 
 export default function ResearchPage() {
-  const pathname = usePathname()
   const [activeStep, setActiveStep] = useState<string | null>(null)
   const [activeSector, setActiveSector] = useState<SectorKey | null>(null)
   const reduce = useReducedMotion()
 
   return (
-    <div className="flex min-h-screen bg-[#131315]">
-
-      {/* ── Sidebar ──────────────────────────────────────────────────── */}
-      <aside style={{
-        width: '256px',
-        flexShrink: 0,
-        height: '100vh',
-        position: 'sticky',
-        top: 0,
-        backgroundColor: '#131315',
-        borderRight: '1px solid #444749',
-        display: 'flex',
-        flexDirection: 'column',
-        overflow: 'hidden',
-        zIndex: 40,
-      }}>
-        {/* Wordmark + identity block */}
-        <div style={{ padding: '20px 20px 16px', borderBottom: '1px solid rgba(68,71,73,0.5)', flexShrink: 0 }}>
-          <Link href="/" style={{ textDecoration: 'none' }}>
-            <span style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: '17px',
-              fontWeight: 700,
-              color: '#ffffff',
-              letterSpacing: '-0.01em',
-              display: 'block',
-              marginBottom: '6px',
-            }}>
-              Trikosh
-            </span>
-          </Link>
-          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.12em', color: '#8e9193', margin: '0 0 2px' }}>
-            Institutional
-          </p>
-          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.08em', color: '#8e9193', margin: 0 }}>
-            ID: 8829-QX
-          </p>
-        </div>
-
-        {/* Nav links */}
-        <nav style={{ flex: 1, padding: '8px 0', overflowY: 'auto' }}>
-          {NAV_LINKS.map(({ label, href, Icon }) => {
-            const active = pathname === href || (href !== '/' && pathname.startsWith(href))
-            return (
-              <Link
-                key={href}
-                href={href}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '10px',
-                  padding: '9px 18px 9px 16px',
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '11px',
-                  letterSpacing: '0.06em',
-                  color: active ? '#ffffff' : '#c4c7c9',
-                  textDecoration: 'none',
-                  backgroundColor: active ? '#2a2a2c' : 'transparent',
-                  borderLeft: active ? '2px solid #ffffff' : '2px solid transparent',
-                  transition: 'background-color 150ms ease, color 150ms ease',
-                }}
-                onMouseEnter={e => {
-                  if (!active) {
-                    const el = e.currentTarget as HTMLAnchorElement
-                    el.style.backgroundColor = '#1c1b1d'
-                  }
-                }}
-                onMouseLeave={e => {
-                  if (!active) {
-                    const el = e.currentTarget as HTMLAnchorElement
-                    el.style.backgroundColor = 'transparent'
-                  }
-                }}
-              >
-                <Icon size={14} strokeWidth={1.5} />
-                {label}
-              </Link>
-            )
-          })}
-        </nav>
-
-        {/* Bottom links */}
-        <div style={{ flexShrink: 0, borderTop: '1px solid rgba(68,71,73,0.5)', padding: '10px 0' }}>
-          {([
-            { label: 'DOCS',   href: '#',                  Icon: FileText  },
-            { label: 'GITHUB', href: 'https://github.com', Icon: GitBranch },
-          ] as const).map(({ label, href, Icon }) => (
-            <a
-              key={label}
-              href={href}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                padding: '8px 18px',
-                fontFamily: 'var(--font-mono)',
-                fontSize: '11px',
-                letterSpacing: '0.06em',
-                color: '#8e9193',
-                textDecoration: 'none',
-                transition: 'color 150ms ease',
-              }}
-              onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = '#c4c7c9' }}
-              onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = '#8e9193' }}
-            >
-              <Icon size={14} strokeWidth={1.5} />
-              {label}
-            </a>
-          ))}
-        </div>
-      </aside>
-
-      {/* ── Main content ─────────────────────────────────────────────── */}
-      <main className="flex-1 overflow-auto">
-        <div style={{ background: '#131315', minHeight: '100vh', fontFamily: 'var(--font-sans)' }}>
+    <div style={{ background: '#131315', minHeight: '100vh', fontFamily: 'var(--font-sans)' }}>
 
           {/* Page header */}
           <div style={{ borderBottom: '1px solid #444749', backgroundColor: '#131315' }}>
@@ -702,7 +572,5 @@ export default function ResearchPage() {
             </TracingBeam>
           </div>
         </div>
-      </main>
-    </div>
   )
 }
