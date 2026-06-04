@@ -1,9 +1,9 @@
 ﻿import type { Company, CardData, GlossaryTerm, SectorSnapshot, ResearchKit } from './types'
 
 // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-// COMPANIES — 111 companies across 6 sectors (mirrors config.py exactly)
+// COMPANIES — 120 companies across 6 sectors (mirrors config.py exactly)
 // Sectors: Financial Services (21) | AI & Technology (20) | Healthcare (20)
-//          Consumer & Retail (20)  | Consumer Internet & Digital Platforms (20) | Industrials (10)
+//          Consumer & Retail (20)  | Consumer Internet & Digital Platforms (19) | Industrials (20)
 // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const COMPANIES: Company[] = [
 
@@ -116,9 +116,8 @@ export const COMPANIES: Company[] = [
   { ticker: 'SNAP',          exchange: 'NYSE',   name: 'Snap Inc.',                      sector: 'Consumer Internet & Digital Platforms', industry: 'Social Media',                  analyticalLens: 'The youth-skewed social platform under permanent monetisation pressure — Snap\'s ARPU versus peers illustrates the difficulty of building an advertising business on a platform where engagement does not translate cleanly into commercial intent.' },
   { ticker: 'GRAB',          exchange: 'NASDAQ', name: 'Grab Holdings Ltd.',             sector: 'Consumer Internet & Digital Platforms', industry: 'Super-App & Digital Platforms', analyticalLens: 'Southeast Asia\'s super-app — Grab\'s ride-hailing, food delivery, and financial services combination illustrates the capital intensity of building a multi-vertical platform across fragmented emerging markets.' },
   { ticker: 'TCOM',          exchange: 'NASDAQ', name: 'Trip.com Group Ltd.',            sector: 'Consumer Internet & Digital Platforms', industry: 'Online Travel',                 analyticalLens: 'China\'s dominant online travel platform going global — Trip.com\'s international expansion strategy illustrates how a domestic travel OTA leverages Chinese outbound tourism recovery to build a global platform.' },
-  { ticker: 'ZOMATO.NS',     exchange: 'NSE',    name: 'Zomato Ltd.',                    sector: 'Consumer Internet & Digital Platforms', industry: 'Food Delivery',                 analyticalLens: 'India\'s leading food delivery and quick commerce platform — Zomato\'s Blinkit hyperpurchase integration illustrates how a food delivery company pivots toward instant commerce to deepen consumer wallet share in urban India.' },
 
-  // ── Industrials (10) ────────────────────────────────────────────────────────
+  // ── Industrials (20) ────────────────────────────────────────────────────────
   { ticker: 'CAT',         exchange: 'NYSE',   name: 'Caterpillar Inc.',             sector: 'Industrials', industry: 'Construction & Mining Equipment',  analyticalLens: 'The global heavy equipment bellwether — Caterpillar\'s order backlog and dealer inventory cycles are the most reliable leading indicators for global construction and mining capex activity.' },
   { ticker: 'HON',         exchange: 'NASDAQ', name: 'Honeywell International Inc.', sector: 'Industrials', industry: 'Industrial Conglomerates',          analyticalLens: 'The diversified industrial technology platform — Honeywell\'s software-defined automation and aerospace units illustrate how a conglomerate can reposition around higher-margin technology services.' },
   { ticker: 'GE',          exchange: 'NYSE',   name: 'GE Aerospace',                 sector: 'Industrials', industry: 'Aerospace & Defence',               analyticalLens: 'The post-Vernova pure-play aerospace company — GE Aerospace\'s LEAP engine installed base and services revenue illustrate the razor-and-blades economics of aviation propulsion.' },
@@ -129,6 +128,16 @@ export const COMPANIES: Company[] = [
   { ticker: 'MMM',         exchange: 'NYSE',   name: '3M Co.',                       sector: 'Industrials', industry: 'Industrial Conglomerates',          analyticalLens: 'The diversified industrial technology company under litigation-driven restructuring — 3M\'s PFAS and Combat Arms liabilities and subsequent separation illustrate the financial and strategic cost of legacy product liability at conglomerate scale.' },
   { ticker: 'EMR',         exchange: 'NYSE',   name: 'Emerson Electric Co.',         sector: 'Industrials', industry: 'Industrial Automation',             analyticalLens: 'The process automation pure-play post-AspenTech integration — Emerson\'s software-enriched process control systems illustrate how an industrial company uses acquisitions to shift revenue mix toward higher-margin software and services.' },
   { ticker: 'DE',          exchange: 'NYSE',   name: 'Deere & Company',              sector: 'Industrials', industry: 'Agricultural Machinery',            analyticalLens: 'Precision agriculture monetised through data — Deere\'s JDLink telematics and John Deere Operations Center show how an equipment OEM builds a recurring software layer on top of its physical installed base.' },
+  { ticker: 'BA',           exchange: 'NYSE',   name: 'Boeing Co.',                   sector: 'Industrials', industry: 'Aerospace & Defence',               analyticalLens: 'The commercial aviation OEM in the most consequential quality crisis of its history — Boeing\'s 737 MAX and 787 production rate recovery illustrate how a duopoly manufacturer rebuilds trust, supply chain capacity, and investor credibility after catastrophic regulatory failure.' },
+  { ticker: 'EADSY',        exchange: 'OTC',    name: 'Airbus SE',                    sector: 'Industrials', industry: 'Aerospace & Defence',               analyticalLens: 'Boeing\'s only serious commercial rival — Airbus\'s A320neo backlog and production ramp illustrate how a duopoly OEM manages a decade-long order pipeline while constrained by engine supplier bottlenecks and supply chain fragmentation.' },
+  { ticker: 'LMT',          exchange: 'NYSE',   name: 'Lockheed Martin Corp.',        sector: 'Industrials', industry: 'Aerospace & Defence',               analyticalLens: 'The world\'s largest defence contractor — Lockheed\'s F-35 programme and hypersonic weapons pipeline illustrate how a defence prime builds multi-decade revenue visibility through platform lock-in and lifecycle sustainment contracts.' },
+  { ticker: 'RTX',          exchange: 'NYSE',   name: 'RTX Corporation',              sector: 'Industrials', industry: 'Aerospace & Defence',               analyticalLens: 'The jet engine and defence systems conglomerate — RTX\'s Pratt & Whitney GTF engine fleet inspection crisis illustrates how a single engineering defect can generate multi-billion provisioning charges and reshape the economics of an entire commercial aviation programme.' },
+  { ticker: 'PH',           exchange: 'NYSE',   name: 'Parker Hannifin Corp.',        sector: 'Industrials', industry: 'Industrial Machinery',              analyticalLens: 'The motion and control technology platform — Parker Hannifin\'s Meggitt acquisition integration illustrates how an industrial serial acquirer compounds returns by folding aerospace and industrial technology businesses into a high-margin aftermarket services model.' },
+  { ticker: 'ETN',          exchange: 'NYSE',   name: 'Eaton Corporation plc',        sector: 'Industrials', industry: 'Electrical Equipment',              analyticalLens: 'The power management company at the intersection of electrification and data centre demand — Eaton\'s electrical segment growth illustrates how AI infrastructure buildout and energy transition create a structural multi-year demand cycle for power distribution equipment.' },
+  { ticker: 'BEL.NS',       exchange: 'NSE',    name: 'Bharat Electronics Ltd.',      sector: 'Industrials', industry: 'Defence Electronics',               analyticalLens: 'India\'s premier state-owned defence electronics company — BEL\'s order backlog from indigenous defence programmes illustrates how India\'s military modernisation and Make in India policy create captive long-cycle revenues for domestic defence prime suppliers.' },
+  { ticker: 'APOLLOTYRE.NS',exchange: 'NSE',    name: 'Apollo Tyres Ltd.',            sector: 'Industrials', industry: 'Auto Components',                   analyticalLens: 'India\'s leading tyre manufacturer with a European growth strategy — Apollo\'s capacity expansion and premium product mix shift illustrate how an emerging market auto components company builds a global brand through inorganic growth and product range extension.' },
+  { ticker: 'CUMMINSIND.NS',exchange: 'NSE',    name: 'Cummins India Ltd.',           sector: 'Industrials', industry: 'Industrial Machinery',              analyticalLens: 'The Indian subsidiary of the global engine manufacturer — Cummins India\'s power generation and industrial engine businesses illustrate how a multinational\'s listed local subsidiary benefits from domestic infrastructure spending and export demand through the parent\'s global channels.' },
+  { ticker: 'SBGSY',        exchange: 'OTC',    name: 'Schneider Electric SE',        sector: 'Industrials', industry: 'Electrical Equipment',              analyticalLens: 'The global leader in energy management and industrial automation — Schneider\'s EcoStruxure platform and data centre power segment illustrate how an electrical equipment company repositions around software and services to capitalise on the energy transition and AI infrastructure buildout.' },
 ]
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -177,7 +186,7 @@ export const SECTOR_SNAPSHOTS: SectorSnapshot[] = [
   },
   {
     sector: 'Consumer Internet & Digital Platforms',
-    companyCount: 20,
+    companyCount: 19,
     avgGrossMargin: 0.54,
     avgROE: 0.164,
     avgRevenueGrowth: 0.118,
@@ -187,7 +196,7 @@ export const SECTOR_SNAPSHOTS: SectorSnapshot[] = [
   },
   {
     sector: 'Industrials',
-    companyCount: 10,
+    companyCount: 20,
     avgGrossMargin: 0.34,
     avgROE: 0.148,
     avgRevenueGrowth: 0.058,
@@ -1512,19 +1521,6 @@ export const MOCK_CARDS: CardData[] = [
     sparkline: [0.14, 0.16, 0.18, 0.20, 0.22, 0.248],
     source: { source: 'Annual Report', standard: 'IFRS', period: 'FY2024', updatedAt: '2025-03-18', currency: 'USD' },
   },
-  {
-    company: COMPANIES.find(c => c.ticker === 'ZOMATO.NS')!,
-    primaryMetric:   { label: 'Adj. EBITDA Margin',value: 0.028,  unit: 'PCT',      period: 'FY2024', delta:  0.068 },
-    secondaryMetric: { label: 'GOV Growth',        value: 0.688,  unit: 'PCT',      period: 'FY2024', delta:  0.248 },
-    ratios: [
-      { label: 'P/E',        value: 0,     unit: 'MULTIPLE', period: 'FY2024' },
-      { label: 'Blinkit GOV',value: 1.2,   unit: 'USD',     period: 'FY2024' },
-      { label: 'Rev Growth', value: 0.748, unit: 'PCT',      period: 'FY2024' },
-      { label: 'MTU Growth', value: 0.228, unit: 'PCT',      period: 'FY2024' },
-    ],
-    sparkline: [-0.08, -0.04, 0.00, 0.01, 0.02, 0.028],
-    source: { source: 'Annual Report', standard: 'IFRS', period: 'FY2024', updatedAt: '2024-05-13', currency: 'USD' },
-  },
 ]
 
 // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
@@ -1555,7 +1551,7 @@ export const GLOSSARY: GlossaryTerm[] = [
     term: 'Burn Rate',
     definition: 'The rate at which a company spends its cash reserves in excess of revenue. Relevant for pre-profitability platforms and early-stage digital businesses.',
     analystNote: 'Burn rate determines runway. A company with $500M cash burning $50M per month has 10 months of runway. Investors watch burn rate inflection points — decelerating burn before profitability is the key re-rating catalyst.',
-    relatedTickers: ['ZOMATO.NS', 'SNAP', 'DASH'],
+    relatedTickers: ['GRAB', 'SNAP', 'DASH'],
   },
   // ── C ─────────────────────────────────────────────────────────────────────
   {
@@ -1584,8 +1580,8 @@ export const GLOSSARY: GlossaryTerm[] = [
   {
     term: 'Contribution Margin',
     definition: 'Revenue minus variable costs, expressed as a percentage of revenue. Measures the profitability of each incremental unit of business before fixed cost allocation.',
-    analystNote: 'Zomato (ZOMATO.NS) and food delivery platforms track contribution margin per order obsessively — achieving positive contribution margin per order is the first milestone before targeting overall profitability.',
-    relatedTickers: ['ZOMATO.NS', 'MELI', 'SHOP', 'AMZN', 'DASH'],
+    analystNote: 'DoorDash (DASH) and food delivery platforms track contribution margin per order obsessively — achieving positive contribution margin per order is the first milestone before targeting overall profitability.',
+    relatedTickers: ['DASH', 'MELI', 'SHOP', 'AMZN', 'UBER'],
   },
   {
     term: 'Cost-to-Income Ratio',
@@ -1622,7 +1618,7 @@ export const GLOSSARY: GlossaryTerm[] = [
     term: 'Daily Active Users (DAU)',
     definition: 'The number of unique users who engage with a platform on any given day. The primary engagement health metric for social and consumer internet platforms.',
     analystNote: "Meta's Family DAP exceeded 3.3 billion in 2024. Plateauing DAU before monetisation matures is the classic growth trap — the platform has to extract more from existing users.",
-    relatedTickers: ['META', 'GOOGL', 'NFLX', 'SHOP', 'ZOMATO.NS'],
+    relatedTickers: ['META', 'GOOGL', 'NFLX', 'SHOP', 'GRAB'],
   },
   {
     term: 'DAU/MAU Ratio',
@@ -1754,7 +1750,7 @@ export const GLOSSARY: GlossaryTerm[] = [
     term: 'Monthly Active Users (MAU)',
     definition: 'Unique users active on a platform within a 30-day window. Broader than DAU and typically used for platforms with lower-frequency engagement patterns.',
     analystNote: 'Snapchat and Pinterest report MAU because daily engagement is lower than Meta\'s core apps. Always compare DAU/MAU ratio alongside MAU to assess stickiness.',
-    relatedTickers: ['META', 'GOOGL', 'NFLX', 'AMZN', 'ZOMATO.NS'],
+    relatedTickers: ['META', 'GOOGL', 'NFLX', 'AMZN', 'GRAB'],
   },
   // ── N ─────────────────────────────────────────────────────────────────────
   {
@@ -1971,7 +1967,7 @@ export const RESEARCH_KITS: ResearchKit[] = [
     title: 'Platform Economics',
     description: 'Understand how marketplace businesses build network effects, set take rates, and move from hyper-growth to profitability.',
     sector: 'Consumer Internet & Digital Platforms',
-    tickers: ['AMZN', 'MELI', 'SHOP', 'ZOMATO.NS'],
+    tickers: ['AMZN', 'MELI', 'SHOP', 'GRAB'],
     metrics: ['GMV Growth', 'Take Rate', 'Contribution Margin', 'EBITDA Margin'],
   },
 ]

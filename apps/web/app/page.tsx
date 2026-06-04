@@ -9,8 +9,8 @@ import { NumberTicker } from '@/components/ui/number-ticker'
 /* ── Data ─────────────────────────────────────────────────────────── */
 
 const STATS = [
-  { value: 102, label: 'Companies',    startValue: 90 },
-  { value: 5,   label: 'Sectors',      startValue: 0  },
+  { value: 120, label: 'Companies',    startValue: 102 },
+  { value: 6,   label: 'Sectors',      startValue: 0  },
   { value: 15,  label: 'Ratios tracked', startValue: 0 },
 ]
 
@@ -29,11 +29,12 @@ const JPM_RATIOS = [
 ]
 
 const SECTORS_COVERED = [
-  { name: 'Financial Services',                       count: 20, n: '01' },
-  { name: 'AI & Technology',                          count: 22, n: '02' },
+  { name: 'Financial Services',                       count: 21, n: '01' },
+  { name: 'AI & Technology',                          count: 20, n: '02' },
   { name: 'Healthcare & Pharmaceuticals',             count: 20, n: '03' },
   { name: 'Consumer & Retail',                        count: 20, n: '04' },
-  { name: 'Consumer Internet & Digital Platforms',    count: 20, n: '05' },
+  { name: 'Consumer Internet & Digital Platforms',    count: 19, n: '05' },
+  { name: 'Industrials',                              count: 20, n: '06' },
 ]
 
 const STEPS = [
@@ -58,7 +59,7 @@ const BENTO_SECTORS = [
   {
     n: '01',
     name: 'Financial Services',
-    count: 20,
+    count: 21,
     description: 'Banks, asset managers, insurance, exchanges',
     metrics: 'ROE · NIM · CET1 Ratio',
     href: '/sectors',
@@ -67,7 +68,7 @@ const BENTO_SECTORS = [
   {
     n: '02',
     name: 'AI & Technology',
-    count: 22,
+    count: 20,
     description: 'Hyperscalers, semiconductors, enterprise software',
     metrics: 'Rev Growth · P/S · R&D%',
     href: '/sectors',
@@ -94,11 +95,20 @@ const BENTO_SECTORS = [
   {
     n: '05',
     name: 'Consumer Internet & Digital Platforms',
-    count: 20,
+    count: 19,
     description: 'Social, marketplaces, streaming, gaming — companies monetised through attention or transactions',
     metrics: 'MAU · ARPU · CAC/LTV',
     href: '/sectors',
-    span: 3,
+    span: 2,
+  },
+  {
+    n: '06',
+    name: 'Industrials',
+    count: 20,
+    description: 'Aerospace & defence, industrial automation, power management, engineering conglomerates',
+    metrics: 'Order Backlog · ROIC · FCF Conv.',
+    href: '/sectors',
+    span: 1,
   },
 ]
 
@@ -196,7 +206,7 @@ export default function LandingPage() {
                 display: 'inline-block',
                 flexShrink: 0,
               }} />
-              102 Companies · 5 Sectors · Open Research
+              120 Companies · 6 Sectors · Open Research
             </span>
           </div>
 
@@ -211,7 +221,7 @@ export default function LandingPage() {
             maxWidth: 840,
             margin: '0 0 24px',
           }}>
-            Five years of financial data on 102 companies,{' '}
+            Five years of financial data on 120 companies,{' '}
             <span style={{ color: '#8e9192' }}>structured so you can actually learn from it.</span>
           </h1>
 
@@ -515,7 +525,7 @@ export default function LandingPage() {
                   Coverage by sector
                 </p>
                 <p style={{ fontFamily: 'var(--font-sans)', fontSize: '11.5px', color: '#8e9192', margin: 0 }}>
-                  102 companies across 5 analytical frameworks
+                  120 companies across 6 analytical frameworks
                 </p>
               </div>
 
@@ -804,7 +814,7 @@ export default function LandingPage() {
             lineHeight: 1.75,
             margin: '0 0 40px',
           }}>
-            Start with Goldman Sachs or browse all 102 companies across five sectors.
+            Start with Goldman Sachs or browse all 120 companies across six sectors.
             Everything is structured, labelled, and free.
           </p>
 
