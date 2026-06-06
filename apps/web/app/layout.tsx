@@ -42,6 +42,7 @@ export const metadata: Metadata = {
   },
 }
 
+// SECURITY: Clerk secret key is server-only. Only publishable key used client-side.
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <ClerkProvider>
