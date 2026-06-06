@@ -3,6 +3,10 @@
  */
 import { Pool, QueryResultRow } from 'pg'
 
+if (!process.env.DATABASE_URL) {
+  throw new Error('DATABASE_URL environment variable is not set')
+}
+
 declare global {
   // eslint-disable-next-line no-var
   var _trikoshPool: Pool | undefined
@@ -14,7 +18,7 @@ function createPool(): Pool {
   if (connectionString) {
     return new Pool({
       connectionString,
-      ssl: { rejectUnauthorized: false },
+      ssl: { rejectUnauthorized: true },
       max:                     10,
       idleTimeoutMillis:       30_000,
       connectionTimeoutMillis: 5_000,
@@ -27,7 +31,7 @@ function createPool(): Pool {
     database: process.env.DB_NAME     ?? 'trikosh',
     user:     process.env.DB_USER     ?? 'root',
     password: process.env.DB_PASSWORD ?? '',
-    ssl: { rejectUnauthorized: false },
+    ssl: { rejectUnauthorized: true },
     max:                     10,
     idleTimeoutMillis:       30_000,
     connectionTimeoutMillis: 5_000,
