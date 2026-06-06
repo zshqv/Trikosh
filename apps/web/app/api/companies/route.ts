@@ -58,7 +58,7 @@ export async function GET(request: NextRequest) {
     )
     return NextResponse.json({ companies, total })
   } catch (err) {
-    console.error('[GET /api/companies] DB error:', err)
+    console.error('Internal server error')
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

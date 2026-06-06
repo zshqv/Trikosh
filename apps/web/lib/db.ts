@@ -11,9 +11,6 @@ declare global {
 function createPool(): Pool {
   const connectionString = process.env.DATABASE_URL
 
-  console.log('[db.ts] DATABASE_URL present:', !!connectionString)
-  console.log('[db.ts] DATABASE_URL starts with:', connectionString?.substring(0, 30))
-
   if (connectionString) {
     return new Pool({
       connectionString,
