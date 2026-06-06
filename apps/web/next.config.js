@@ -34,6 +34,13 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  images: {
+    // No external images are used in this app. An empty remotePatterns array
+    // prevents the /_next/image optimizer from making outbound requests to
+    // arbitrary domains (mitigates GHSA-9g9p-9gw9-jx7f). If you add next/image
+    // components later, add trusted hostnames here rather than using domains:[].
+    remotePatterns: [],
+  },
   async headers() {
     return [
       {
