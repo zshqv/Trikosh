@@ -1,3 +1,5 @@
+// RATE LIMIT NOTE: This route is public. Add Upstash rate limiting if abuse is detected.
+
 /**
  * GET /api/companies/[ticker]
  *
@@ -131,7 +133,7 @@ export async function GET(
   } catch (err) {
     console.error(`[GET /api/companies/${ticker}] DB error:`, err)
     return NextResponse.json(
-      { error: 'Failed to fetch company data', detail: String(err) },
+      { error: 'Internal server error' },
       { status: 500 }
     )
   }

@@ -1,3 +1,6 @@
+// SECURITY: This debug route is protected by Clerk authentication (not in public routes).
+// Remove this endpoint before promoting to a customer-facing production environment.
+// It must never be made public — it reveals database connectivity information.
 import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";

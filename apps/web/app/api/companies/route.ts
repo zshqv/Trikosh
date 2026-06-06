@@ -1,3 +1,5 @@
+// RATE LIMIT NOTE: This route is public. Add Upstash rate limiting if abuse is detected.
+
 /**
  * GET /api/companies
  *
@@ -58,7 +60,7 @@ export async function GET(request: NextRequest) {
   } catch (err) {
     console.error('[GET /api/companies] DB error:', err)
     return NextResponse.json(
-      { error: 'Failed to fetch companies', detail: String(err) },
+      { error: 'Internal server error' },
       { status: 500 }
     )
   }

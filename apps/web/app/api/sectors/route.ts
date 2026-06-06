@@ -1,3 +1,4 @@
+// RATE LIMIT NOTE: This route is public. Add Upstash rate limiting if abuse is detected.
 import { NextResponse } from 'next/server'
 import type { Sector } from '@/lib/types'
 

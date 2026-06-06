@@ -1,3 +1,4 @@
+// RATE LIMIT NOTE: This route requires Clerk auth. Add rate limiting if download abuse is detected.
 import { NextResponse } from "next/server";
 import * as XLSX from "xlsx";
 
