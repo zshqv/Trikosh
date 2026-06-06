@@ -186,11 +186,12 @@ const DEFAULT_QUESTIONS = [
 
 /* ─── Skeleton primitives ───────────────────────────────────────────────── */
 
-function Sk({ w, h, rounded = 4, className = '' }: {
+function Sk({ w, h, rounded = 4, className = '', style }: {
   w?: string | number
   h?: string | number
   rounded?: number
   className?: string
+  style?: React.CSSProperties
 }) {
   return (
     <div
@@ -201,6 +202,7 @@ function Sk({ w, h, rounded = 4, className = '' }: {
         backgroundColor: 'rgba(255,255,255,0.05)',
         borderRadius: `${rounded}px`,
         flexShrink: 0,
+        ...style,
       }}
     />
   )

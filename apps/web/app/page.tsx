@@ -442,7 +442,7 @@ export default function LandingPage() {
                         fontSize: '11px',
                         color: '#e5e2e1',
                       }}
-                      formatter={(v: number) => [`$${v}B`, 'Revenue']}
+                      formatter={(v) => (typeof v === 'number' ? [`$${v}B`, 'Revenue'] : ['—', 'Revenue'])}
                     />
                     <Bar dataKey="value" fill="#e5e2e1" radius={[2, 2, 0, 0]} />
                   </BarChart>

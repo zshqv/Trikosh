@@ -36,6 +36,7 @@ function buildCardData(ticker: string): CardData {
     'Healthcare':                            { primary: 'Gross Margin',      secondary: 'R&D as % Revenue',        sparkline: [0.58, 0.60, 0.61, 0.62, 0.63, 0.63] },
     'Consumer & Retail':                     { primary: 'Gross Margin',      secondary: 'Same-Store Sales Growth', sparkline: [0.32, 0.33, 0.34, 0.33, 0.35, 0.36] },
     'Consumer Internet & Digital Platforms': { primary: 'Revenue Growth YoY', secondary: 'EBITDA Margin',         sparkline: [0.20, 0.25, 0.30, 0.35, 0.38, 0.40] },
+    'Industrials':                           { primary: 'Operating Margin',   secondary: 'Revenue Growth YoY',  sparkline: [0.08, 0.09, 0.10, 0.10, 0.11, 0.11] },
   }
   const def = sectorDefaults[company.sector]
   return {
@@ -58,6 +59,13 @@ function fmtGrossMargin(card: CardData): string {
   if (fromRatios) return (fromRatios.value * 100).toFixed(1) + '%'
   if (card.primaryMetric.label === 'Gross Margin') return (card.primaryMetric.value * 100).toFixed(1) + '%'
   if (card.secondaryMetric?.label === 'Gross Margin') return (card.secondaryMetric.value * 100).toFixed(1) + '%'
+  return '—'
+}
+
+function fmtROE(card: CardData): string {
+  const roe = card.ratios.find(r => r.label === 'ROE')
+  if (roe) return (roe.value * 100).toFixed(1) + '%'
+  if (card.primaryMetric.label === 'ROE') return (card.primaryMetric.value * 100).toFixed(1) + '%'
   return '—'
 }
 
