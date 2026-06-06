@@ -47,6 +47,17 @@ const nextConfig = {
         source: '/(.*)',
         headers: securityHeaders,
       },
+      {
+        // Explicit CORS restriction for all API routes.
+        // No wildcard Access-Control-Allow-Origin was found during audit —
+        // this rule makes the restriction positive and enforceable.
+        source: '/api/(.*)',
+        headers: [
+          { key: 'Access-Control-Allow-Origin', value: 'https://trikosh.vercel.app' },
+          { key: 'Access-Control-Allow-Methods', value: 'GET, OPTIONS' },
+          { key: 'Access-Control-Allow-Headers', value: 'Content-Type, Authorization' },
+        ],
+      },
     ]
   },
 }
