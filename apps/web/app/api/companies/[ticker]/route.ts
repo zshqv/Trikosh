@@ -131,7 +131,7 @@ export async function GET(
     })
 
   } catch (err) {
-    console.error('Internal server error')
+    console.error('[API /api/companies/[ticker]]', err)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
