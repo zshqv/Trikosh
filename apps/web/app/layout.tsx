@@ -34,11 +34,18 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: { default: 'Trikosh', template: '%s · Trikosh' },
   description:
-    'Open-source financial research infrastructure. Standardised data for 100+ companies across Financial Services, AI & Technology, and Healthcare. Free for students and CFA candidates.',
+    'Trikosh — Open-source financial research infrastructure. Standardised historical data for 120+ companies across 6 sectors. Built for students who can\'t afford Bloomberg.',
   openGraph: {
     title: 'Trikosh',
-    description: 'Open financial research infrastructure for serious students.',
+    description: 'Open-source financial research infrastructure. Standardised historical data for 120+ companies across 6 sectors. Built for students who can\'t afford Bloomberg.',
+    url: 'https://trikosh.vercel.app',
+    siteName: 'Trikosh',
     type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Trikosh',
+    description: 'Open-source financial research infrastructure. Standardised historical data for 120+ companies across 6 sectors.',
   },
 }
 
