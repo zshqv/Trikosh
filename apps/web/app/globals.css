@@ -164,6 +164,18 @@
   html.cursor-ready * {
     cursor: none !important;
   }
+
+  html.cursor-ready a,
+  html.cursor-ready button,
+  html.cursor-ready [role="button"],
+  html.cursor-ready input,
+  html.cursor-ready select,
+  html.cursor-ready textarea,
+  html.cursor-ready label,
+  html.cursor-ready [tabindex],
+  html.cursor-ready summary {
+    cursor: pointer !important;
+  }
 }
 
 /* ------------------------------------------------------------------ */
