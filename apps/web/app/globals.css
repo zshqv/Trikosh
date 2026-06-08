@@ -160,9 +160,11 @@
 /*  Custom cursor                                                       */
 /* ------------------------------------------------------------------ */
 @media (pointer: fine) {
-  html.cursor-ready,
-  html.cursor-ready * {
-    cursor: none !important;
+  html.cursor-ready {
+    cursor: none;
+  }
+  html.cursor-ready *:not(a):not(button):not(input):not(select):not(textarea):not([role="button"]):not([tabindex]):not(label):not(summary) {
+    cursor: none;
   }
 
   html.cursor-ready a,
