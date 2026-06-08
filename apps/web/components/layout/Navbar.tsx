@@ -19,6 +19,7 @@ const NAV_LINKS = [
 export default function Navbar() {
   const pathname = usePathname()
   const [scrolled, setScrolled] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8)
@@ -26,144 +27,310 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  // Close menu on route change
+  useEffect(() => { setMenuOpen(false) }, [pathname])
+
+  // Prevent body scroll when menu open
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [menuOpen])
+
   function isActive(href: string) {
     if (href === '/') return pathname === '/'
     return pathname === href || pathname.startsWith(href + '/')
   }
 
   return (
-    <nav
-      style={{
-        position: 'sticky',
-        top: 0,
-        zIndex: 50,
-        width: '100%',
-        height: 'var(--nav-h)',
-        backgroundColor: scrolled ? 'rgba(19,19,19,0.8)' : '#131313',
-        backdropFilter: scrolled ? 'blur(12px)' : 'none',
-        WebkitBackdropFilter: scrolled ? 'blur(12px)' : 'none',
-        borderBottom: '1px solid #444748',
-        transition: 'background-color 200ms ease, backdrop-filter 200ms ease',
-        display: 'flex',
-        alignItems: 'center',
-      }}
-    >
-      <div
+    <>
+      <nav
         style={{
-          maxWidth: '1280px',
-          margin: '0 auto',
-          padding: '0 24px',
+          position: 'sticky',
+          top: 0,
+          zIndex: 50,
           width: '100%',
+          height: 'var(--nav-h)',
+          backgroundColor: scrolled ? 'rgba(19,19,19,0.8)' : '#131313',
+          backdropFilter: scrolled ? 'blur(12px)' : 'none',
+          WebkitBackdropFilter: scrolled ? 'blur(12px)' : 'none',
+          borderBottom: '1px solid #444748',
+          transition: 'background-color 200ms ease',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'space-between',
         }}
       >
-        {/* Wordmark */}
-        <Link href="/" style={{ textDecoration: 'none', flexShrink: 0 }}>
-          <span style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: '17px',
-            fontWeight: 700,
-            color: '#ffffff',
-            letterSpacing: '-0.01em',
-          }}>
-            Trikosh
-          </span>
-        </Link>
+        <div
+          style={{
+            maxWidth: '1280px',
+            margin: '0 auto',
+            padding: '0 24px',
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+        >
+          {/* Wordmark */}
+          <Link href="/" style={{ textDecoration: 'none', flexShrink: 0 }}>
+            <span style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: '17px',
+              fontWeight: 700,
+              color: '#ffffff',
+              letterSpacing: '-0.01em',
+            }}>
+              Trikosh
+            </span>
+          </Link>
 
-        {/* Nav links */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
-          {NAV_LINKS.map(({ label, href }) => {
+          {/* Desktop nav links */}
+          <div className="hide-on-mobile" style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
+            {NAV_LINKS.map(({ label, href }) => {
+              const active = isActive(href)
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  style={{
+                    position: 'relative',
+                    fontFamily: 'var(--font-sans)',
+                    fontSize: '11px',
+                    fontWeight: active ? 500 : 400,
+                    color: active ? '#ffffff' : '#8e9192',
+                    padding: '8px 10px',
+                    textDecoration: 'none',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.1em',
+                    transition: 'color 150ms ease',
+                  }}
+                  onMouseEnter={e => { if (!active) (e.currentTarget as HTMLAnchorElement).style.color = '#c4c7c8' }}
+                  onMouseLeave={e => { if (!active) (e.currentTarget as HTMLAnchorElement).style.color = '#8e9192' }}
+                >
+                  {label}
+                  {active && (
+                    <span style={{
+                      position: 'absolute',
+                      left: 10,
+                      right: 10,
+                      bottom: 2,
+                      height: '1px',
+                      backgroundColor: '#ffffff',
+                      display: 'block',
+                    }} />
+                  )}
+                </Link>
+              )
+            })}
+
+            
+              href="https://github.com/zshqv/Trikosh"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '8px 10px',
+                color: '#8e9192',
+                transition: 'color 150ms ease',
+                cursor: 'pointer',
+              }}
+              onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = '#c4c7c8' }}
+              onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = '#8e9192' }}
+            >
+              <GitBranch size={16} strokeWidth={1.5} />
+            </a>
+
+            <SignedOut>
+              <SignInButton mode="modal">
+                <button
+                  style={{
+                    fontFamily: 'var(--font-sans)',
+                    fontSize: '11px',
+                    fontWeight: 600,
+                    color: '#000000',
+                    border: '1px solid #ffffff',
+                    borderRadius: '4px',
+                    padding: '6px 14px',
+                    marginLeft: '8px',
+                    backgroundColor: '#ffffff',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.08em',
+                    whiteSpace: 'nowrap',
+                    transition: 'opacity 150ms',
+                    cursor: 'pointer',
+                  }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.opacity = '0.85' }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.opacity = '1' }}
+                >
+                  Sign in
+                </button>
+              </SignInButton>
+            </SignedOut>
+
+            <SignedIn>
+              <div style={{ marginLeft: '12px' }}>
+                <UserButton afterSignOutUrl="/" />
+              </div>
+            </SignedIn>
+          </div>
+
+          {/* Mobile right side: auth + hamburger */}
+          <div className="show-on-mobile" style={{ display: 'none', alignItems: 'center', gap: '12px' }}>
+            <SignedIn>
+              <UserButton afterSignOutUrl="/" />
+            </SignedIn>
+            <SignedOut>
+              <SignInButton mode="modal">
+                <button
+                  style={{
+                    fontFamily: 'var(--font-sans)',
+                    fontSize: '11px',
+                    fontWeight: 600,
+                    color: '#000000',
+                    border: '1px solid #ffffff',
+                    borderRadius: '4px',
+                    padding: '5px 12px',
+                    backgroundColor: '#ffffff',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.08em',
+                    cursor: 'pointer',
+                  }}
+                >
+                  Sign in
+                </button>
+              </SignInButton>
+            </SignedOut>
+
+            {/* Hamburger button */}
+            <button
+              onClick={() => setMenuOpen(v => !v)}
+              aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+              style={{
+                background: 'none',
+                border: 'none',
+                padding: '4px',
+                cursor: 'pointer',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: '5px',
+                width: '32px',
+                height: '32px',
+              }}
+            >
+              <span style={{
+                display: 'block',
+                width: '20px',
+                height: '1px',
+                backgroundColor: '#ffffff',
+                transition: 'transform 200ms ease, opacity 200ms ease',
+                transform: menuOpen ? 'translateY(6px) rotate(45deg)' : 'none',
+              }} />
+              <span style={{
+                display: 'block',
+                width: '20px',
+                height: '1px',
+                backgroundColor: '#ffffff',
+                transition: 'opacity 200ms ease',
+                opacity: menuOpen ? 0 : 1,
+              }} />
+              <span style={{
+                display: 'block',
+                width: '20px',
+                height: '1px',
+                backgroundColor: '#ffffff',
+                transition: 'transform 200ms ease, opacity 200ms ease',
+                transform: menuOpen ? 'translateY(-6px) rotate(-45deg)' : 'none',
+              }} />
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      {/* Mobile drawer */}
+      <div
+        style={{
+          position: 'fixed',
+          top: 'var(--nav-h)',
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: '#131313',
+          zIndex: 49,
+          transform: menuOpen ? 'translateY(0)' : 'translateY(-100%)',
+          opacity: menuOpen ? 1 : 0,
+          transition: 'transform 250ms cubic-bezier(0.25, 0.1, 0.25, 1), opacity 200ms ease',
+          overflowY: 'auto',
+          borderBottom: '1px solid #444748',
+        }}
+        className="show-on-mobile"
+      >
+        <div style={{ padding: '8px 0 32px' }}>
+          {NAV_LINKS.map(({ label, href }, i) => {
             const active = isActive(href)
             return (
               <Link
                 key={href}
                 href={href}
                 style={{
-                  position: 'relative',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '16px 24px',
                   fontFamily: 'var(--font-sans)',
-                  fontSize: '11px',
+                  fontSize: '13px',
                   fontWeight: active ? 500 : 400,
                   color: active ? '#ffffff' : '#8e9192',
-                  padding: '8px 10px',
                   textDecoration: 'none',
                   textTransform: 'uppercase',
                   letterSpacing: '0.1em',
+                  borderBottom: '1px solid #1c1b1b',
                   transition: 'color 150ms ease',
                 }}
-                onMouseEnter={e => { if (!active) (e.currentTarget as HTMLAnchorElement).style.color = '#c4c7c8' }}
-                onMouseLeave={e => { if (!active) (e.currentTarget as HTMLAnchorElement).style.color = '#8e9192' }}
               >
                 {label}
-                {active && (
-                  <span style={{
-                    position: 'absolute',
-                    left: 10,
-                    right: 10,
-                    bottom: 2,
-                    height: '1px',
-                    backgroundColor: '#ffffff',
-                    display: 'block',
-                  }} />
-                )}
+                {active && <span style={{ width: '4px', height: '4px', borderRadius: '50%', backgroundColor: '#ffffff', flexShrink: 0 }} />}
               </Link>
             )
           })}
 
-          <a
+          
             href="https://github.com/zshqv/Trikosh"
             target="_blank"
             rel="noopener noreferrer"
             style={{
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
-              padding: '8px 10px',
+              gap: '10px',
+              padding: '16px 24px',
+              fontFamily: 'var(--font-sans)',
+              fontSize: '13px',
+              fontWeight: 400,
               color: '#8e9192',
-              transition: 'color 150ms ease',
-              cursor: 'pointer',
+              textDecoration: 'none',
+              textTransform: 'uppercase',
+              letterSpacing: '0.1em',
             }}
-            onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = '#c4c7c8' }}
-            onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = '#8e9192' }}
           >
-            <GitBranch size={16} strokeWidth={1.5} />
+            <GitBranch size={14} strokeWidth={1.5} />
+            GitHub
           </a>
-
-          <SignedOut>
-            <SignInButton mode="modal">
-              <button
-                style={{
-                  fontFamily: 'var(--font-sans)',
-                  fontSize: '11px',
-                  fontWeight: 600,
-                  color: '#000000',
-                  border: '1px solid #ffffff',
-                  borderRadius: '4px',
-                  padding: '6px 14px',
-                  marginLeft: '8px',
-                  backgroundColor: '#ffffff',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.08em',
-                  whiteSpace: 'nowrap',
-                  transition: 'opacity 150ms',
-                  cursor: 'pointer',
-                }}
-                onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.opacity = '0.85' }}
-                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.opacity = '1' }}
-              >
-                Sign in
-              </button>
-            </SignInButton>
-          </SignedOut>
-
-          <SignedIn>
-            <div style={{ marginLeft: '12px' }}>
-              <UserButton afterSignOutUrl="/" />
-            </div>
-          </SignedIn>
         </div>
       </div>
-    </nav>
+
+      {/* Mobile responsive styles */}
+      <style>{
+        @media (max-width: 768px) {
+          .hide-on-mobile { display: none !important; }
+          .show-on-mobile { display: flex !important; }
+        }
+        @media (min-width: 769px) {
+          .show-on-mobile { display: none !important; }
+          .hide-on-mobile { display: flex !important; }
+        }
+      }</style>
+    </>
   )
 }
