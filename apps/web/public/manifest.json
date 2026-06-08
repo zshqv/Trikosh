@@ -1,0 +1,16 @@
+{
+  "name": "Trikosh",
+  "short_name": "Trikosh",
+  "description": "Open-source financial research infrastructure for students.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#131313",
+  "theme_color": "#131313",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    }
+  ]
+}

@@ -57,6 +57,7 @@ export const metadata: Metadata = {
     images: ['https://trikosh.xyz/images/og-image.png'],
   },
   metadataBase: new URL('https://trikosh.xyz'),
+  manifest: '/manifest.json',
 }
 
 // SECURITY: Clerk secret key is server-only. Only publishable key used client-side.
