@@ -23,6 +23,7 @@ function addAoa(ws: ExcelJS.Worksheet, data: CellVal[][], colWidths: number[]) {
 }
 
 export async function GET() {
+  try {
   const wb = new ExcelJS.Workbook()
 
   // ── Sheet 1: Income Statement ──
@@ -173,4 +174,8 @@ export async function GET() {
       'Cache-Control': 'public, max-age=86400',
     },
   })
+  } catch (err) {
+    console.error('[API /api/template]', err)
+    return NextResponse.json({ error: 'Failed to generate template' }, { status: 500 })
+  }
 }
