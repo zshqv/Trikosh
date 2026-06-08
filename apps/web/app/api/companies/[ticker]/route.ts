@@ -33,9 +33,10 @@ export const dynamic = 'force-dynamic'
 
 export async function GET(
   _request: NextRequest,
-  { params }: { params: { ticker: string } }
+  { params }: { params: Promise<{ ticker: string }> }
 ) {
-  const ticker = params.ticker.toUpperCase()
+  const { ticker: rawTicker } = await params
+  const ticker = rawTicker.toUpperCase()
 
   try {
     // ------------------------------------------------------------------
