@@ -27,10 +27,8 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // Close menu on route change
   useEffect(() => { setMenuOpen(false) }, [pathname])
 
-  // Prevent body scroll when menu open
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
@@ -122,7 +120,7 @@ export default function Navbar() {
               )
             })}
 
-            
+            <a
               href="https://github.com/zshqv/Trikosh"
               target="_blank"
               rel="noopener noreferrer"
@@ -175,7 +173,7 @@ export default function Navbar() {
             </SignedIn>
           </div>
 
-          {/* Mobile right side: auth + hamburger */}
+          {/* Mobile: auth + hamburger */}
           <div className="show-on-mobile" style={{ display: 'none', alignItems: 'center', gap: '12px' }}>
             <SignedIn>
               <UserButton afterSignOutUrl="/" />
@@ -202,7 +200,6 @@ export default function Navbar() {
               </SignInButton>
             </SignedOut>
 
-            {/* Hamburger button */}
             <button
               onClick={() => setMenuOpen(v => !v)}
               aria-label={menuOpen ? 'Close menu' : 'Open menu'}
@@ -251,6 +248,7 @@ export default function Navbar() {
 
       {/* Mobile drawer */}
       <div
+        className="show-on-mobile"
         style={{
           position: 'fixed',
           top: 'var(--nav-h)',
@@ -265,10 +263,9 @@ export default function Navbar() {
           overflowY: 'auto',
           borderBottom: '1px solid #444748',
         }}
-        className="show-on-mobile"
       >
         <div style={{ padding: '8px 0 32px' }}>
-          {NAV_LINKS.map(({ label, href }, i) => {
+          {NAV_LINKS.map(({ label, href }) => {
             const active = isActive(href)
             return (
               <Link
@@ -287,16 +284,23 @@ export default function Navbar() {
                   textTransform: 'uppercase',
                   letterSpacing: '0.1em',
                   borderBottom: '1px solid #1c1b1b',
-                  transition: 'color 150ms ease',
                 }}
               >
                 {label}
-                {active && <span style={{ width: '4px', height: '4px', borderRadius: '50%', backgroundColor: '#ffffff', flexShrink: 0 }} />}
+                {active && (
+                  <span style={{
+                    width: '4px',
+                    height: '4px',
+                    borderRadius: '50%',
+                    backgroundColor: '#ffffff',
+                    flexShrink: 0,
+                  }} />
+                )}
               </Link>
             )
           })}
 
-          
+          <a
             href="https://github.com/zshqv/Trikosh"
             target="_blank"
             rel="noopener noreferrer"
@@ -307,7 +311,6 @@ export default function Navbar() {
               padding: '16px 24px',
               fontFamily: 'var(--font-sans)',
               fontSize: '13px',
-              fontWeight: 400,
               color: '#8e9192',
               textDecoration: 'none',
               textTransform: 'uppercase',
@@ -320,8 +323,7 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile responsive styles */}
-      <style>{
+      <style>{`
         @media (max-width: 768px) {
           .hide-on-mobile { display: none !important; }
           .show-on-mobile { display: flex !important; }
@@ -330,7 +332,7 @@ export default function Navbar() {
           .show-on-mobile { display: none !important; }
           .hide-on-mobile { display: flex !important; }
         }
-      }</style>
+      `}</style>
     </>
   )
 }
