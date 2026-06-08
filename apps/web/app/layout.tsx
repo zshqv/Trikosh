@@ -63,7 +63,18 @@ export const metadata: Metadata = {
 // SECURITY: Clerk secret key is server-only. Only publishable key used client-side.
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <ClerkProvider>
+    <ClerkProvider appearance={{
+        variables: { colorPrimary: '#ffffff' },
+        elements: {
+          card: { cursor: 'auto' },
+          modalContent: { cursor: 'auto' },
+          userButtonPopoverCard: { cursor: 'auto' },
+          formButtonPrimary: { cursor: 'pointer' },
+          socialButtonsBlockButton: { cursor: 'pointer' },
+          footerActionLink: { cursor: 'pointer' },
+          userButtonTrigger: { cursor: 'pointer' },
+        },
+      }}>
       <html
         lang="en"
         className={`${bodoniModa.variable} ${dmSans.variable} ${jetbrainsMono.variable}`}
