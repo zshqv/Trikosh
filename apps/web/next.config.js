@@ -1,5 +1,4 @@
-/** @type {import('next').NextConfig} */
-
+﻿/** @type {import('next').NextConfig} */
 const securityHeaders = [
   { key: 'X-DNS-Prefetch-Control', value: 'on' },
   {
@@ -14,19 +13,18 @@ const securityHeaders = [
     key: 'Content-Security-Policy',
     value: [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.clerk.accounts.dev",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.clerk.accounts.dev https://*.clerk.trikosh.xyz https://clerk.trikosh.xyz",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",
       "img-src 'self' data: https:",
-      "connect-src 'self' https://*.neon.tech https://*.clerk.com https://*.clerk.accounts.dev",
-      "frame-src 'none'",
+      "connect-src 'self' https://*.neon.tech https://*.clerk.com https://*.clerk.accounts.dev https://*.clerk.trikosh.xyz https://clerk.trikosh.xyz",
+      "frame-src https://*.clerk.accounts.dev https://*.clerk.trikosh.xyz https://clerk.trikosh.xyz",
       "object-src 'none'",
       "base-uri 'self'",
       "form-action 'self'",
     ].join('; '),
   },
 ]
-
 const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
@@ -48,10 +46,6 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
-    // No external images are used in this app. An empty remotePatterns array
-    // prevents the /_next/image optimizer from making outbound requests to
-    // arbitrary domains (mitigates GHSA-9g9p-9gw9-jx7f). If you add next/image
-    // components later, add trusted hostnames here rather than using domains:[].
     remotePatterns: [],
   },
   async headers() {
@@ -61,12 +55,9 @@ const nextConfig = {
         headers: securityHeaders,
       },
       {
-        // Explicit CORS restriction for all API routes.
-        // No wildcard Access-Control-Allow-Origin was found during audit —
-        // this rule makes the restriction positive and enforceable.
         source: '/api/(.*)',
         headers: [
-          { key: 'Access-Control-Allow-Origin', value: 'https://trikosh.vercel.app' },
+          { key: 'Access-Control-Allow-Origin', value: 'https://trikosh.xyz' },
           { key: 'Access-Control-Allow-Methods', value: 'GET, OPTIONS' },
           { key: 'Access-Control-Allow-Headers', value: 'Content-Type, Authorization' },
         ],
@@ -74,5 +65,4 @@ const nextConfig = {
     ]
   },
 }
-
 module.exports = nextConfig
