@@ -1,11 +1,11 @@
-@tailwind base;
+﻿@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* ------------------------------------------------------------------ */
-/*  Trikosh — Stitch M3 design tokens                                  */
-/*  Background: #131313 · Text: #e5e2e1 / #c4c7c8 / #8e9192           */
-/*  Fonts: Bodoni Moda (display/hero) · DM Sans (body/UI)               */
+/*  Trikosh â€” Stitch M3 design tokens                                  */
+/*  Background: #131313 Â· Text: #e5e2e1 / #c4c7c8 / #8e9192           */
+/*  Fonts: Bodoni Moda (display/hero) Â· DM Sans (body/UI)               */
 /*         JetBrains Mono (data/mono)                                  */
 /* ------------------------------------------------------------------ */
 :root {
@@ -125,7 +125,7 @@
   .border-rest  { border: var(--border-rest); }
   .border-hover { border: var(--border-hover); }
 
-  /* Editorial divider — left-to-right fade line */
+  /* Editorial divider â€” left-to-right fade line */
   .editorial-line {
     height: 1px;
     background: linear-gradient(to right, #444748 0%, rgba(68, 71, 72, 0) 100%);
@@ -207,13 +207,16 @@
 /*  Restore default cursor inside Clerk modal                          */
 /* ------------------------------------------------------------------ */
 @media (pointer: fine) {
-  .cl-rootBox,
-  .cl-rootBox * {
+  [class^="cl-"],
+  [class*=" cl-"],
+  [class^="cl-"] * {
     cursor: auto !important;
   }
-  .cl-rootBox button,
-  .cl-rootBox a,
-  .cl-rootBox [role="button"] {
+  [class^="cl-"] button,
+  [class*=" cl-"] button,
+  [class^="cl-"] a,
+  [class*=" cl-"] a,
+  [class^="cl-"] [role="button"] {
     cursor: pointer !important;
   }
 }
@@ -222,13 +225,17 @@
 /*  Restore default cursor inside Clerk modal                          */
 /* ------------------------------------------------------------------ */
 @media (pointer: fine) {
-  .cl-rootBox,
-  .cl-rootBox * {
+  [class^="cl-"],
+  [class*=" cl-"],
+  [class^="cl-"] * {
     cursor: auto !important;
   }
-  .cl-rootBox button,
-  .cl-rootBox a,
-  .cl-rootBox [role="button"] {
+  [class^="cl-"] button,
+  [class*=" cl-"] button,
+  [class^="cl-"] a,
+  [class*=" cl-"] a,
+  [class^="cl-"] [role="button"] {
     cursor: pointer !important;
   }
 }
+
