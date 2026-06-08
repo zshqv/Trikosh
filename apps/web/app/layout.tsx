@@ -38,15 +38,25 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Trikosh',
     description: 'Open-source financial research infrastructure. Standardised historical data for 120+ companies across 6 sectors. Built for students who can\'t afford Bloomberg.',
-    url: 'https://trikosh.vercel.app',
+    url: 'https://trikosh.xyz',
     siteName: 'Trikosh',
     type: 'website',
+    images: [
+      {
+        url: 'https://trikosh.xyz/images/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Trikosh — Financial Research Infrastructure',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Trikosh',
     description: 'Open-source financial research infrastructure. Standardised historical data for 120+ companies across 6 sectors.',
+    images: ['https://trikosh.xyz/images/og-image.png'],
   },
+  metadataBase: new URL('https://trikosh.xyz'),
 }
 
 // SECURITY: Clerk secret key is server-only. Only publishable key used client-side.
