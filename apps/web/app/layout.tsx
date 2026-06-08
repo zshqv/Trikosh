@@ -64,7 +64,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <ClerkProvider appearance={{
-        variables: { colorPrimary: '#ffffff' },
+        variables: { colorPrimary: '#131313' },
         elements: {
           card: { cursor: 'auto' },
           modalContent: { cursor: 'auto' },
