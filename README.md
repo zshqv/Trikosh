@@ -4,6 +4,8 @@
 
 Open-source financial research infrastructure for students and aspiring analysts.
 
+**Live:** [trikosh.xyz](https://trikosh.xyz)
+
 Trikosh is built on a simple observation: financial information exists, but financial understanding does not come pre-assembled. Annual reports, SEC filings, earnings transcripts, and investor presentations are scattered, inconsistent, and overwhelming for anyone beginning their research journey. Trikosh standardises, structures, and presents this information so that students can focus on analysis rather than data collection.
 
 **Built by a student, for students. Inspired by the open-source philosophy of Linux.**
