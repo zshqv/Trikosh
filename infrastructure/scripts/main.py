@@ -22,7 +22,7 @@ def get_conn():
         port=os.getenv("DB_PORT", "5432"),
         dbname=os.getenv("DB_NAME", "trikosh"),
         user=os.getenv("DB_USER", "root"),
-        password=os.getenv("DB_PASSWORD", "ashu")
+        password=os.getenv("DB_PASSWORD")
     )
 
 @app.get("/api/companies")
