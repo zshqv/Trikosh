@@ -34,10 +34,10 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: { default: 'Trikosh', template: '%s · Trikosh' },
   description:
-    'Trikosh — Open-source financial research infrastructure. Standardised historical data for 120+ companies across 6 sectors. Built for students who can\'t afford Bloomberg.',
+    'Trikosh — Open-source financial research infrastructure. Standardised historical data for 200+ companies across 6 sectors. Built for students who can\'t afford Bloomberg.',
   openGraph: {
     title: 'Trikosh',
-    description: 'Open-source financial research infrastructure. Standardised historical data for 120+ companies across 6 sectors. Built for students who can\'t afford Bloomberg.',
+    description: 'Open-source financial research infrastructure. Standardised historical data for 200+ companies across 6 sectors. Built for students who can\'t afford Bloomberg.',
     url: 'https://trikosh.xyz',
     siteName: 'Trikosh',
     type: 'website',
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Trikosh',
-    description: 'Open-source financial research infrastructure. Standardised historical data for 120+ companies across 6 sectors.',
+    description: 'Open-source financial research infrastructure. Standardised historical data for 200+ companies across 6 sectors.',
     images: ['https://trikosh.xyz/images/og-image.png'],
   },
   metadataBase: new URL('https://trikosh.xyz'),

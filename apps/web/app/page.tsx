@@ -9,7 +9,7 @@ import { NumberTicker } from '@/components/ui/number-ticker'
 /* ── Data ─────────────────────────────────────────────────────────── */
 
 const STATS = [
-  { value: 120, label: 'Companies',    startValue: 102 },
+  { value: 200, label: 'Companies',    startValue: 175 },
   { value: 6,   label: 'Sectors',      startValue: 0  },
   { value: 15,  label: 'Ratios tracked', startValue: 0 },
 ]
@@ -29,12 +29,12 @@ const JPM_RATIOS = [
 ]
 
 const SECTORS_COVERED = [
-  { name: 'Financial Services',                       count: 21, n: '01' },
-  { name: 'AI & Technology',                          count: 20, n: '02' },
-  { name: 'Healthcare & Pharmaceuticals',             count: 20, n: '03' },
-  { name: 'Consumer & Retail',                        count: 20, n: '04' },
-  { name: 'Consumer Internet & Digital Platforms',    count: 19, n: '05' },
-  { name: 'Industrials',                              count: 20, n: '06' },
+  { name: 'Financial Services',                       count: 34, n: '01' },
+  { name: 'AI & Technology',                          count: 33, n: '02' },
+  { name: 'Healthcare & Pharmaceuticals',             count: 33, n: '03' },
+  { name: 'Consumer & Retail',                        count: 33, n: '04' },
+  { name: 'Consumer Internet & Digital Platforms',    count: 33, n: '05' },
+  { name: 'Industrials',                              count: 34, n: '06' },
 ]
 
 const STEPS = [
@@ -206,7 +206,7 @@ export default function LandingPage() {
                 display: 'inline-block',
                 flexShrink: 0,
               }} />
-              120 Companies · 6 Sectors · Open Research
+              200 Companies · 6 Sectors · Open Research
             </span>
           </div>
 
@@ -221,7 +221,7 @@ export default function LandingPage() {
             maxWidth: 840,
             margin: '0 0 24px',
           }}>
-            Five years of financial data on 120 companies,{' '}
+            Five years of financial data on 200 companies,{' '}
             <span style={{ color: '#8e9192' }}>structured so you can actually learn from it.</span>
           </h1>
 
@@ -525,7 +525,7 @@ export default function LandingPage() {
                   Coverage by sector
                 </p>
                 <p style={{ fontFamily: 'var(--font-sans)', fontSize: '11.5px', color: '#8e9192', margin: 0 }}>
-                  120 companies across 6 analytical frameworks
+                  200 companies across 6 analytical frameworks
                 </p>
               </div>
 
@@ -814,7 +814,7 @@ export default function LandingPage() {
             lineHeight: 1.75,
             margin: '0 0 40px',
           }}>
-            Start with Goldman Sachs or browse all 120 companies across six sectors.
+            Start with Goldman Sachs or browse all 200 companies across six sectors.
             Everything is structured, labelled, and free.
           </p>
 
