@@ -44,7 +44,7 @@ What is built and working today.
 |---|---|
 | **DB → frontend connection** | `lib/db.ts` is a stub. API routes (`/api/companies`, `/api/companies/[ticker]`) exist but serve mock data. Real PostgreSQL connection pending |
 | **Full pipeline run** | Pipeline built and tested. Full 49-company data load to production PostgreSQL pending |
-| **Sector enum reconciliation** | DB schema uses `'Artificial Intelligence'`; frontend TypeScript uses `'AI & Technology'`. Needs alignment before live data |
+| **Sector enum reconciliation** | ✅ Resolved — both DB schema and frontend TypeScript use `'AI & Technology'` |
 | **Deployment** | Vercel configuration in place. Public deployment pending |
 
 ---
@@ -57,7 +57,7 @@ The primary goal of v0.2 is replacing mock data with real data end-to-end.
 
 - **PostgreSQL connection live** — `lib/db.ts` wired to production database. All pages fetch from API routes, not `mockData.ts`
 - **Full pipeline run** — All 49 companies loaded: 5 years × income + balance sheet + cash flow + 15 ratios + market data
-- **Sector enum fix** — Reconcile `'Artificial Intelligence'` (DB) ↔ `'AI & Technology'` (frontend). Single source of truth
+- **Sector enum fix** — ✅ Done — DB schema and frontend TypeScript both use `'AI & Technology'`
 - **API routes validated** — `/api/companies` and `/api/companies/[ticker]` returning real data with correct types
 - **Error states** — Graceful handling when data is missing or null (common for non-US tickers like `.NS`)
 - **Dark mode toggle** — `.dark {}` already defined in `globals.css`. Wire the UI switch

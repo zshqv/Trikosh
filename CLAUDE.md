@@ -125,7 +125,7 @@ financial_ratios     → pre-computed profitability / leverage / valuation ratio
 market_data          → share price, market cap, EV, analyst consensus
 ```
 
-All monetary columns are `NUMERIC(20,3)` — exact decimal arithmetic. All timestamps are `TIMESTAMPTZ`. ENUM types: `sector_type`, `period_type`, `unit_type`, `consensus_rating_type`. Note: the DB schema uses `'Artificial Intelligence'` as the sector enum value; the frontend TypeScript type uses `'AI & Technology'`. These will need to be reconciled when the DB is wired.
+All monetary columns are `NUMERIC(20,3)` — exact decimal arithmetic. All timestamps are `TIMESTAMPTZ`. ENUM types: `sector_type`, `period_type`, `unit_type`, `consensus_rating_type`. Both the DB schema and the frontend TypeScript type use `'AI & Technology'` — these are in sync.
 
 ### Python ETL pipeline
 

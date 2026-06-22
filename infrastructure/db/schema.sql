@@ -111,7 +111,7 @@ CREATE TABLE companies (
     -- CLASSIFICATION
     sector                  sector_type     NOT NULL,
         -- Uses the custom ENUM type defined above.
-        -- Only accepts: 'Financial Services', 'Artificial Intelligence', 'Healthcare'
+        -- Only accepts: 'Financial Services', 'AI & Technology', 'Healthcare'
 
     industry                VARCHAR(150),
         -- Granular classification within sector.
