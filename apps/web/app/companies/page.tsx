@@ -26,29 +26,24 @@ const SORT_OPTIONS: { value: SortOption; label: string }[] = [
 
 /* ── Data builder ──────────────────────────────────────────────────── */
 
+/**
+ * @deprecated Populate via the yfinance ETL pipeline (infrastructure/scripts/yfinance_etl.py)
+ * then read from /api/companies. This function should only be called for companies
+ * that already have a real entry in MOCK_CARDS. No placeholder financial values are
+ * generated for companies without real data — the UI shows "—" instead.
+ */
 function buildCardData(ticker: string): CardData {
   const existing = MOCK_CARDS.find(c => c.company.ticker === ticker)
   if (existing) return existing
   const company = COMPANIES.find(c => c.ticker === ticker)!
-  const sectorDefaults: Record<Sector, { primary: string; secondary: string; sparkline: number[] }> = {
-    'Financial Services':                    { primary: 'ROE',               secondary: 'Net Interest Margin',     sparkline: [0.10, 0.11, 0.10, 0.12, 0.12, 0.11] },
-    'AI & Technology':                       { primary: 'FCF Margin',        secondary: 'Revenue Growth YoY',      sparkline: [50e9, 60e9, 72e9, 85e9, 98e9, 112e9] },
-    'Healthcare':                            { primary: 'Gross Margin',      secondary: 'R&D as % Revenue',        sparkline: [0.58, 0.60, 0.61, 0.62, 0.63, 0.63] },
-    'Consumer & Retail':                     { primary: 'Gross Margin',      secondary: 'Same-Store Sales Growth', sparkline: [0.32, 0.33, 0.34, 0.33, 0.35, 0.36] },
-    'Consumer Internet & Digital Platforms': { primary: 'Revenue Growth YoY', secondary: 'EBITDA Margin',         sparkline: [0.20, 0.25, 0.30, 0.35, 0.38, 0.40] },
-    'Industrials':                           { primary: 'Operating Margin',   secondary: 'Revenue Growth YoY',  sparkline: [0.08, 0.09, 0.10, 0.10, 0.11, 0.11] },
-  }
-  const def = sectorDefaults[company.sector]
+  // Return company directory info only — no fake financial values pending DB connection
   return {
     company,
-    primaryMetric:   { label: def.primary,   value: 0.12,  unit: 'PCT'      as const, period: 'FY2024' },
-    secondaryMetric: { label: def.secondary,  value: 0.025, unit: 'PCT'      as const, period: 'FY2024' },
-    ratios: [
-      { label: 'P/E', value: 16.0, unit: 'MULTIPLE' as const, period: 'FY2024' },
-      { label: 'ROE', value: 0.12, unit: 'PCT'      as const, period: 'FY2024' },
-    ],
-    sparkline: def.sparkline,
-    source: { source: 'SEC 10-K' as const, standard: 'GAAP' as const, period: 'FY2024', updatedAt: '2025-01-14', currency: 'USD' as const },
+    primaryMetric:   { label: 'Data Pending', value: 0, unit: 'PCT' as const, period: '—' },
+    secondaryMetric: undefined,
+    ratios:          [],
+    sparkline:       [],
+    source: { source: 'SEC 10-K' as const, standard: 'GAAP' as const, period: '—', updatedAt: '—', currency: 'USD' as const },
   }
 }
 
