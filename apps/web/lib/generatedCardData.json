@@ -5798,5 +5798,1919 @@
       "updatedAt": "2026-06-22",
       "currency": "USD"
     }
+  },
+  "NSRGY": {
+    "ticker": "NSRGY",
+    "primaryMetric": {
+      "label": "Gross Margin",
+      "value": 0.45826,
+      "unit": "PCT",
+      "period": "FY2025",
+      "delta": null
+    },
+    "secondaryMetric": {
+      "label": "Revenue Growth YoY",
+      "value": -0.022,
+      "unit": "PCT",
+      "period": "FY2025",
+      "delta": null
+    },
+    "ratios": [
+      {
+        "label": "P/E",
+        "value": 22.194569,
+        "unit": "MULTIPLE",
+        "period": "FY2025"
+      },
+      {
+        "label": "ROE",
+        "value": 0.26534,
+        "unit": "PCT",
+        "period": "FY2025"
+      },
+      {
+        "label": "Op. Margin",
+        "value": 0.14885,
+        "unit": "PCT",
+        "period": "FY2025"
+      },
+      {
+        "label": "FCF Margin",
+        "value": 0.069404,
+        "unit": "PCT",
+        "period": "FY2025"
+      }
+    ],
+    "sparkline": [
+      83.542,
+      88.1427,
+      95.644,
+      91.3026,
+      95.1829,
+      98.1
+    ],
+    "source": {
+      "source": "Annual Report",
+      "standard": "IFRS",
+      "period": "FY2025",
+      "updatedAt": "2026-06-22",
+      "currency": "USD"
+    }
+  },
+  "UL": {
+    "ticker": "UL",
+    "primaryMetric": {
+      "label": "Gross Margin",
+      "value": 0.46946,
+      "unit": "PCT",
+      "period": "FY2025",
+      "delta": null
+    },
+    "secondaryMetric": {
+      "label": "Revenue Growth YoY",
+      "value": 0.08,
+      "unit": "PCT",
+      "period": "FY2025",
+      "delta": null
+    },
+    "ratios": [
+      {
+        "label": "P/E",
+        "value": 19.401995,
+        "unit": "MULTIPLE",
+        "period": "FY2025"
+      },
+      {
+        "label": "ROE",
+        "value": 0.30955,
+        "unit": "PCT",
+        "period": "FY2025"
+      },
+      {
+        "label": "Op. Margin",
+        "value": 0.20052,
+        "unit": "PCT",
+        "period": "FY2025"
+      },
+      {
+        "label": "FCF Margin",
+        "value": 0.124213,
+        "unit": "PCT",
+        "period": "FY2025"
+      }
+    ],
+    "sparkline": [
+      63.5783,
+      65.0548,
+      66.4924,
+      67.1974,
+      56.4285,
+      58.4
+    ],
+    "source": {
+      "source": "SEC 10-K",
+      "standard": "IFRS",
+      "period": "FY2025",
+      "updatedAt": "2026-06-22",
+      "currency": "USD"
+    }
+  },
+  "LVMUY": {
+    "ticker": "LVMUY",
+    "primaryMetric": {
+      "label": "Gross Margin",
+      "value": 0.66242,
+      "unit": "PCT",
+      "period": "FY2025",
+      "delta": null
+    },
+    "secondaryMetric": {
+      "label": "Revenue Growth YoY",
+      "value": -0.047,
+      "unit": "PCT",
+      "period": "FY2025",
+      "delta": null
+    },
+    "ratios": [
+      {
+        "label": "P/E",
+        "value": 23.110453,
+        "unit": "MULTIPLE",
+        "period": "FY2025"
+      },
+      {
+        "label": "ROE",
+        "value": 0.16236,
+        "unit": "PCT",
+        "period": "FY2025"
+      },
+      {
+        "label": "Op. Margin",
+        "value": 0.21165,
+        "unit": "PCT",
+        "period": "FY2025"
+      },
+      {
+        "label": "FCF Margin",
+        "value": 0.144754,
+        "unit": "PCT",
+        "period": "FY2025"
+      }
+    ],
+    "sparkline": [
+      105.9437,
+      120.4049,
+      145.9507,
+      127.2664,
+      107.5385,
+      117.17
+    ],
+    "source": {
+      "source": "Annual Report",
+      "standard": "IFRS",
+      "period": "FY2025",
+      "updatedAt": "2026-06-22",
+      "currency": "USD"
+    }
+  },
+  "PG": {
+    "ticker": "PG",
+    "primaryMetric": {
+      "label": "Gross Margin",
+      "value": 0.50984,
+      "unit": "PCT",
+      "period": "FY2025",
+      "delta": null
+    },
+    "secondaryMetric": {
+      "label": "Revenue Growth YoY",
+      "value": 0.074,
+      "unit": "PCT",
+      "period": "FY2025",
+      "delta": null
+    },
+    "ratios": [
+      {
+        "label": "P/E",
+        "value": 21.98538,
+        "unit": "MULTIPLE",
+        "period": "FY2025"
+      },
+      {
+        "label": "ROE",
+        "value": 0.31112,
+        "unit": "PCT",
+        "period": "FY2025"
+      },
+      {
+        "label": "Op. Margin",
+        "value": 0.23047,
+        "unit": "PCT",
+        "period": "FY2025"
+      },
+      {
+        "label": "FCF Margin",
+        "value": 0.146843,
+        "unit": "PCT",
+        "period": "FY2025"
+      }
+    ],
+    "sparkline": [
+      146.2625,
+      150.375,
+      146.016,
+      149.5737,
+      143.3605,
+      150.38
+    ],
+    "source": {
+      "source": "SEC 10-K",
+      "standard": "GAAP",
+      "period": "FY2025",
+      "updatedAt": "2026-06-22",
+      "currency": "USD"
+    }
+  },
+  "CL": {
+    "ticker": "CL",
+    "primaryMetric": {
+      "label": "Gross Margin",
+      "value": 0.60063,
+      "unit": "PCT",
+      "period": "FY2025",
+      "delta": null
+    },
+    "secondaryMetric": {
+      "label": "Revenue Growth YoY",
+      "value": 0.084,
+      "unit": "PCT",
+      "period": "FY2025",
+      "delta": null
+    },
+    "ratios": [
+      {
+        "label": "P/E",
+        "value": 34.682175,
+        "unit": "MULTIPLE",
+        "period": "FY2025"
+      },
+      {
+        "label": "ROE",
+        "value": 3.63577,
+        "unit": "PCT",
+        "period": "FY2025"
+      },
+      {
+        "label": "Op. Margin",
+        "value": 0.20924,
+        "unit": "PCT",
+        "period": "FY2025"
+      },
+      {
+        "label": "FCF Margin",
+        "value": 0.15963,
+        "unit": "PCT",
+        "period": "FY2025"
+      }
+    ],
+    "sparkline": [
+      81.7829,
+      78.4369,
+      79.4072,
+      89.1862,
+      84.7036,
+      89.48
+    ],
+    "source": {
+      "source": "SEC 10-K",
+      "standard": "GAAP",
+      "period": "FY2025",
+      "updatedAt": "2026-06-22",
+      "currency": "USD"
+    }
+  },
+  "WMT": {
+    "ticker": "WMT",
+    "primaryMetric": {
+      "label": "Gross Margin",
+      "value": 0.24976,
+      "unit": "PCT",
+      "period": "FY2026",
+      "delta": null
+    },
+    "secondaryMetric": {
+      "label": "Revenue Growth YoY",
+      "value": 0.073,
+      "unit": "PCT",
+      "period": "FY2026",
+      "delta": null
+    },
+    "ratios": [
+      {
+        "label": "P/E",
+        "value": 41.260563,
+        "unit": "MULTIPLE",
+        "period": "FY2026"
+      },
+      {
+        "label": "ROE",
+        "value": 0.24132,
+        "unit": "PCT",
+        "period": "FY2026"
+      },
+      {
+        "label": "Op. Margin",
+        "value": 0.04215,
+        "unit": "PCT",
+        "period": "FY2026"
+      },
+      {
+        "label": "FCF Margin",
+        "value": 0.009461,
+        "unit": "PCT",
+        "period": "FY2026"
+      }
+    ],
+    "sparkline": [
+      97.1676,
+      102.4442,
+      109.8497,
+      118.6695,
+      123.7892,
+      117.18
+    ],
+    "source": {
+      "source": "Annual Report",
+      "standard": "GAAP",
+      "period": "FY2026",
+      "updatedAt": "2026-06-22",
+      "currency": "USD"
+    }
+  },
+  "MCD": {
+    "ticker": "MCD",
+    "primaryMetric": {
+      "label": "Gross Margin",
+      "value": 0.57349,
+      "unit": "PCT",
+      "period": "FY2025",
+      "delta": null
+    },
+    "secondaryMetric": {
+      "label": "Revenue Growth YoY",
+      "value": 0.094,
+      "unit": "PCT",
+      "period": "FY2025",
+      "delta": null
+    },
+    "ratios": [
+      {
+        "label": "P/E",
+        "value": 22.987623,
+        "unit": "MULTIPLE",
+        "period": "FY2025"
+      },
+      {
+        "label": "ROE",
+        "value": 0.18,
+        "unit": "PCT",
+        "period": "FY2025"
+      },
+      {
+        "label": "Op. Margin",
+        "value": 0.44253,
+        "unit": "PCT",
+        "period": "FY2025"
+      },
+      {
+        "label": "FCF Margin",
+        "value": 0.216871,
+        "unit": "PCT",
+        "period": "FY2025"
+      }
+    ],
+    "sparkline": [
+      292.9617,
+      296.6912,
+      306.1617,
+      311.1399,
+      306.9815,
+      278.61
+    ],
+    "source": {
+      "source": "SEC 10-K",
+      "standard": "GAAP",
+      "period": "FY2025",
+      "updatedAt": "2026-06-22",
+      "currency": "USD"
+    }
+  },
+  "QSR": {
+    "ticker": "QSR",
+    "primaryMetric": {
+      "label": "Gross Margin",
+      "value": 0.33914,
+      "unit": "PCT",
+      "period": "FY2025",
+      "delta": null
+    },
+    "secondaryMetric": {
+      "label": "Revenue Growth YoY",
+      "value": 0.073,
+      "unit": "PCT",
+      "period": "FY2025",
+      "delta": null
+    },
+    "ratios": [
+      {
+        "label": "P/E",
+        "value": 23.61415,
+        "unit": "MULTIPLE",
+        "period": "FY2025"
+      },
+      {
+        "label": "ROE",
+        "value": 0.28136,
+        "unit": "PCT",
+        "period": "FY2025"
+      },
+      {
+        "label": "Op. Margin",
+        "value": 0.25883,
+        "unit": "PCT",
+        "period": "FY2025"
+      },
+      {
+        "label": "FCF Margin",
+        "value": 0.172072,
+        "unit": "PCT",
+        "period": "FY2025"
+      }
+    ],
+    "sparkline": [
+      66.0339,
+      62.414,
+      71.1238,
+      66.4036,
+      73.2532,
+      73.44
+    ],
+    "source": {
+      "source": "SEC 10-K",
+      "standard": "GAAP",
+      "period": "FY2025",
+      "updatedAt": "2026-06-22",
+      "currency": "USD"
+    }
+  },
+  "HINDUNILVR.NS": {
+    "ticker": "HINDUNILVR.NS",
+    "primaryMetric": {
+      "label": "Gross Margin",
+      "value": 0.50583,
+      "unit": "PCT",
+      "period": "FY2026",
+      "delta": null
+    },
+    "secondaryMetric": {
+      "label": "Revenue Growth YoY",
+      "value": 0.043,
+      "unit": "PCT",
+      "period": "FY2026",
+      "delta": null
+    },
+    "ratios": [
+      {
+        "label": "P/E",
+        "value": 48.56448,
+        "unit": "MULTIPLE",
+        "period": "FY2026"
+      },
+      {
+        "label": "ROE",
+        "value": 0.21603,
+        "unit": "PCT",
+        "period": "FY2026"
+      },
+      {
+        "label": "Op. Margin",
+        "value": 0.21136,
+        "unit": "PCT",
+        "period": "FY2026"
+      },
+      {
+        "label": "FCF Margin",
+        "value": 0.101209,
+        "unit": "PCT",
+        "period": "FY2026"
+      }
+    ],
+    "sparkline": [
+      2501.5354,
+      2494.7883,
+      2447.3613,
+      2373.0,
+      2055.2,
+      2194.6001
+    ],
+    "source": {
+      "source": "Annual Report",
+      "standard": "IFRS",
+      "period": "FY2026",
+      "updatedAt": "2026-06-22",
+      "currency": "USD"
+    }
+  },
+  "TATACONSUM.NS": {
+    "ticker": "TATACONSUM.NS",
+    "primaryMetric": {
+      "label": "Gross Margin",
+      "value": 0.40461,
+      "unit": "PCT",
+      "period": "FY2026",
+      "delta": null
+    },
+    "secondaryMetric": {
+      "label": "Revenue Growth YoY",
+      "value": 0.179,
+      "unit": "PCT",
+      "period": "FY2026",
+      "delta": null
+    },
+    "ratios": [
+      {
+        "label": "P/E",
+        "value": 71.25321,
+        "unit": "MULTIPLE",
+        "period": "FY2026"
+      },
+      {
+        "label": "ROE",
+        "value": 0.0694,
+        "unit": "PCT",
+        "period": "FY2026"
+      },
+      {
+        "label": "Op. Margin",
+        "value": 0.11146,
+        "unit": "PCT",
+        "period": "FY2026"
+      },
+      {
+        "label": "FCF Margin",
+        "value": 0.092423,
+        "unit": "PCT",
+        "period": "FY2026"
+      }
+    ],
+    "sparkline": [
+      1064.1951,
+      1119.8245,
+      1162.5629,
+      1124.3859,
+      1006.2852,
+      1111.5
+    ],
+    "source": {
+      "source": "Annual Report",
+      "standard": "IFRS",
+      "period": "FY2026",
+      "updatedAt": "2026-06-22",
+      "currency": "USD"
+    }
+  },
+  "LOW": {
+    "ticker": "LOW",
+    "primaryMetric": {
+      "label": "Gross Margin",
+      "value": 0.33293,
+      "unit": "PCT",
+      "period": "FY2026",
+      "delta": null
+    },
+    "secondaryMetric": {
+      "label": "Revenue Growth YoY",
+      "value": 0.103,
+      "unit": "PCT",
+      "period": "FY2026",
+      "delta": null
+    },
+    "ratios": [
+      {
+        "label": "P/E",
+        "value": 18.798647,
+        "unit": "MULTIPLE",
+        "period": "FY2026"
+      },
+      {
+        "label": "ROE",
+        "value": 0.18,
+        "unit": "PCT",
+        "period": "FY2026"
+      },
+      {
+        "label": "Op. Margin",
+        "value": 0.11067,
+        "unit": "PCT",
+        "period": "FY2026"
+      },
+      {
+        "label": "FCF Margin",
+        "value": 0.05446,
+        "unit": "PCT",
+        "period": "FY2026"
+      }
+    ],
+    "sparkline": [
+      219.2573,
+      247.773,
+      240.2427,
+      264.5959,
+      235.1512,
+      222.2
+    ],
+    "source": {
+      "source": "SEC 10-K",
+      "standard": "GAAP",
+      "period": "FY2026",
+      "updatedAt": "2026-06-22",
+      "currency": "USD"
+    }
+  },
+  "TJX": {
+    "ticker": "TJX",
+    "primaryMetric": {
+      "label": "Gross Margin",
+      "value": 0.31352,
+      "unit": "PCT",
+      "period": "FY2026",
+      "delta": null
+    },
+    "secondaryMetric": {
+      "label": "Revenue Growth YoY",
+      "value": 0.092,
+      "unit": "PCT",
+      "period": "FY2026",
+      "delta": null
+    },
+    "ratios": [
+      {
+        "label": "P/E",
+        "value": 31.86965,
+        "unit": "MULTIPLE",
+        "period": "FY2026"
+      },
+      {
+        "label": "ROE",
+        "value": 0.6125,
+        "unit": "PCT",
+        "period": "FY2026"
+      },
+      {
+        "label": "Op. Margin",
+        "value": 0.11771,
+        "unit": "PCT",
+        "period": "FY2026"
+      },
+      {
+        "label": "FCF Margin",
+        "value": 0.070055,
+        "unit": "PCT",
+        "period": "FY2026"
+      }
+    ],
+    "sparkline": [
+      123.026,
+      143.2484,
+      150.5624,
+      148.8999,
+      159.1786,
+      163.81
+    ],
+    "source": {
+      "source": "SEC 10-K",
+      "standard": "GAAP",
+      "period": "FY2026",
+      "updatedAt": "2026-06-22",
+      "currency": "USD"
+    }
+  },
+  "MDLZ": {
+    "ticker": "MDLZ",
+    "primaryMetric": {
+      "label": "Gross Margin",
+      "value": 0.28771,
+      "unit": "PCT",
+      "period": "FY2025",
+      "delta": null
+    },
+    "secondaryMetric": {
+      "label": "Revenue Growth YoY",
+      "value": 0.082,
+      "unit": "PCT",
+      "period": "FY2025",
+      "delta": null
+    },
+    "ratios": [
+      {
+        "label": "P/E",
+        "value": 29.762377,
+        "unit": "MULTIPLE",
+        "period": "FY2025"
+      },
+      {
+        "label": "ROE",
+        "value": 0.10161,
+        "unit": "PCT",
+        "period": "FY2025"
+      },
+      {
+        "label": "Op. Margin",
+        "value": 0.09306,
+        "unit": "PCT",
+        "period": "FY2025"
+      },
+      {
+        "label": "FCF Margin",
+        "value": 0.072448,
+        "unit": "PCT",
+        "period": "FY2025"
+      }
+    ],
+    "sparkline": [
+      63.0423,
+      60.8789,
+      56.5552,
+      57.9681,
+      57.1452,
+      60.12
+    ],
+    "source": {
+      "source": "Annual Report",
+      "standard": "GAAP",
+      "period": "FY2025",
+      "updatedAt": "2026-06-22",
+      "currency": "USD"
+    }
+  },
+  "KHC": {
+    "ticker": "KHC",
+    "primaryMetric": {
+      "label": "Gross Margin",
+      "value": 0.33974,
+      "unit": "PCT",
+      "period": "FY2025",
+      "delta": null
+    },
+    "secondaryMetric": {
+      "label": "Revenue Growth YoY",
+      "value": 0.008,
+      "unit": "PCT",
+      "period": "FY2025",
+      "delta": null
+    },
+    "ratios": [
+      {
+        "label": "P/E",
+        "value": 10.918817,
+        "unit": "MULTIPLE",
+        "period": "FY2025"
+      },
+      {
+        "label": "ROE",
+        "value": -0.12576,
+        "unit": "PCT",
+        "period": "FY2025"
+      },
+      {
+        "label": "Op. Margin",
+        "value": 0.20738,
+        "unit": "PCT",
+        "period": "FY2025"
+      },
+      {
+        "label": "FCF Margin",
+        "value": 0.128541,
+        "unit": "PCT",
+        "period": "FY2025"
+      }
+    ],
+    "sparkline": [
+      25.7336,
+      24.7612,
+      24.2572,
+      22.9325,
+      21.725,
+      22.82
+    ],
+    "source": {
+      "source": "Annual Report",
+      "standard": "GAAP",
+      "period": "FY2025",
+      "updatedAt": "2026-06-22",
+      "currency": "USD"
+    }
+  },
+  "CLX": {
+    "ticker": "CLX",
+    "primaryMetric": {
+      "label": "Gross Margin",
+      "value": 0.43846,
+      "unit": "PCT",
+      "period": "FY2025",
+      "delta": null
+    },
+    "secondaryMetric": {
+      "label": "Revenue Growth YoY",
+      "value": 0.001,
+      "unit": "PCT",
+      "period": "FY2025",
+      "delta": null
+    },
+    "ratios": [
+      {
+        "label": "P/E",
+        "value": 15.577236,
+        "unit": "MULTIPLE",
+        "period": "FY2025"
+      },
+      {
+        "label": "ROE",
+        "value": 5.46099,
+        "unit": "PCT",
+        "period": "FY2025"
+      },
+      {
+        "label": "Op. Margin",
+        "value": 0.17006,
+        "unit": "PCT",
+        "period": "FY2025"
+      },
+      {
+        "label": "FCF Margin",
+        "value": 0.009283,
+        "unit": "PCT",
+        "period": "FY2025"
+      }
+    ],
+    "sparkline": [
+      120.1448,
+      119.1856,
+      105.4285,
+      110.1657,
+      102.34,
+      95.8
+    ],
+    "source": {
+      "source": "SEC 10-K",
+      "standard": "GAAP",
+      "period": "FY2025",
+      "updatedAt": "2026-06-22",
+      "currency": "USD"
+    }
+  },
+  "GIS": {
+    "ticker": "GIS",
+    "primaryMetric": {
+      "label": "Gross Margin",
+      "value": 0.3314,
+      "unit": "PCT",
+      "period": "FY2025",
+      "delta": null
+    },
+    "secondaryMetric": {
+      "label": "Revenue Growth YoY",
+      "value": 0.022,
+      "unit": "PCT",
+      "period": "FY2025",
+      "delta": null
+    },
+    "ratios": [
+      {
+        "label": "P/E",
+        "value": 8.171148,
+        "unit": "MULTIPLE",
+        "period": "FY2025"
+      },
+      {
+        "label": "ROE",
+        "value": 0.23591,
+        "unit": "PCT",
+        "period": "FY2025"
+      },
+      {
+        "label": "Op. Margin",
+        "value": 0.19194,
+        "unit": "PCT",
+        "period": "FY2025"
+      },
+      {
+        "label": "FCF Margin",
+        "value": 0.123202,
+        "unit": "PCT",
+        "period": "FY2025"
+      }
+    ],
+    "sparkline": [
+      46.3504,
+      48.2883,
+      45.9173,
+      44.8603,
+      36.6022,
+      33.42
+    ],
+    "source": {
+      "source": "SEC 10-K",
+      "standard": "GAAP",
+      "period": "FY2025",
+      "updatedAt": "2026-06-22",
+      "currency": "USD"
+    }
+  },
+  "KMB": {
+    "ticker": "KMB",
+    "primaryMetric": {
+      "label": "Gross Margin",
+      "value": 0.37147,
+      "unit": "PCT",
+      "period": "FY2025",
+      "delta": null
+    },
+    "secondaryMetric": {
+      "label": "Revenue Growth YoY",
+      "value": 0.027,
+      "unit": "PCT",
+      "period": "FY2025",
+      "delta": null
+    },
+    "ratios": [
+      {
+        "label": "P/E",
+        "value": 19.837523,
+        "unit": "MULTIPLE",
+        "period": "FY2025"
+      },
+      {
+        "label": "ROE",
+        "value": 1.11727,
+        "unit": "PCT",
+        "period": "FY2025"
+      },
+      {
+        "label": "Op. Margin",
+        "value": 0.19649,
+        "unit": "PCT",
+        "period": "FY2025"
+      },
+      {
+        "label": "FCF Margin",
+        "value": 0.0637,
+        "unit": "PCT",
+        "period": "FY2025"
+      }
+    ],
+    "sparkline": [
+      118.8033,
+      118.5364,
+      105.0515,
+      97.4318,
+      94.0018,
+      102.56
+    ],
+    "source": {
+      "source": "Annual Report",
+      "standard": "GAAP",
+      "period": "FY2025",
+      "updatedAt": "2026-06-22",
+      "currency": "USD"
+    }
+  },
+  "HESAY": {
+    "ticker": "HESAY",
+    "primaryMetric": {
+      "label": "Gross Margin",
+      "value": 0.7111,
+      "unit": "PCT",
+      "period": "FY2025",
+      "delta": null
+    },
+    "secondaryMetric": {
+      "label": "Revenue Growth YoY",
+      "value": 0.039,
+      "unit": "PCT",
+      "period": "FY2025",
+      "delta": null
+    },
+    "ratios": [
+      {
+        "label": "P/E",
+        "value": 40.498,
+        "unit": "MULTIPLE",
+        "period": "FY2025"
+      },
+      {
+        "label": "ROE",
+        "value": 0.25207,
+        "unit": "PCT",
+        "period": "FY2025"
+      },
+      {
+        "label": "Op. Margin",
+        "value": 0.41403,
+        "unit": "PCT",
+        "period": "FY2025"
+      },
+      {
+        "label": "FCF Margin",
+        "value": 0.252445,
+        "unit": "PCT",
+        "period": "FY2025"
+      }
+    ],
+    "sparkline": [
+      242.8615,
+      242.6635,
+      241.4359,
+      237.6839,
+      188.257,
+      202.49
+    ],
+    "source": {
+      "source": "Annual Report",
+      "standard": "IFRS",
+      "period": "FY2025",
+      "updatedAt": "2026-06-22",
+      "currency": "USD"
+    }
+  },
+  "PPRUY": {
+    "ticker": "PPRUY",
+    "primaryMetric": {
+      "label": "Gross Margin",
+      "value": 0.72641,
+      "unit": "PCT",
+      "period": "FY2025",
+      "delta": null
+    },
+    "secondaryMetric": {
+      "label": "Revenue Growth YoY",
+      "value": 0.08,
+      "unit": "PCT",
+      "period": "FY2025",
+      "delta": null
+    },
+    "ratios": [
+      {
+        "label": "P/E",
+        "value": 27.946589,
+        "unit": "MULTIPLE",
+        "period": "FY2025"
+      },
+      {
+        "label": "ROE",
+        "value": 0.0025,
+        "unit": "PCT",
+        "period": "FY2025"
+      },
+      {
+        "label": "Op. Margin",
+        "value": 0.11114,
+        "unit": "PCT",
+        "period": "FY2025"
+      },
+      {
+        "label": "FCF Margin",
+        "value": 0.156388,
+        "unit": "PCT",
+        "period": "FY2025"
+      }
+    ],
+    "sparkline": [
+      24.5193,
+      33.0499,
+      33.7749,
+      30.9545,
+      30.1104,
+      31.73
+    ],
+    "source": {
+      "source": "Annual Report",
+      "standard": "IFRS",
+      "period": "FY2025",
+      "updatedAt": "2026-06-22",
+      "currency": "USD"
+    }
+  },
+  "MARICO.NS": {
+    "ticker": "MARICO.NS",
+    "primaryMetric": {
+      "label": "Gross Margin",
+      "value": 0.44464,
+      "unit": "PCT",
+      "period": "FY2026",
+      "delta": null
+    },
+    "secondaryMetric": {
+      "label": "Revenue Growth YoY",
+      "value": 0.221,
+      "unit": "PCT",
+      "period": "FY2026",
+      "delta": null
+    },
+    "ratios": [
+      {
+        "label": "P/E",
+        "value": 59.837757,
+        "unit": "MULTIPLE",
+        "period": "FY2026"
+      },
+      {
+        "label": "ROE",
+        "value": 0.41393,
+        "unit": "PCT",
+        "period": "FY2026"
+      },
+      {
+        "label": "Op. Margin",
+        "value": 0.13831,
+        "unit": "PCT",
+        "period": "FY2026"
+      },
+      {
+        "label": "FCF Margin",
+        "value": 0.209509,
+        "unit": "PCT",
+        "period": "FY2026"
+      }
+    ],
+    "sparkline": [
+      702.8,
+      697.4,
+      717.4,
+      729.8,
+      735.95,
+      817.05
+    ],
+    "source": {
+      "source": "Annual Report",
+      "standard": "IFRS",
+      "period": "FY2026",
+      "updatedAt": "2026-06-22",
+      "currency": "USD"
+    }
+  },
+  "DABUR.NS": {
+    "ticker": "DABUR.NS",
+    "primaryMetric": {
+      "label": "Gross Margin",
+      "value": 0.48276,
+      "unit": "PCT",
+      "period": "FY2026",
+      "delta": null
+    },
+    "secondaryMetric": {
+      "label": "Revenue Growth YoY",
+      "value": 0.073,
+      "unit": "PCT",
+      "period": "FY2026",
+      "delta": null
+    },
+    "ratios": [
+      {
+        "label": "P/E",
+        "value": 39.789127,
+        "unit": "MULTIPLE",
+        "period": "FY2026"
+      },
+      {
+        "label": "ROE",
+        "value": 0.1624,
+        "unit": "PCT",
+        "period": "FY2026"
+      },
+      {
+        "label": "Op. Margin",
+        "value": 0.11179,
+        "unit": "PCT",
+        "period": "FY2026"
+      },
+      {
+        "label": "FCF Margin",
+        "value": 0.126523,
+        "unit": "PCT",
+        "period": "FY2026"
+      }
+    ],
+    "sparkline": [
+      520.9968,
+      488.7201,
+      514.6831,
+      506.6,
+      410.45,
+      423.5
+    ],
+    "source": {
+      "source": "Annual Report",
+      "standard": "IFRS",
+      "period": "FY2026",
+      "updatedAt": "2026-06-22",
+      "currency": "USD"
+    }
+  },
+  "ITC.NS": {
+    "ticker": "ITC.NS",
+    "primaryMetric": {
+      "label": "Gross Margin",
+      "value": 0.58731,
+      "unit": "PCT",
+      "period": "FY2026",
+      "delta": null
+    },
+    "secondaryMetric": {
+      "label": "Revenue Growth YoY",
+      "value": -0.05,
+      "unit": "PCT",
+      "period": "FY2026",
+      "delta": null
+    },
+    "ratios": [
+      {
+        "label": "P/E",
+        "value": 17.666666,
+        "unit": "MULTIPLE",
+        "period": "FY2026"
+      },
+      {
+        "label": "ROE",
+        "value": 0.2934,
+        "unit": "PCT",
+        "period": "FY2026"
+      },
+      {
+        "label": "Op. Margin",
+        "value": 0.36479,
+        "unit": "PCT",
+        "period": "FY2026"
+      },
+      {
+        "label": "FCF Margin",
+        "value": 0.156805,
+        "unit": "PCT",
+        "period": "FY2026"
+      }
+    ],
+    "sparkline": [
+      392.7928,
+      382.8764,
+      385.4508,
+      307.1688,
+      280.07,
+      292.5
+    ],
+    "source": {
+      "source": "Annual Report",
+      "standard": "IFRS",
+      "period": "FY2026",
+      "updatedAt": "2026-06-22",
+      "currency": "USD"
+    }
+  },
+  "PIDILITIND.NS": {
+    "ticker": "PIDILITIND.NS",
+    "primaryMetric": {
+      "label": "Gross Margin",
+      "value": 0.55557,
+      "unit": "PCT",
+      "period": "FY2026",
+      "delta": null
+    },
+    "secondaryMetric": {
+      "label": "Revenue Growth YoY",
+      "value": 0.141,
+      "unit": "PCT",
+      "period": "FY2026",
+      "delta": null
+    },
+    "ratios": [
+      {
+        "label": "P/E",
+        "value": 65.05623,
+        "unit": "MULTIPLE",
+        "period": "FY2026"
+      },
+      {
+        "label": "ROE",
+        "value": 0.23523,
+        "unit": "PCT",
+        "period": "FY2026"
+      },
+      {
+        "label": "Op. Margin",
+        "value": 0.20533,
+        "unit": "PCT",
+        "period": "FY2026"
+      },
+      {
+        "label": "FCF Margin",
+        "value": 0.125848,
+        "unit": "PCT",
+        "period": "FY2026"
+      }
+    ],
+    "sparkline": [
+      1425.1199,
+      1468.0,
+      1469.8,
+      1431.1,
+      1285.0,
+      1579.9
+    ],
+    "source": {
+      "source": "Annual Report",
+      "standard": "IFRS",
+      "period": "FY2026",
+      "updatedAt": "2026-06-22",
+      "currency": "USD"
+    }
+  },
+  "COST": {
+    "ticker": "COST",
+    "primaryMetric": {
+      "label": "Gross Margin",
+      "value": 0.12876,
+      "unit": "PCT",
+      "period": "FY2025",
+      "delta": null
+    },
+    "secondaryMetric": {
+      "label": "Revenue Growth YoY",
+      "value": 0.215,
+      "unit": "PCT",
+      "period": "FY2025",
+      "delta": null
+    },
+    "ratios": [
+      {
+        "label": "P/E",
+        "value": 47.835598,
+        "unit": "MULTIPLE",
+        "period": "FY2025"
+      },
+      {
+        "label": "ROE",
+        "value": 0.29152,
+        "unit": "PCT",
+        "period": "FY2025"
+      },
+      {
+        "label": "Op. Margin",
+        "value": 0.03673,
+        "unit": "PCT",
+        "period": "FY2025"
+      },
+      {
+        "label": "FCF Margin",
+        "value": 0.023688,
+        "unit": "PCT",
+        "period": "FY2025"
+      }
+    ],
+    "sparkline": [
+      934.3802,
+      921.7238,
+      911.0217,
+      937.6067,
+      994.9862,
+      951.45
+    ],
+    "source": {
+      "source": "Annual Report",
+      "standard": "GAAP",
+      "period": "FY2025",
+      "updatedAt": "2026-06-22",
+      "currency": "USD"
+    }
+  },
+  "TGT": {
+    "ticker": "TGT",
+    "primaryMetric": {
+      "label": "Gross Margin",
+      "value": 0.28139,
+      "unit": "PCT",
+      "period": "FY2026",
+      "delta": null
+    },
+    "secondaryMetric": {
+      "label": "Revenue Growth YoY",
+      "value": 0.067,
+      "unit": "PCT",
+      "period": "FY2026",
+      "delta": null
+    },
+    "ratios": [
+      {
+        "label": "P/E",
+        "value": 17.270805,
+        "unit": "MULTIPLE",
+        "period": "FY2026"
+      },
+      {
+        "label": "ROE",
+        "value": 0.22015,
+        "unit": "PCT",
+        "period": "FY2026"
+      },
+      {
+        "label": "Op. Margin",
+        "value": 0.0452,
+        "unit": "PCT",
+        "period": "FY2026"
+      },
+      {
+        "label": "FCF Margin",
+        "value": 0.029529,
+        "unit": "PCT",
+        "period": "FY2026"
+      }
+    ],
+    "sparkline": [
+      96.2859,
+      86.8708,
+      87.7618,
+      103.4309,
+      120.0656,
+      130.74
+    ],
+    "source": {
+      "source": "SEC 10-K",
+      "standard": "GAAP",
+      "period": "FY2026",
+      "updatedAt": "2026-06-22",
+      "currency": "USD"
+    }
+  },
+  "HD": {
+    "ticker": "HD",
+    "primaryMetric": {
+      "label": "Gross Margin",
+      "value": 0.33127,
+      "unit": "PCT",
+      "period": "FY2026",
+      "delta": null
+    },
+    "secondaryMetric": {
+      "label": "Revenue Growth YoY",
+      "value": 0.048,
+      "unit": "PCT",
+      "period": "FY2026",
+      "delta": null
+    },
+    "ratios": [
+      {
+        "label": "P/E",
+        "value": 23.758352,
+        "unit": "MULTIPLE",
+        "period": "FY2026"
+      },
+      {
+        "label": "ROE",
+        "value": 1.2838,
+        "unit": "PCT",
+        "period": "FY2026"
+      },
+      {
+        "label": "Op. Margin",
+        "value": 0.11926,
+        "unit": "PCT",
+        "period": "FY2026"
+      },
+      {
+        "label": "FCF Margin",
+        "value": 0.060797,
+        "unit": "PCT",
+        "period": "FY2026"
+      }
+    ],
+    "sparkline": [
+      357.9919,
+      394.696,
+      349.6487,
+      369.332,
+      324.2735,
+      334.28
+    ],
+    "source": {
+      "source": "SEC 10-K",
+      "standard": "GAAP",
+      "period": "FY2026",
+      "updatedAt": "2026-06-22",
+      "currency": "USD"
+    }
+  },
+  "KO": {
+    "ticker": "KO",
+    "primaryMetric": {
+      "label": "Gross Margin",
+      "value": 0.61744,
+      "unit": "PCT",
+      "period": "FY2025",
+      "delta": null
+    },
+    "secondaryMetric": {
+      "label": "Revenue Growth YoY",
+      "value": 0.121,
+      "unit": "PCT",
+      "period": "FY2025",
+      "delta": null
+    },
+    "ratios": [
+      {
+        "label": "P/E",
+        "value": 24.965408,
+        "unit": "MULTIPLE",
+        "period": "FY2025"
+      },
+      {
+        "label": "ROE",
+        "value": 0.43372,
+        "unit": "PCT",
+        "period": "FY2025"
+      },
+      {
+        "label": "Op. Margin",
+        "value": 0.35055,
+        "unit": "PCT",
+        "period": "FY2025"
+      },
+      {
+        "label": "FCF Margin",
+        "value": 0.063393,
+        "unit": "PCT",
+        "period": "FY2025"
+      }
+    ],
+    "sparkline": [
+      66.0203,
+      64.4935,
+      71.6516,
+      73.8225,
+      75.0461,
+      79.39
+    ],
+    "source": {
+      "source": "SEC 10-K",
+      "standard": "GAAP",
+      "period": "FY2025",
+      "updatedAt": "2026-06-22",
+      "currency": "USD"
+    }
+  },
+  "NKE": {
+    "ticker": "NKE",
+    "primaryMetric": {
+      "label": "Gross Margin",
+      "value": 0.4092,
+      "unit": "PCT",
+      "period": "FY2025",
+      "delta": null
+    },
+    "secondaryMetric": {
+      "label": "Revenue Growth YoY",
+      "value": 0.001,
+      "unit": "PCT",
+      "period": "FY2025",
+      "delta": null
+    },
+    "ratios": [
+      {
+        "label": "P/E",
+        "value": 29.736843,
+        "unit": "MULTIPLE",
+        "period": "FY2025"
+      },
+      {
+        "label": "ROE",
+        "value": 0.16016,
+        "unit": "PCT",
+        "period": "FY2025"
+      },
+      {
+        "label": "Op. Margin",
+        "value": 0.06942,
+        "unit": "PCT",
+        "period": "FY2025"
+      },
+      {
+        "label": "FCF Margin",
+        "value": 0.028241,
+        "unit": "PCT",
+        "period": "FY2025"
+      }
+    ],
+    "sparkline": [
+      72.6952,
+      67.8676,
+      63.2308,
+      60.8579,
+      52.0064,
+      45.2
+    ],
+    "source": {
+      "source": "SEC 10-K",
+      "standard": "GAAP",
+      "period": "FY2025",
+      "updatedAt": "2026-06-22",
+      "currency": "USD"
+    }
+  },
+  "SBUX": {
+    "ticker": "SBUX",
+    "primaryMetric": {
+      "label": "Gross Margin",
+      "value": 0.21897,
+      "unit": "PCT",
+      "period": "FY2025",
+      "delta": null
+    },
+    "secondaryMetric": {
+      "label": "Revenue Growth YoY",
+      "value": 0.088,
+      "unit": "PCT",
+      "period": "FY2025",
+      "delta": null
+    },
+    "ratios": [
+      {
+        "label": "P/E",
+        "value": 76.83207,
+        "unit": "MULTIPLE",
+        "period": "FY2025"
+      },
+      {
+        "label": "ROE",
+        "value": 0.18,
+        "unit": "PCT",
+        "period": "FY2025"
+      },
+      {
+        "label": "Op. Margin",
+        "value": 0.08418,
+        "unit": "PCT",
+        "period": "FY2025"
+      },
+      {
+        "label": "FCF Margin",
+        "value": -0.033897,
+        "unit": "PCT",
+        "period": "FY2025"
+      }
+    ],
+    "sparkline": [
+      86.8676,
+      82.9687,
+      85.4303,
+      90.8285,
+      89.0679,
+      100.65
+    ],
+    "source": {
+      "source": "Annual Report",
+      "standard": "GAAP",
+      "period": "FY2025",
+      "updatedAt": "2026-06-22",
+      "currency": "USD"
+    }
+  },
+  "EL": {
+    "ticker": "EL",
+    "primaryMetric": {
+      "label": "Gross Margin",
+      "value": 0.74651,
+      "unit": "PCT",
+      "period": "FY2025",
+      "delta": null
+    },
+    "secondaryMetric": {
+      "label": "Revenue Growth YoY",
+      "value": 0.046,
+      "unit": "PCT",
+      "period": "FY2025",
+      "delta": null
+    },
+    "ratios": [
+      {
+        "label": "P/E",
+        "value": 26.634464,
+        "unit": "MULTIPLE",
+        "period": "FY2025"
+      },
+      {
+        "label": "ROE",
+        "value": -0.05949,
+        "unit": "PCT",
+        "period": "FY2025"
+      },
+      {
+        "label": "Op. Margin",
+        "value": 0.14925,
+        "unit": "PCT",
+        "period": "FY2025"
+      },
+      {
+        "label": "FCF Margin",
+        "value": 0.121865,
+        "unit": "PCT",
+        "period": "FY2025"
+      }
+    ],
+    "sparkline": [
+      91.9911,
+      86.8465,
+      93.0656,
+      114.4768,
+      71.4936,
+      84.81
+    ],
+    "source": {
+      "source": "SEC 10-K",
+      "standard": "GAAP",
+      "period": "FY2025",
+      "updatedAt": "2026-06-22",
+      "currency": "USD"
+    }
+  },
+  "DMART.NS": {
+    "ticker": "DMART.NS",
+    "primaryMetric": {
+      "label": "Gross Margin",
+      "value": 0.15055,
+      "unit": "PCT",
+      "period": "FY2026",
+      "delta": null
+    },
+    "secondaryMetric": {
+      "label": "Revenue Growth YoY",
+      "value": 0.189,
+      "unit": "PCT",
+      "period": "FY2026",
+      "delta": null
+    },
+    "ratios": [
+      {
+        "label": "P/E",
+        "value": 95.50836,
+        "unit": "MULTIPLE",
+        "period": "FY2026"
+      },
+      {
+        "label": "ROE",
+        "value": 0.12944,
+        "unit": "PCT",
+        "period": "FY2026"
+      },
+      {
+        "label": "Op. Margin",
+        "value": 0.05242,
+        "unit": "PCT",
+        "period": "FY2026"
+      },
+      {
+        "label": "FCF Margin",
+        "value": -0.021218,
+        "unit": "PCT",
+        "period": "FY2026"
+      }
+    ],
+    "sparkline": [
+      4267.3999,
+      4475.3999,
+      3996.5,
+      3689.5,
+      3956.8,
+      4286.8999
+    ],
+    "source": {
+      "source": "Annual Report",
+      "standard": "IFRS",
+      "period": "FY2026",
+      "updatedAt": "2026-06-22",
+      "currency": "USD"
+    }
+  },
+  "BRITANNIA.NS": {
+    "ticker": "BRITANNIA.NS",
+    "primaryMetric": {
+      "label": "Gross Margin",
+      "value": 0.4187,
+      "unit": "PCT",
+      "period": "FY2026",
+      "delta": null
+    },
+    "secondaryMetric": {
+      "label": "Revenue Growth YoY",
+      "value": 0.079,
+      "unit": "PCT",
+      "period": "FY2026",
+      "delta": null
+    },
+    "ratios": [
+      {
+        "label": "P/E",
+        "value": 49.618828,
+        "unit": "MULTIPLE",
+        "period": "FY2026"
+      },
+      {
+        "label": "ROE",
+        "value": 0.53314,
+        "unit": "PCT",
+        "period": "FY2026"
+      },
+      {
+        "label": "Op. Margin",
+        "value": 0.16267,
+        "unit": "PCT",
+        "period": "FY2026"
+      },
+      {
+        "label": "FCF Margin",
+        "value": 0.106993,
+        "unit": "PCT",
+        "period": "FY2026"
+      }
+    ],
+    "sparkline": [
+      5696.3491,
+      5991.0,
+      5846.0,
+      5860.5,
+      5423.0,
+      5195.0
+    ],
+    "source": {
+      "source": "Annual Report",
+      "standard": "IFRS",
+      "period": "FY2026",
+      "updatedAt": "2026-06-22",
+      "currency": "USD"
+    }
+  },
+  "RELIANCE.NS": {
+    "ticker": "RELIANCE.NS",
+    "primaryMetric": {
+      "label": "Gross Margin",
+      "value": 0.34861,
+      "unit": "PCT",
+      "period": "FY2026",
+      "delta": null
+    },
+    "secondaryMetric": {
+      "label": "Revenue Growth YoY",
+      "value": 0.125,
+      "unit": "PCT",
+      "period": "FY2026",
+      "delta": null
+    },
+    "ratios": [
+      {
+        "label": "P/E",
+        "value": 22.408308,
+        "unit": "MULTIPLE",
+        "period": "FY2026"
+      },
+      {
+        "label": "ROE",
+        "value": 0.09139,
+        "unit": "PCT",
+        "period": "FY2026"
+      },
+      {
+        "label": "Op. Margin",
+        "value": 0.09975,
+        "unit": "PCT",
+        "period": "FY2026"
+      },
+      {
+        "label": "FCF Margin",
+        "value": 0.020648,
+        "unit": "PCT",
+        "period": "FY2026"
+      }
+    ],
+    "sparkline": [
+      1378.297,
+      1357.7224,
+      1560.2859,
+      1388.9779,
+      1337.715,
+      1303.4733
+    ],
+    "source": {
+      "source": "Annual Report",
+      "standard": "IFRS",
+      "period": "FY2026",
+      "updatedAt": "2026-06-22",
+      "currency": "USD"
+    }
   }
 }
