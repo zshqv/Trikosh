@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import type { CardData } from '@/lib/types'
 import { formatPercent } from '@/lib/utils'
+import { tokens } from '@/lib/tokens'
 import TickerBadge from './TickerBadge'
 import DeltaLabel from './DeltaLabel'
 import Sparkline from './Sparkline'
@@ -25,7 +26,7 @@ export default function DataAssetCard({ data, onClick, isLoading }: DataAssetCar
 
   const { company, primaryMetric, secondaryMetric, ratios, sparkline, source, isPinned, isStale } = data
 
-  const accentColor = isPinned ? 'var(--accent-archive)' : 'var(--accent-primary)'
+  const accentColor = isPinned ? tokens.color.accentArchive : tokens.color.accentPrimary
 
   return (
     <div
@@ -37,13 +38,13 @@ export default function DataAssetCard({ data, onClick, isLoading }: DataAssetCar
       style={{
         position: 'relative',
         overflow: 'hidden',
-        borderRadius: 'var(--card-radius)',
-        backgroundColor: 'var(--bg-surface-1)',
-        border: hovered ? 'var(--border-hover)' : 'var(--border-rest)',
+        borderRadius: tokens.radius.card,
+        backgroundColor: tokens.color.bgSurface1,
+        border: hovered ? tokens.border.hover : tokens.border.rest,
         minWidth: '300px',
         maxWidth: '380px',
         cursor: onClick ? 'pointer' : 'default',
-        transition: 'var(--card-transition)',
+        transition: tokens.transition.card,
         transform: active ? 'scale(0.99)' : 'scale(1)',
         display: 'flex',
         flexDirection: 'column',
@@ -83,14 +84,14 @@ export default function DataAssetCard({ data, onClick, isLoading }: DataAssetCar
                 width: '28px',
                 height: '28px',
                 borderRadius: '6px',
-                backgroundColor: 'var(--bg-surface-2)',
-                border: 'var(--border-rest)',
+                backgroundColor: tokens.color.bgSurface2,
+                border: tokens.border.rest,
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 fontSize: '13px',
-                color: 'var(--text-secondary)',
+                color: tokens.color.textSecondary,
               }}
             >
               ↗
@@ -101,14 +102,14 @@ export default function DataAssetCard({ data, onClick, isLoading }: DataAssetCar
                 width: '28px',
                 height: '28px',
                 borderRadius: '6px',
-                backgroundColor: 'var(--bg-surface-2)',
-                border: 'var(--border-rest)',
+                backgroundColor: tokens.color.bgSurface2,
+                border: tokens.border.rest,
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 fontSize: '13px',
-                color: 'var(--text-secondary)',
+                color: tokens.color.textSecondary,
               }}
             >
               ↓
@@ -118,10 +119,10 @@ export default function DataAssetCard({ data, onClick, isLoading }: DataAssetCar
 
         <p
           style={{
-            fontFamily: 'var(--font-sans)',
+            fontFamily: tokens.font.sans,
             fontSize: '15px',
             fontWeight: 500,
-            color: 'var(--text-primary)',
+            color: tokens.color.textPrimary,
             marginBottom: '3px',
             lineHeight: 1.3,
           }}
@@ -130,10 +131,10 @@ export default function DataAssetCard({ data, onClick, isLoading }: DataAssetCar
         </p>
         <p
           style={{
-            fontFamily: 'var(--font-sans)',
+            fontFamily: tokens.font.sans,
             fontSize: '12px',
             fontWeight: 400,
-            color: 'var(--text-tertiary)',
+            color: tokens.color.textTertiary,
             fontStyle: 'italic',
             marginBottom: '4px',
             lineHeight: 1.4,
@@ -141,11 +142,11 @@ export default function DataAssetCard({ data, onClick, isLoading }: DataAssetCar
         >
           {company.analyticalLens}
         </p>
-        <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-tertiary)' }}>
+        <p style={{ fontFamily: tokens.font.sans, fontSize: '12px', color: tokens.color.textTertiary }}>
           {company.sector} · {company.industry}
         </p>
 
-        <div style={{ marginTop: '10px', borderTop: 'var(--border-rest)' }} />
+        <div style={{ marginTop: '10px', borderTop: tokens.border.rest }} />
       </div>
 
       {/* Zone B — Core Data */}
@@ -165,11 +166,11 @@ export default function DataAssetCard({ data, onClick, isLoading }: DataAssetCar
             <div>
               <p
                 style={{
-                  fontFamily: 'var(--font-mono)',
+                  fontFamily: tokens.font.mono,
                   fontSize: '11px',
                   textTransform: 'uppercase',
                   letterSpacing: '0.05em',
-                  color: 'var(--text-tertiary)',
+                  color: tokens.color.textTertiary,
                   marginBottom: '2px',
                 }}
               >
@@ -177,11 +178,11 @@ export default function DataAssetCard({ data, onClick, isLoading }: DataAssetCar
               </p>
               <p
                 style={{
-                  fontFamily: 'var(--font-sans)',
+                  fontFamily: tokens.font.sans,
                   fontSize: '20px',
                   fontWeight: 500,
                   fontVariantNumeric: 'tabular-nums',
-                  color: hovered ? 'var(--accent-primary)' : 'var(--text-primary)',
+                  color: hovered ? tokens.color.accentPrimary : tokens.color.textPrimary,
                   transition: 'color 150ms ease',
                   marginBottom: '2px',
                 }}
@@ -197,11 +198,11 @@ export default function DataAssetCard({ data, onClick, isLoading }: DataAssetCar
               <div>
                 <p
                   style={{
-                    fontFamily: 'var(--font-mono)',
+                    fontFamily: tokens.font.mono,
                     fontSize: '11px',
                     textTransform: 'uppercase',
                     letterSpacing: '0.05em',
-                    color: 'var(--text-tertiary)',
+                    color: tokens.color.textTertiary,
                     marginBottom: '2px',
                   }}
                 >
@@ -209,11 +210,11 @@ export default function DataAssetCard({ data, onClick, isLoading }: DataAssetCar
                 </p>
                 <p
                   style={{
-                    fontFamily: 'var(--font-sans)',
+                    fontFamily: tokens.font.sans,
                     fontSize: '20px',
                     fontWeight: 500,
                     fontVariantNumeric: 'tabular-nums',
-                    color: 'var(--text-primary)',
+                    color: tokens.color.textPrimary,
                     marginBottom: '2px',
                   }}
                 >
@@ -231,21 +232,21 @@ export default function DataAssetCard({ data, onClick, isLoading }: DataAssetCar
           data={sparkline}
           width={280}
           height={28}
-          color={hovered ? 'var(--accent-primary)' : 'var(--accent-data)'}
+          color={hovered ? tokens.color.accentPrimary : tokens.color.accentData}
         />
       </div>
 
       {/* Zone C — Ratio Rail */}
       <div style={{ padding: '0 14px 10px' }}>
         <RatioRail ratios={ratios} />
-        <div style={{ marginTop: '10px', borderTop: 'var(--border-rest)' }} />
+        <div style={{ marginTop: '10px', borderTop: tokens.border.rest }} />
       </div>
 
       {/* Zone D — Meta Strip */}
       <div
         style={{
           padding: '8px 14px',
-          backgroundColor: 'var(--card-meta-bg)',
+          backgroundColor: tokens.color.cardMetaBg,
           borderRadius: '0 0 12px 12px',
           marginTop: 'auto',
         }}

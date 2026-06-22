@@ -1,5 +1,6 @@
 import type { FinancialMetric } from '@/lib/types'
 import { formatPercent, formatMultiple } from '@/lib/utils'
+import { tokens } from '@/lib/tokens'
 
 interface RatioRailProps {
   ratios: FinancialMetric[]
@@ -19,11 +20,11 @@ export default function RatioRail({ ratios }: RatioRailProps) {
         <div key={ratio.label} style={{ display: 'flex', flexDirection: 'column', gap: '2px', minWidth: 'max-content' }}>
           <span
             style={{
-              fontFamily: 'var(--font-sans)',
+              fontFamily: tokens.font.sans,
               fontSize: '10px',
               textTransform: 'uppercase',
               letterSpacing: '0.05em',
-              color: 'var(--text-tertiary)',
+              color: tokens.color.textTertiary,
               fontWeight: 400,
             }}
           >
@@ -31,11 +32,11 @@ export default function RatioRail({ ratios }: RatioRailProps) {
           </span>
           <span
             style={{
-              fontFamily: 'var(--font-sans)',
+              fontFamily: tokens.font.sans,
               fontSize: '13px',
               fontWeight: 500,
               fontVariantNumeric: 'tabular-nums',
-              color: 'var(--text-primary)',
+              color: tokens.color.textPrimary,
             }}
           >
             {formatRatioValue(ratio)}

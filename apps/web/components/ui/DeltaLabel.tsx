@@ -1,4 +1,5 @@
 import { formatDelta, getDeltaDirection } from '@/lib/utils'
+import { tokens } from '@/lib/tokens'
 
 interface DeltaLabelProps {
   value: number
@@ -6,9 +7,9 @@ interface DeltaLabelProps {
 }
 
 const COLOR_MAP = {
-  positive: 'var(--delta-pos)',
-  negative: 'var(--delta-neg)',
-  neutral:  'var(--delta-neutral)',
+  positive: tokens.color.deltaPos,
+  negative: tokens.color.deltaNeg,
+  neutral:  tokens.color.deltaNeutral,
 }
 
 export default function DeltaLabel({ value, size = 'md' }: DeltaLabelProps) {
@@ -16,7 +17,7 @@ export default function DeltaLabel({ value, size = 'md' }: DeltaLabelProps) {
   return (
     <span
       style={{
-        fontFamily: 'var(--font-mono)',
+        fontFamily: tokens.font.mono,
         fontSize: size === 'sm' ? '10px' : '11px',
         color: COLOR_MAP[direction],
         fontVariantNumeric: 'tabular-nums',

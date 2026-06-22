@@ -1,3 +1,5 @@
+import { tokens } from '@/lib/tokens'
+
 interface MetaBadgeProps {
   label: string
   variant: 'gaap' | 'ifrs' | 'sec' | 'warn'
@@ -15,7 +17,7 @@ export default function MetaBadge({ label, variant }: MetaBadgeProps) {
   return (
     <span
       style={{
-        fontFamily: 'var(--font-mono)',
+        fontFamily: tokens.font.mono,
         fontSize: '10px',
         backgroundColor: bg,
         color,

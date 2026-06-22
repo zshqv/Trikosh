@@ -1,6 +1,7 @@
 'use client'
 
 import type { Sector } from '@/lib/types'
+import { tokens } from '@/lib/tokens'
 
 interface SectorPillProps {
   sector: Sector
@@ -13,15 +14,15 @@ export default function SectorPill({ sector, active = false, onClick }: SectorPi
     <button
       onClick={onClick}
       style={{
-        fontFamily: 'var(--font-sans)',
+        fontFamily: tokens.font.sans,
         fontSize: '13px',
         fontWeight: 400,
         padding: '4px 12px',
         borderRadius: '6px',
         cursor: 'pointer',
-        border: active ? 'none' : 'var(--border-rest)',
-        backgroundColor: active ? 'var(--accent-primary)' : 'var(--bg-surface-2)',
-        color: active ? '#FFFFFF' : 'var(--text-secondary)',
+        border: active ? 'none' : tokens.border.rest,
+        backgroundColor: active ? tokens.color.accentPrimary : tokens.color.bgSurface2,
+        color: active ? '#FFFFFF' : tokens.color.textSecondary,
         transition: 'all 150ms ease',
         whiteSpace: 'nowrap',
       }}

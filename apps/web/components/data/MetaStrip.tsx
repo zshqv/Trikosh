@@ -1,6 +1,7 @@
 import type { DataSource } from '@/lib/types'
 import MetaBadge from '@/components/ui/MetaBadge'
 import { formatDate } from '@/lib/utils'
+import { tokens } from '@/lib/tokens'
 
 interface MetaStripProps {
   source: DataSource
@@ -23,18 +24,18 @@ export default function MetaStrip({ source, isStale }: MetaStripProps) {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1px' }}>
         <span
           style={{
-            fontFamily: 'var(--font-mono)',
+            fontFamily: tokens.font.mono,
             fontSize: '10px',
-            color: 'var(--text-tertiary)',
+            color: tokens.color.textTertiary,
           }}
         >
           SRC: {source.source} · {source.period}
         </span>
         <span
           style={{
-            fontFamily: 'var(--font-mono)',
+            fontFamily: tokens.font.mono,
             fontSize: '10px',
-            color: isStale ? 'var(--delta-warn)' : 'var(--text-tertiary)',
+            color: isStale ? tokens.color.deltaWarn : tokens.color.textTertiary,
           }}
         >
           Updated: {formatDate(source.updatedAt)}
