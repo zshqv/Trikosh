@@ -64,6 +64,48 @@
   --nav-h: 60px;
 }
 
+/* ------------------------------------------------------------------ */
+/*  Light mode — [data-theme="light"] on <html>                        */
+/*  Toggle managed by Navbar; persisted in localStorage               */
+/* ------------------------------------------------------------------ */
+[data-theme="light"] {
+  --background:                #f5f4f2;
+  --surface:                   #f5f4f2;
+  --surface-container-low:     #eeede9;
+  --surface-container:         #e6e5e0;
+  --surface-container-high:    #d9d8d2;
+  --surface-container-lowest:  #fafaf8;
+  --surface-container-highest: #cccbc5;
+  --on-surface:                #1a1917;
+  --on-surface-variant:        #3d3c3a;
+  --outline:                   #7a7874;
+  --outline-variant:           #c8c7c1;
+  --primary:                   #000000;
+  --on-primary:                #ffffff;
+  --error:                     #ba1a1a;
+
+  --accent-primary: var(--primary);
+  --accent-data:    var(--primary);
+  --accent-archive: var(--primary);
+  --accent-glow:    rgba(0, 0, 0, 0.06);
+
+  --delta-pos:      #15803d;
+  --delta-neg:      #dc2626;
+  --delta-neutral:  #6b7280;
+  --delta-warn:     #b45309;
+  --delta-estimate: #2563eb;
+
+  --border-rest:   1px solid var(--outline-variant);
+  --border-hover:  1px solid var(--primary);
+  --border-subtle: 1px solid rgba(200, 199, 193, 0.5);
+}
+
+[data-theme="light"] html,
+[data-theme="light"] body {
+  background-color: var(--background);
+  color: var(--on-surface);
+}
+
 @layer base {
   *,
   *::before,
