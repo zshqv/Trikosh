@@ -172,9 +172,9 @@ COMPANIES = [
     ("CHWY",             "Chewy",                       "Digital Platforms & E-Commerce"),
     # Digital Platforms & E-Commerce — Indian internet
     ("ZOMATO.NS",        "Zomato",                      "Digital Platforms & E-Commerce"),
-    ("FSN.NS",           "Nykaa",                       "Digital Platforms & E-Commerce"),
-    ("INDIAMRT.NS",      "IndiaMart",                   "Digital Platforms & E-Commerce"),
-    ("ONE97.NS",         "Paytm",                       "Digital Platforms & E-Commerce"),
+    ("NYKAA.NS",          "Nykaa",                       "Digital Platforms & E-Commerce"),
+    ("INDIAMART.NS",     "IndiaMart",                   "Digital Platforms & E-Commerce"),
+    ("PAYTM.NS",         "Paytm",                       "Digital Platforms & E-Commerce"),
     ("CARTRADE.NS",      "CarTrade Tech",               "Digital Platforms & E-Commerce"),
     ("POLICYBZR.NS",     "PolicyBazaar",                "Digital Platforms & E-Commerce"),
 
