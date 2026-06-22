@@ -127,3 +127,39 @@ def fetch_cash_flow(ticker):
     except Exception as e:
         print(f"  [ERROR] Cash flow fetch failed for {ticker}: {e}")
         return []
+
+
+def fetch_price_history(ticker: str, years: int = 5) -> list[dict]:
+    """
+    Fetch daily OHLCV price history for the last `years` years from today.
+
+    Always computed relative to today's date — calling this function on any
+    future date returns the correct rolling window without any code changes.
+    The result is intentionally NOT cached or stored as a static snapshot.
+
+    Returns a list of dicts with keys: date, open, high, low, close, volume.
+    Returns an empty list if the ticker is invalid or data is unavailable.
+    """
+    from datetime import date, timedelta
+
+    try:
+        end = date.today()
+        start = end - timedelta(days=years * 365 + 2)  # +2 for leap year safety
+        t = yf.Ticker(ticker)
+        hist = t.history(start=str(start), end=str(end), interval="1d", auto_adjust=True)
+        if hist is None or hist.empty:
+            return []
+        results = []
+        for ts, row in hist.iterrows():
+            results.append({
+                "date":   str(ts)[:10],
+                "open":   clean(row.get("Open")),
+                "high":   clean(row.get("High")),
+                "low":    clean(row.get("Low")),
+                "close":  clean(row.get("Close")),
+                "volume": int(row.get("Volume") or 0),
+            })
+        return results
+    except Exception as e:
+        print(f"  [ERROR] Price history fetch failed for {ticker}: {e}")
+        return []

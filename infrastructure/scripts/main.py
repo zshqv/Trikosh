@@ -4,6 +4,7 @@ import psycopg2
 import psycopg2.extras
 import os
 from dotenv import load_dotenv
+from fetcher import fetch_price_history
 
 load_dotenv()
 
@@ -80,4 +81,39 @@ def get_company(ticker: str):
         "cash_flow_statements": [dict(r) for r in cashflow],
         "financial_ratios": [dict(r) for r in ratios],
         "market_data": dict(market) if market else None
+    }
+
+
+@app.get("/api/companies/{ticker}/history")
+def get_price_history(ticker: str, years: int = 5):
+    """
+    GET /api/companies/{ticker}/history?years=5
+
+    Returns daily OHLCV price history for the last `years` years,
+    computed from today's date dynamically on every request.
+    This is a perpetual rolling window — not a static snapshot.
+
+    Response: { ticker, years, start, end, rows: [{date, open, high, low, close, volume}] }
+    """
+    from datetime import date, timedelta
+
+    ticker_upper = ticker.upper()
+    rows = fetch_price_history(ticker_upper, years=years)
+
+    if not rows:
+        raise HTTPException(
+            status_code=404,
+            detail=f"No price history available for {ticker_upper}. "
+                   "Ticker may be invalid or data unavailable."
+        )
+
+    end_date = str(date.today())
+    start_date = str(date.today() - timedelta(days=years * 365))
+
+    return {
+        "ticker": ticker_upper,
+        "years":  years,
+        "start":  start_date,
+        "end":    end_date,
+        "rows":   rows,
     }

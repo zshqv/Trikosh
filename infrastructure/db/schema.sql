@@ -1,9 +1,10 @@
 -- =============================================================================
 -- TRIKOSH FINANCIAL RESEARCH INFRASTRUCTURE
 -- Database Schema v0.1 — PostgreSQL
--- Six tables | 50 companies | 5 sectors | 5 years of financial data
+-- Six tables | 200 companies | 6 sectors | 5 years of financial data
 --
--- Sectors covered: Financial Services | Artificial Intelligence | Healthcare
+-- Sectors covered: Financial Services | AI & Technology | Healthcare
+--                  Consumer & Retail  | Consumer Internet & Digital Platforms | Industrials
 --
 -- Schema designed to analyst-grade standards:
 -- Every line item matches what appears in actual SEC 10-K filings,
@@ -34,8 +35,11 @@ DROP TYPE IF EXISTS consensus_rating_type CASCADE;
 
 CREATE TYPE sector_type AS ENUM (
     'Financial Services',
-    'Artificial Intelligence',
-    'Healthcare'
+    'AI & Technology',
+    'Healthcare',
+    'Consumer & Retail',
+    'Consumer Internet & Digital Platforms',
+    'Industrials'
 );
 
 CREATE TYPE period_type AS ENUM (
@@ -81,7 +85,7 @@ $$ LANGUAGE plpgsql;
 
 -- =============================================================================
 -- TABLE 1: companies
--- Master directory of all 50 companies covered by Trikosh.
+-- Master directory of all 200 companies covered by Trikosh.
 -- Every other table links back to this via company_id.
 -- =============================================================================
 
@@ -185,7 +189,7 @@ CREATE TRIGGER trg_companies_updated_at
     BEFORE UPDATE ON companies
     FOR EACH ROW EXECUTE FUNCTION update_updated_at();
 
-COMMENT ON TABLE companies IS 'Master company directory — anchor table for all Trikosh data';
+COMMENT ON TABLE companies IS 'Master company directory — anchor table for all 200 Trikosh companies';
 
 
 -- =============================================================================
@@ -398,7 +402,7 @@ CREATE TRIGGER trg_income_updated_at
     BEFORE UPDATE ON income_statements
     FOR EACH ROW EXECUTE FUNCTION update_updated_at();
 
-COMMENT ON TABLE income_statements IS 'Income statements — P&L data for all 50 Trikosh companies';
+COMMENT ON TABLE income_statements IS 'Income statements — P&L data for all 200 Trikosh companies';
 
 
 -- =============================================================================
@@ -633,7 +637,7 @@ CREATE TRIGGER trg_bs_updated_at
     BEFORE UPDATE ON balance_sheets
     FOR EACH ROW EXECUTE FUNCTION update_updated_at();
 
-COMMENT ON TABLE balance_sheets IS 'Balance sheets — financial position snapshots for all 50 Trikosh companies';
+COMMENT ON TABLE balance_sheets IS 'Balance sheets — financial position snapshots for all 200 Trikosh companies';
 
 
 -- =============================================================================

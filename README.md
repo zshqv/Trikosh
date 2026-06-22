@@ -14,7 +14,7 @@ Trikosh is built on a simple observation: financial information exists, but fina
 
 ## What Trikosh Is
 
-Trikosh is a structured financial research platform covering 120 companies across six sectors — Financial Services, AI & Technology, Healthcare, Consumer & Retail, Consumer Internet & Digital Platforms, and Industrials — with five years of standardised financial data, ratio analysis, peer comparison, and research starter frameworks.
+Trikosh is a structured financial research platform covering 200 companies across six sectors — Financial Services, AI & Technology, Healthcare, Consumer & Retail, Consumer Internet & Digital Platforms, and Industrials — with five years of standardised financial data, ratio analysis, peer comparison, and research starter frameworks.
 
 It is not a data vendor. It is not an AI tool. It is infrastructure — the foundation on which a student builds their own understanding.
 
@@ -34,7 +34,7 @@ It is not a data vendor. It is not an AI tool. It is infrastructure — the foun
 ## Core Features
 
 ### Standardised Financial Statements
-Five years of income statements, balance sheets, and cash flow statements — cleaned, structured, and consistent across all 120 companies.
+Five years of income statements, balance sheets, and cash flow statements — cleaned, structured, and consistent across all 200 companies.
 
 ### Ratio Analysis
 Pre-computed financial ratios across profitability, leverage, liquidity, efficiency, and valuation — with methodology documented transparently.
@@ -54,13 +54,13 @@ Download any company or comparison view as PDF or Excel for use in your own rese
 
 | Sector | Companies |
 |---|---|
-| Financial Services | 21 companies |
-| AI & Technology | 20 companies |
-| Healthcare | 20 companies |
-| Consumer & Retail | 20 companies |
-| Consumer Internet & Digital Platforms | 19 companies |
-| Industrials | 20 companies |
-| **Total** | **120 companies** |
+| Financial Services | 34 companies |
+| AI & Technology | 33 companies |
+| Healthcare | 33 companies |
+| Consumer & Retail | 33 companies |
+| Consumer Internet & Digital Platforms | 33 companies |
+| Industrials | 34 companies |
+| **Total** | **200 companies** |
 
 ---
 
@@ -85,7 +85,7 @@ Trikosh is live and in active development.
 |---|---|
 | Repository and architecture | ✅ Complete |
 | Database schema | ✅ Complete |
-| Data loading — 120 companies, 6 sectors | ✅ Complete |
+| Data loading — 200 companies, 6 sectors | ✅ Complete |
 | Frontend — company pages | ✅ Complete |
 | Peer comparison tool | ✅ Complete |
 | Research frameworks | ✅ Live |

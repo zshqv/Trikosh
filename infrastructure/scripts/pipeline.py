@@ -1,7 +1,7 @@
 import argparse
 import time
 from config import COMPANIES, YEARS_OF_DATA
-from fetcher import fetch_income_statement, fetch_balance_sheet, fetch_cash_flow, fetch_company_profile, fetch_market_data
+from fetcher import fetch_income_statement, fetch_balance_sheet, fetch_cash_flow, fetch_company_profile, fetch_market_data, fetch_price_history
 from calculator import compute_ratios
 from loader import upsert_company, upsert_market_data, upsert_income_statement, upsert_balance_sheet, upsert_cash_flow, upsert_ratios
 
