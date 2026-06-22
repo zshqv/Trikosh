@@ -41,7 +41,7 @@ psql -U <user> -d trikosh -f infrastructure/db/schema.sql
 
 ```
 apps/web/               Next.js 14 frontend (the active product)
-apps/api/               Empty placeholder — not yet built
+apps/api/               FastAPI backend (WIP) — routers scaffolded, DB connection pending
 infrastructure/
   db/schema.sql         PostgreSQL schema (6 tables)
   scripts/              Python ETL pipeline (FMP API → PostgreSQL)
