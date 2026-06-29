@@ -8,8 +8,8 @@ YEARS_OF_DATA = 5
 DB_HOST     = os.getenv("DB_HOST", "localhost")
 DB_PORT     = int(os.getenv("DB_PORT", 5432))
 DB_NAME     = os.getenv("DB_NAME", "trikosh")
-DB_USER     = os.getenv("DB_USER", "root")
-DB_PASSWORD = os.getenv("DB_PASSWORD", "")
+DB_USER     = os.getenv("DB_USER")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
 
 DB_CONFIG = {
     "host":     DB_HOST,

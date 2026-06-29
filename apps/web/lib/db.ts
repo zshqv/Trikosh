@@ -26,11 +26,11 @@ function createPool(): Pool {
   }
 
   return new Pool({
-    host:     process.env.DB_HOST     ?? 'localhost',
+    host:     process.env.DB_HOST,
     port:     parseInt(process.env.DB_PORT ?? '5432', 10),
-    database: process.env.DB_NAME     ?? 'trikosh',
-    user:     process.env.DB_USER     ?? 'root',
-    password: process.env.DB_PASSWORD ?? '',
+    database: process.env.DB_NAME,
+    user:     process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
     ssl: { rejectUnauthorized: true },
     max:                     10,
     idleTimeoutMillis:       30_000,
