@@ -5,11 +5,19 @@ load_dotenv()
 
 YEARS_OF_DATA = 5
 
-DB_HOST     = os.getenv("DB_HOST", "localhost")
-DB_PORT     = int(os.getenv("DB_PORT", 5432))
-DB_NAME     = os.getenv("DB_NAME", "trikosh")
+DB_HOST     = os.getenv("DB_HOST")
+DB_PORT     = int(os.getenv("DB_PORT") or 5432)
+DB_NAME     = os.getenv("DB_NAME")
 DB_USER     = os.getenv("DB_USER")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
+
+_REQUIRED = {"DB_HOST": DB_HOST, "DB_NAME": DB_NAME, "DB_USER": DB_USER, "DB_PASSWORD": DB_PASSWORD}
+_MISSING = [k for k, v in _REQUIRED.items() if not v]
+if _MISSING:
+    raise RuntimeError(
+        f"Missing required environment variables: {', '.join(_MISSING)}. "
+        "Copy infrastructure/scripts/.env.example to .env and fill in all values."
+    )
 
 DB_CONFIG = {
     "host":     DB_HOST,

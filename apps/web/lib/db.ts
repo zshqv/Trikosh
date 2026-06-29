@@ -4,7 +4,16 @@
 import { Pool, QueryResultRow } from 'pg'
 
 if (!process.env.DATABASE_URL) {
-  throw new Error('DATABASE_URL environment variable is not set')
+  const missing = (['DB_USER', 'DB_PASSWORD', 'DB_HOST', 'DB_NAME'] as const).filter(
+    k => !process.env[k]
+  )
+  if (missing.length > 0) {
+    throw new Error(
+      `Missing required environment variables: ${missing.join(', ')}. ` +
+      'Set DATABASE_URL for connection-string mode, or set DB_HOST, DB_NAME, DB_USER, ' +
+      'and DB_PASSWORD for individual-variable mode.'
+    )
+  }
 }
 
 declare global {
