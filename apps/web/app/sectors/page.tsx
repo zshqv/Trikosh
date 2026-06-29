@@ -65,13 +65,13 @@ export default function SectorsPage() {
               transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1], delay: Math.min(i * 0.05, 0.2) }}
               style={{
                 backgroundColor: 'var(--bg-surface-1)',
-                border: '1px solid #444748',
+                border: '1px solid var(--outline-variant)',
                 borderRadius: '12px',
                 overflow: 'hidden',
                 transition: 'border-color 200ms ease',
               }}
-              onMouseEnter={e => ((e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.5)')}
-              onMouseLeave={e => ((e.currentTarget as HTMLElement).style.borderColor = '#444748')}
+              onMouseEnter={e => ((e.currentTarget as HTMLElement).style.borderColor = 'var(--outline)')}
+              onMouseLeave={e => ((e.currentTarget as HTMLElement).style.borderColor = 'var(--outline-variant)')}
             >
               <div style={{ padding: '24px 28px' }}>
 
@@ -100,9 +100,12 @@ export default function SectorsPage() {
                     href={`/sectors/${encodeURIComponent(snapshot.sector)}`}
                     style={{
                       fontFamily: 'var(--font-sans)', fontSize: '12.5px',
-                      color: '#ffffff', textDecoration: 'none', flexShrink: 0,
+                      color: 'var(--text-secondary)', textDecoration: 'none', flexShrink: 0,
                       display: 'flex', alignItems: 'center', gap: '4px',
+                      transition: 'color 150ms ease',
                     }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'var(--text-primary)' }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'var(--text-secondary)' }}
                   >
                     Deep dive <span>→</span>
                   </Link>
@@ -169,7 +172,7 @@ export default function SectorsPage() {
                 <div style={{
                   backgroundColor: 'rgba(0,0,0,0.25)',
                   borderRadius: '7px',
-                  border: '1px solid #383838',
+                  border: '1px solid var(--surface-container-high)',
                   display: 'flex', gap: '0', flexWrap: 'wrap',
                   overflow: 'hidden',
                 }}>
@@ -207,16 +210,19 @@ export default function SectorsPage() {
               {/* Footer with links */}
               <div style={{
                 padding: '12px 28px',
-                borderTop: '1px solid #383838',
+                borderTop: '1px solid var(--outline-variant)',
                 display: 'flex', alignItems: 'center', gap: '16px',
-                backgroundColor: 'rgba(0,0,0,0.15)',
+                backgroundColor: 'rgba(0,0,0,0.12)',
               }}>
                 <Link
                   href={`/companies?sector=${encodeURIComponent(snapshot.sector)}`}
                   style={{
                     fontFamily: 'var(--font-sans)', fontSize: '12px',
-                    color: '#8e9192', textDecoration: 'none',
+                    color: 'var(--text-tertiary)', textDecoration: 'none',
+                    transition: 'color 150ms ease',
                   }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'var(--text-primary)' }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'var(--text-tertiary)' }}
                 >
                   {snapshot.companyCount} companies →
                 </Link>
@@ -224,8 +230,11 @@ export default function SectorsPage() {
                   href={`/sectors/${encodeURIComponent(snapshot.sector)}`}
                   style={{
                     fontFamily: 'var(--font-sans)', fontSize: '12px',
-                    color: '#8e9192', textDecoration: 'none',
+                    color: 'var(--text-tertiary)', textDecoration: 'none',
+                    transition: 'color 150ms ease',
                   }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'var(--text-primary)' }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'var(--text-tertiary)' }}
                 >
                   Full framework →
                 </Link>
