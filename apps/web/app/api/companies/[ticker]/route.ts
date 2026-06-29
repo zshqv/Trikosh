@@ -38,6 +38,10 @@ export async function GET(
   const { ticker: rawTicker } = await params
   const ticker = rawTicker.toUpperCase()
 
+  if (!/^[A-Z0-9.\-]{1,20}$/.test(ticker)) {
+    return NextResponse.json({ error: 'Invalid ticker format' }, { status: 400 })
+  }
+
   try {
     // ------------------------------------------------------------------
     // 1. Resolve company (single round-trip before parallel fan-out)
