@@ -55,13 +55,9 @@ export async function GET(
     return NextResponse.json(data)
 
   } catch (err) {
-    const message = err instanceof Error ? err.message : String(err)
-    console.error(`[API /api/companies/${ticker}/history]`, message)
+    console.error(`[API /api/companies/${ticker}/history]`, err instanceof Error ? err.message : String(err))
     return NextResponse.json(
-      {
-        error: 'Price history unavailable. Ensure the Python API (main.py) is running.',
-        detail: message,
-      },
+      { error: 'Price history unavailable' },
       { status: 503 }
     )
   }
