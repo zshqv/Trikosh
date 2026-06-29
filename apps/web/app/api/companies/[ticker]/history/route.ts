@@ -22,6 +22,7 @@ import { NextRequest, NextResponse } from 'next/server'
 export const dynamic = 'force-dynamic'
 
 const PYTHON_API_URL = process.env.PYTHON_API_URL ?? 'http://localhost:8000'
+const ALLOWED_API_URL = /^https?:\/\/(localhost|[\w.-]+\.onrender\.com)(:\d+)?$/
 
 export async function GET(
   request: NextRequest,
@@ -36,6 +37,11 @@ export async function GET(
 
   const { searchParams } = new URL(request.url)
   const years = Math.min(Math.max(parseInt(searchParams.get('years') ?? '5', 10), 1), 10)
+
+  if (!ALLOWED_API_URL.test(PYTHON_API_URL)) {
+    console.error('[API history] PYTHON_API_URL failed allowlist validation')
+    return NextResponse.json({ error: 'Internal configuration error' }, { status: 500 })
+  }
 
   try {
     const upstream = await fetch(
