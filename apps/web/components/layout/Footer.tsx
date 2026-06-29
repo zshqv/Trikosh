@@ -10,7 +10,7 @@ const LEGAL_LINKS = [
 
 export default function Footer() {
   return (
-    <footer style={{ backgroundColor: '#131313', borderTop: '1px solid #444748' }}>
+    <footer style={{ backgroundColor: 'var(--surface-container-lowest)', borderTop: '1px solid var(--outline-variant)' }}>
       <div
         style={{
           maxWidth: '1280px',
@@ -30,7 +30,7 @@ export default function Footer() {
             fontStyle: 'italic',
             fontSize: '16px',
             fontWeight: 700,
-            color: '#ffffff',
+            color: 'var(--text-primary)',
           }}>
             Trikosh
           </span>
@@ -47,12 +47,12 @@ export default function Footer() {
                 fontSize: '10px',
                 textTransform: 'uppercase',
                 letterSpacing: '0.1em',
-                color: '#8e9192',
+                color: 'var(--text-tertiary)',
                 textDecoration: 'none',
                 transition: 'color 150ms ease',
               }}
-              onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = '#c4c7c8' }}
-              onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = '#8e9192' }}
+              onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'var(--text-primary)' }}
+              onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'var(--text-tertiary)' }}
             >
               {label}
             </Link>
@@ -65,7 +65,7 @@ export default function Footer() {
           maxWidth: '1280px',
           margin: '0 auto',
           padding: '14px 24px 24px',
-          borderTop: '1px solid rgba(68,71,72,0.4)',
+          borderTop: '1px solid var(--surface-container-high)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -78,7 +78,7 @@ export default function Footer() {
           fontSize: '10px',
           textTransform: 'uppercase',
           letterSpacing: '0.08em',
-          color: '#8e9192',
+          color: 'var(--text-tertiary)',
         }}>
           Open source · MIT License · Built by Ashutosh Tripathi
         </span>
@@ -91,12 +91,12 @@ export default function Footer() {
             fontSize: '10px',
             textTransform: 'uppercase',
             letterSpacing: '0.08em',
-            color: '#e5e2e1',
+            color: 'var(--text-secondary)',
             textDecoration: 'none',
             transition: 'color 150ms ease',
           }}
-          onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = '#ffffff' }}
-          onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = '#e5e2e1' }}
+          onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'var(--text-primary)' }}
+          onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'var(--text-secondary)' }}
         >
           GitHub ↗
         </a>
