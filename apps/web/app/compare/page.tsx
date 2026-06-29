@@ -163,7 +163,7 @@ export default function ComparePage() {
     fetch('/api/companies?limit=200')
       .then(r => r.json())
       .then(data => setAllCompanies(data.companies ?? []))
-      .catch(() => {})
+      .catch((err: unknown) => console.error('[compare] fetch failed:', err))
   }, [])
 
   useEffect(() => {
@@ -183,7 +183,7 @@ export default function ComparePage() {
       fetch(`/api/companies/${ticker}`)
         .then(r => r.json())
         .then(data => setDetails(prev => ({ ...prev, [ticker]: data })))
-        .catch(() => {})
+        .catch((err: unknown) => console.error('[compare] fetch failed:', err))
         .finally(() => setLoading(prev => ({ ...prev, [ticker]: false })))
     })
   }, [tickers])

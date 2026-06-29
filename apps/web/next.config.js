@@ -30,7 +30,7 @@ const securityHeaders = [
 ]
 const nextConfig = {
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: false,
   },
   webpack: (config, { isServer }) => {
     if (!isServer) {
@@ -46,7 +46,7 @@ const nextConfig = {
     return config
   },
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
   },
   images: {
     remotePatterns: [],

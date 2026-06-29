@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function formatCurrency(value: number, currency: string = 'USD'): string {
+export function formatCurrency(value: number, currency = 'USD'): string {
   const symbol = currency === 'EUR' ? '€' : currency === 'GBP' ? '£' : currency === 'JPY' ? '¥' : '$'
   if (Math.abs(value) >= 1e9) return `${symbol}${(value / 1e9).toFixed(1)}B`
   if (Math.abs(value) >= 1e6) return `${symbol}${(value / 1e6).toFixed(1)}M`
