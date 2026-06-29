@@ -1,5 +1,3 @@
-// RATE LIMIT NOTE: This route is public. Add Upstash rate limiting if abuse is detected.
-
 /**
  * GET /api/companies/[ticker]
  *
@@ -28,13 +26,19 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { query } from '@/lib/db'
+import { rateLimit } from '@/lib/ratelimit'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ ticker: string }> }
 ) {
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
+  if (!(await rateLimit(ip))) {
+    return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
+  }
+
   const { ticker: rawTicker } = await params
   const ticker = rawTicker.toUpperCase()
 
