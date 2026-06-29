@@ -155,6 +155,11 @@
     background: rgba(255, 255, 255, 0.15);
     color: #ffffff;
   }
+
+  [data-theme="light"] ::selection {
+    background: rgba(0, 0, 0, 0.1);
+    color: var(--on-surface);
+  }
 }
 
 @layer utilities {
@@ -183,10 +188,18 @@
     background-image: radial-gradient(circle at 1px 1px, #262626 1px, transparent 0);
     background-size: 32px 32px;
   }
+
+  [data-theme="light"] .dot-grid {
+    background-image: radial-gradient(circle at 1px 1px, #d0cfc9 1px, transparent 0);
+  }
+
+  [data-theme="light"] .editorial-line {
+    background: linear-gradient(to right, #c8c7c1 0%, rgba(200, 199, 193, 0) 100%);
+  }
 }
 
 /* ------------------------------------------------------------------ */
-/*  Dark scrollbar                                                      */
+/*  Scrollbar — dark default, light override                           */
 /* ------------------------------------------------------------------ */
 ::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-track { background: var(--background); }
@@ -197,6 +210,10 @@
 }
 ::-webkit-scrollbar-thumb:hover { background: #444748; }
 * { scrollbar-color: #383838 var(--background); scrollbar-width: thin; }
+
+[data-theme="light"] ::-webkit-scrollbar-thumb { background: #c8c7c1; }
+[data-theme="light"] ::-webkit-scrollbar-thumb:hover { background: #a8a7a1; }
+[data-theme="light"] * { scrollbar-color: #c8c7c1 var(--background); }
 
 /* ------------------------------------------------------------------ */
 /*  Custom cursor                                                       */
@@ -256,24 +273,6 @@
   html.cursor-ready,
   html.cursor-ready * {
     cursor: auto !important;
-  }
-}
-
-/* ------------------------------------------------------------------ */
-/*  Restore default cursor inside Clerk modal                          */
-/* ------------------------------------------------------------------ */
-@media (pointer: fine) {
-  [class^="cl-"],
-  [class*=" cl-"],
-  [class^="cl-"] * {
-    cursor: auto !important;
-  }
-  [class^="cl-"] button,
-  [class*=" cl-"] button,
-  [class^="cl-"] a,
-  [class*=" cl-"] a,
-  [class^="cl-"] [role="button"] {
-    cursor: pointer !important;
   }
 }
 
