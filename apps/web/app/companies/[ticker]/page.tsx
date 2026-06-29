@@ -132,22 +132,22 @@ function fmtRatio(value: unknown, unit: 'PCT' | 'MULTIPLE' | 'RATIO'): string {
   return n.toFixed(2)
 }
 
-const RATIO_MAP: { label: string; key: keyof RatioRow; unit: 'PCT' | 'MULTIPLE' | 'RATIO' }[] = [
-  { label: 'Gross Margin',        key: 'gross_margin',         unit: 'PCT'      },
-  { label: 'Operating Margin',    key: 'operating_margin',     unit: 'PCT'      },
-  { label: 'Net Margin',          key: 'net_margin',           unit: 'PCT'      },
-  { label: 'Return on Equity',    key: 'return_on_equity',     unit: 'PCT'      },
-  { label: 'Return on Assets',    key: 'return_on_assets',     unit: 'PCT'      },
-  { label: 'Current Ratio',       key: 'current_ratio',        unit: 'RATIO'    },
-  { label: 'Debt / Equity',       key: 'debt_to_equity',       unit: 'RATIO'    },
-  { label: 'Debt / Assets',       key: 'debt_to_assets',       unit: 'RATIO'    },
-  { label: 'Asset Turnover',      key: 'asset_turnover',       unit: 'RATIO'    },
-  { label: 'Interest Coverage',   key: 'interest_coverage',    unit: 'RATIO'    },
-  { label: 'P/E Ratio',            key: 'pe_ratio',             unit: 'MULTIPLE' },
-  { label: 'P/B',                 key: 'price_to_book',        unit: 'MULTIPLE' },
-  { label: 'EV/EBITDA',           key: 'ev_ebitda',            unit: 'MULTIPLE' },
-  { label: 'FCF Yield',           key: 'free_cash_flow_yield', unit: 'PCT'      },
-  { label: 'Earnings Yield',      key: 'earnings_yield',       unit: 'PCT'      },
+const RATIO_MAP: { label: string; key: keyof RatioRow; unit: 'PCT' | 'MULTIPLE' | 'RATIO'; desc: string }[] = [
+  { label: 'Gross Margin',      key: 'gross_margin',         unit: 'PCT',      desc: 'Revenue minus cost of goods sold as a % of revenue. Reflects pricing power and input cost efficiency.' },
+  { label: 'Operating Margin',  key: 'operating_margin',     unit: 'PCT',      desc: 'EBIT as a % of revenue. Captures operating leverage after all recurring costs but before interest and tax.' },
+  { label: 'Net Margin',        key: 'net_margin',           unit: 'PCT',      desc: 'Bottom-line profit as a % of revenue after all costs, interest, and tax.' },
+  { label: 'FCF Yield',         key: 'free_cash_flow_yield', unit: 'PCT',      desc: 'Free cash flow as a % of market cap. Higher = more cash generation per dollar of market value.' },
+  { label: 'Return on Equity',  key: 'return_on_equity',     unit: 'PCT',      desc: 'Net income ÷ shareholders equity. Measures how efficiently equity capital is converted to profit.' },
+  { label: 'Return on Assets',  key: 'return_on_assets',     unit: 'PCT',      desc: 'Net income ÷ total assets. Shows how well the company earns profit from its asset base.' },
+  { label: 'Current Ratio',     key: 'current_ratio',        unit: 'RATIO',    desc: 'Current assets ÷ current liabilities. Below 1× may signal near-term liquidity pressure.' },
+  { label: 'Debt / Equity',     key: 'debt_to_equity',       unit: 'RATIO',    desc: 'Total debt ÷ equity. Indicates how much the business is financed by creditors vs. shareholders.' },
+  { label: 'Debt / Assets',     key: 'debt_to_assets',       unit: 'RATIO',    desc: 'Total debt ÷ total assets. The fraction of the asset base funded by borrowing.' },
+  { label: 'Interest Coverage', key: 'interest_coverage',    unit: 'RATIO',    desc: 'EBIT ÷ interest expense. Below 1.5× is often considered a warning for debt service risk.' },
+  { label: 'Asset Turnover',    key: 'asset_turnover',       unit: 'RATIO',    desc: 'Revenue ÷ average total assets. Higher = more revenue generated per dollar of assets deployed.' },
+  { label: 'P/E Ratio',         key: 'pe_ratio',             unit: 'MULTIPLE', desc: 'Price ÷ earnings per share. Compare within sector and against earnings growth rate (PEG).' },
+  { label: 'P/B',               key: 'price_to_book',        unit: 'MULTIPLE', desc: 'Price ÷ book value per share. Most useful for asset-heavy businesses and financial firms.' },
+  { label: 'EV/EBITDA',         key: 'ev_ebitda',            unit: 'MULTIPLE', desc: 'Enterprise value ÷ EBITDA. Capital-structure neutral; enables cross-border peer comparisons.' },
+  { label: 'Earnings Yield',    key: 'earnings_yield',       unit: 'PCT',      desc: 'EPS ÷ price (inverse of P/E). Useful for comparing equity return to prevailing bond yields.' },
 ]
 
 const RESEARCH_QUESTIONS: Record<string, string[]> = {
@@ -216,12 +216,12 @@ function PageSkeleton({ ticker }: { ticker: string }) {
   return (
     <div style={{ backgroundColor: 'var(--bg-base)', minHeight: '100vh' }}>
       {/* Header banner — matches real layout exactly */}
-      <div style={{ borderBottom: '1px solid #1a1a1a', backgroundColor: '#0c0c0c' }}>
+      <div style={{ borderBottom: '1px solid var(--outline-variant)', backgroundColor: 'var(--surface-container-lowest)' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '28px 24px 24px' }}>
           <Link href="/companies" style={{
-            fontFamily: 'var(--font-mono)', fontSize: '11px', color: '#4a4a4a',
+            fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text-tertiary)',
             textDecoration: 'none', display: 'inline-flex', alignItems: 'center',
-            gap: '5px', marginBottom: '18px',
+            gap: '5px', marginBottom: '18px', transition: 'color 150ms ease',
           }}>
             ← Directory
           </Link>
@@ -258,8 +258,8 @@ function PageSkeleton({ ticker }: { ticker: string }) {
               key={tab}
               style={{
                 fontFamily: 'var(--font-sans)', fontSize: '13.5px', fontWeight: i === 0 ? 500 : 400,
-                color: i === 0 ? '#ffffff' : '#5a5a5a',
-                borderBottom: i === 0 ? '2px solid #ffffff' : '2px solid transparent',
+                color: i === 0 ? 'var(--text-primary)' : 'var(--text-tertiary)',
+                borderBottom: i === 0 ? '2px solid var(--text-primary)' : '2px solid transparent',
                 padding: '12px 18px',
               }}
             >
@@ -343,7 +343,7 @@ interface TableRow {
 const TH: React.CSSProperties = {
   fontFamily: 'var(--font-mono)', fontSize: '10px', fontWeight: 500,
   textTransform: 'uppercase', letterSpacing: '0.07em',
-  color: '#4a4a4a', padding: '9px 14px', borderBottom: '1px solid #1a1a1a',
+  color: 'var(--text-tertiary)', padding: '9px 14px', borderBottom: '1px solid var(--outline-variant)',
 }
 const TD: React.CSSProperties = {
   fontFamily: 'var(--font-sans)', fontSize: '13px',
@@ -354,7 +354,7 @@ const TD: React.CSSProperties = {
 function FinancialTable({ rows, years }: { rows: TableRow[]; years: string[] }) {
   if (rows.length === 0 || years.length === 0) {
     return (
-      <p style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: '#3a3a3a', padding: '24px 0' }}>
+      <p style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text-tertiary)', padding: '24px 0' }}>
         No data available for this company.
       </p>
     )
@@ -445,7 +445,7 @@ export default function CompanyDetailPage() {
   if (notFound || !data) {
     return (
       <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '80px 24px', textAlign: 'center' }}>
-        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: '#3a3a3a', marginBottom: '16px', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text-tertiary)', marginBottom: '16px', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
           Company not found: {ticker?.toUpperCase()}
         </p>
         <Link href="/companies" style={{ color: 'var(--accent-primary)', textDecoration: 'none', fontSize: '13px' }}>
@@ -562,13 +562,16 @@ export default function CompanyDetailPage() {
 
   return (
     <div style={{ backgroundColor: 'var(--bg-base)', minHeight: '100vh' }}>
-      <div style={{ borderBottom: '1px solid #1a1a1a', backgroundColor: '#0c0c0c' }}>
+      <div style={{ borderBottom: '1px solid var(--outline-variant)', backgroundColor: 'var(--surface-container-lowest)' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '28px 24px 24px' }}>
           <Link href="/companies" style={{
-            fontFamily: 'var(--font-mono)', fontSize: '11px', color: '#4a4a4a',
+            fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text-tertiary)',
             textDecoration: 'none', display: 'inline-flex', alignItems: 'center',
-            gap: '5px', marginBottom: '18px',
-          }}>
+            gap: '5px', marginBottom: '18px', transition: 'color 150ms ease',
+          }}
+            onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'var(--text-primary)' }}
+            onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'var(--text-tertiary)' }}
+          >
             ← Directory
           </Link>
 
@@ -598,28 +601,28 @@ export default function CompanyDetailPage() {
                   </span>
                 )}
               </div>
-              <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12.5px', color: '#5a5a5a', marginBottom: '8px' }}>
+              <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12.5px', color: 'var(--text-tertiary)', marginBottom: '8px' }}>
                 {[company.sector, company.industry].filter(Boolean).join(' · ')}
                 {company.country ? ` · ${company.country}` : ''}
               </p>
               <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', marginTop: '8px' }}>
                 {market_data && toNum(market_data.price) != null && (
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: '#6a6a6a' }}>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--text-tertiary)' }}>
                     Price <strong style={{ color: 'var(--text-primary)' }}>${toNum(market_data.price)!.toFixed(2)}</strong>
                   </span>
                 )}
                 {market_data && toNum(market_data.market_cap) != null && (
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: '#6a6a6a' }}>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--text-tertiary)' }}>
                     Mkt Cap <strong style={{ color: 'var(--text-primary)' }}>{formatCurrency(toNum(market_data.market_cap)!)}</strong>
                   </span>
                 )}
                 {market_data && toNum(market_data.beta) != null && (
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: '#6a6a6a' }}>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--text-tertiary)' }}>
                     Beta <strong style={{ color: 'var(--text-primary)' }}>{toNum(market_data.beta)!.toFixed(2)}</strong>
                   </span>
                 )}
                 {toNum(company.revenue_cagr_5yr) != null && (
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: '#6a6a6a' }}>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--text-tertiary)' }}>
                     Rev CAGR (5yr){' '}
                     <strong style={{
                       color: (toNum(company.revenue_cagr_5yr) ?? 0) >= 0 ? 'var(--delta-pos)' : 'var(--delta-neg)',
@@ -631,7 +634,7 @@ export default function CompanyDetailPage() {
               </div>
               {company.description && (
                 <p style={{
-                  fontFamily: 'var(--font-sans)', fontSize: '12.5px', color: '#5a5a5a',
+                  fontFamily: 'var(--font-sans)', fontSize: '12.5px', color: 'var(--text-secondary)',
                   fontStyle: 'italic', maxWidth: '580px', lineHeight: 1.55, marginTop: '10px',
                 }}>
                   {company.description.length > 220 ? company.description.slice(0, 220) + '…' : company.description}
@@ -663,14 +666,20 @@ export default function CompanyDetailPage() {
 
         <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px', display: 'flex' }}>
           {TABS.map(tab => (
-            <button key={tab} onClick={() => setActiveTab(tab)} style={{
-              fontFamily: 'var(--font-sans)', fontSize: '13.5px',
-              fontWeight: activeTab === tab ? 500 : 400,
-              color: activeTab === tab ? '#ffffff' : '#5a5a5a',
-              backgroundColor: 'transparent', border: 'none',
-              borderBottom: activeTab === tab ? '2px solid #ffffff' : '2px solid transparent',
-              padding: '12px 18px', cursor: 'pointer', transition: 'color 150ms',
-            }}>
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              style={{
+                fontFamily: 'var(--font-sans)', fontSize: '13.5px',
+                fontWeight: activeTab === tab ? 500 : 400,
+                color: activeTab === tab ? 'var(--text-primary)' : 'var(--text-tertiary)',
+                backgroundColor: 'transparent', border: 'none',
+                borderBottom: activeTab === tab ? '2px solid var(--text-primary)' : '2px solid transparent',
+                padding: '12px 18px', cursor: 'pointer', transition: 'color 150ms',
+              }}
+              onMouseEnter={e => { if (activeTab !== tab) (e.currentTarget as HTMLButtonElement).style.color = 'var(--text-secondary)' }}
+              onMouseLeave={e => { if (activeTab !== tab) (e.currentTarget as HTMLButtonElement).style.color = 'var(--text-tertiary)' }}
+            >
               {tab}
             </button>
           ))}
@@ -689,7 +698,7 @@ export default function CompanyDetailPage() {
                 <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '2px' }}>
                   Revenue &amp; Net Income
                 </h2>
-                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: '#3a3a3a', marginBottom: '16px' }}>
+                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-tertiary)', marginBottom: '16px' }}>
                   {revChartData[0].year}–{revChartData[revChartData.length - 1].year} · Reported basis
                 </p>
                 <ResponsiveContainer width="100%" height={240}>
@@ -720,18 +729,24 @@ export default function CompanyDetailPage() {
             )}
             <div style={{ display: 'flex', gap: '6px', marginBottom: '18px' }}>
               {(['Income Statement', 'Balance Sheet', 'Cash Flow'] as FinTab[]).map(ft => (
-                <button key={ft} onClick={() => setFinTab(ft)} style={{
-                  fontFamily: 'var(--font-sans)', fontSize: '12px', padding: '5px 12px', borderRadius: '5px',
-                  border: '1px solid', borderColor: finTab === ft ? 'rgba(255,255,255,0.25)' : '#2a2a2a',
-                  backgroundColor: finTab === ft ? 'rgba(255,255,255,0.05)' : 'transparent',
-                  color: finTab === ft ? '#ffffff' : '#5a5a5a', cursor: 'pointer', transition: 'all 150ms',
-                }}>
+                <button
+                  key={ft}
+                  onClick={() => setFinTab(ft)}
+                  style={{
+                    fontFamily: 'var(--font-sans)', fontSize: '12px', padding: '5px 12px', borderRadius: '5px',
+                    border: '1px solid', borderColor: finTab === ft ? 'rgba(255,255,255,0.25)' : 'var(--outline-variant)',
+                    backgroundColor: finTab === ft ? 'rgba(255,255,255,0.06)' : 'transparent',
+                    color: finTab === ft ? 'var(--text-primary)' : 'var(--text-tertiary)', cursor: 'pointer', transition: 'all 150ms',
+                  }}
+                  onMouseEnter={e => { if (finTab !== ft) (e.currentTarget as HTMLButtonElement).style.color = 'var(--text-secondary)' }}
+                  onMouseLeave={e => { if (finTab !== ft) (e.currentTarget as HTMLButtonElement).style.color = 'var(--text-tertiary)' }}
+                >
                   {ft}
                 </button>
               ))}
             </div>
             <FinancialTable rows={activeFinRows} years={activeFinYears} />
-            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: '#3a3a3a', marginTop: '10px' }}>
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-tertiary)', marginTop: '10px' }}>
               Source: Trikosh pipeline · {company.exchange ?? ''} · {company.currency ?? 'USD'} · Verify against primary filings.
             </p>
           </div>
@@ -740,34 +755,44 @@ export default function CompanyDetailPage() {
         {activeTab === 'Ratios' && (
           <div>
             {latestRatios == null ? (
-              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: '#3a3a3a', padding: '24px 0' }}>
+              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text-tertiary)', padding: '24px 0' }}>
                 No ratio data available for this company yet.
               </p>
             ) : (
               <>
-                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10.5px', color: '#3a3a3a', marginBottom: '18px' }}>
+                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10.5px', color: 'var(--text-tertiary)', marginBottom: '18px' }}>
                   FY{latestRatios.fiscal_year} — most recent year available
                 </p>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '10px' }}>
-                  {RATIO_MAP.map(({ label, key, unit }) => {
+                  {RATIO_MAP.map(({ label, key, unit, desc }) => {
                     const raw = latestRatios[key]
                     const formatted = fmtRatio(raw, unit)
                     const n = toNum(raw)
                     return (
-                      <div key={label} style={{
-                        backgroundColor: 'var(--bg-surface-1)', border: '1px solid #1f1f1f',
-                        borderRadius: '8px', padding: '14px 16px', transition: 'border-color 200ms',
-                      }}
-                        onMouseEnter={e => ((e.currentTarget as HTMLElement).style.borderColor = '#2a2a2a')}
-                        onMouseLeave={e => ((e.currentTarget as HTMLElement).style.borderColor = '#1f1f1f')}
+                      <div
+                        key={label}
+                        title={desc}
+                        style={{
+                          backgroundColor: 'var(--bg-surface-1)', border: '1px solid var(--surface-container)',
+                          borderRadius: '8px', padding: '14px 16px', transition: 'border-color 180ms, background-color 180ms',
+                          cursor: 'default',
+                        }}
+                        onMouseEnter={e => {
+                          (e.currentTarget as HTMLElement).style.borderColor = 'var(--outline-variant)'
+                          ;(e.currentTarget as HTMLElement).style.backgroundColor = 'var(--surface-container-low)'
+                        }}
+                        onMouseLeave={e => {
+                          (e.currentTarget as HTMLElement).style.borderColor = 'var(--surface-container)'
+                          ;(e.currentTarget as HTMLElement).style.backgroundColor = 'var(--bg-surface-1)'
+                        }}
                       >
-                        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '9.5px', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#3a3a3a', marginBottom: '6px' }}>
+                        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '9.5px', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-tertiary)', marginBottom: '6px' }}>
                           {label}
                         </p>
-                        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '20px', fontWeight: 500, fontVariantNumeric: 'tabular-nums', color: n != null ? 'var(--text-primary)' : '#3a3a3a', marginBottom: '3px', letterSpacing: '-0.01em' }}>
+                        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '20px', fontWeight: 500, fontVariantNumeric: 'tabular-nums', color: n != null ? 'var(--text-primary)' : 'var(--text-tertiary)', marginBottom: '3px', letterSpacing: '-0.01em' }}>
                           {formatted}
                         </p>
-                        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '9.5px', color: '#3a3a3a' }}>
+                        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '9.5px', color: 'var(--text-tertiary)' }}>
                           FY{latestRatios.fiscal_year}
                         </p>
                       </div>
@@ -776,7 +801,7 @@ export default function CompanyDetailPage() {
                 </div>
               </>
             )}
-            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: '#3a3a3a', marginTop: '14px' }}>
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-tertiary)', marginTop: '14px' }}>
               Source: Trikosh pipeline · Peer median calculated from Trikosh coverage universe only.
             </p>
           </div>
@@ -784,11 +809,11 @@ export default function CompanyDetailPage() {
 
         {activeTab === 'Peers' && (
           <div>
-            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '13.5px', color: '#6a6a6a', marginBottom: '20px' }}>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '13.5px', color: 'var(--text-secondary)', marginBottom: '20px' }}>
               Peer companies in {company.sector}.
             </p>
             {peers.length === 0 ? (
-              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: '#3a3a3a', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
                 No peer companies found in the database for this sector.
               </p>
             ) : (
@@ -826,14 +851,14 @@ export default function CompanyDetailPage() {
                             {peer.exchange}
                           </span>
                         )}
-                        <span style={{ color: '#3a3a3a', fontSize: '14px' }}>→</span>
+                        <span style={{ color: 'var(--text-tertiary)', fontSize: '14px' }}>→</span>
                       </div>
                     </div>
                   </Link>
                 ))}
               </div>
             )}
-            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: '#3a3a3a', marginTop: '16px' }}>
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-tertiary)', marginTop: '16px' }}>
               Source: Trikosh pipeline · Peer selection limited to Trikosh coverage universe.
             </p>
           </div>
@@ -844,7 +869,7 @@ export default function CompanyDetailPage() {
             <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '18px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '10px' }}>
               Key Research Questions
             </h2>
-            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: '#5a5a5a', marginBottom: '24px', lineHeight: 1.65 }}>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '24px', lineHeight: 1.65 }}>
               These questions do not have answers here. Your job is to find them — in the 10-K, the earnings calls, and the financial statements.
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -862,7 +887,7 @@ export default function CompanyDetailPage() {
                 </div>
               ))}
             </div>
-            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: '#3a3a3a', marginTop: '20px' }}>
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-tertiary)', marginTop: '20px' }}>
               Source: Trikosh research framework · Research questions are sector-generic.
             </p>
           </div>
@@ -872,7 +897,7 @@ export default function CompanyDetailPage() {
         <div style={{ marginTop: '48px', paddingTop: '20px', borderTop: '1px solid #1a1a1a' }}>
           <p style={{
             fontFamily: 'var(--font-mono)', fontSize: '9px', textTransform: 'uppercase',
-            letterSpacing: '0.12em', color: '#2a2a2a', marginBottom: '10px',
+            letterSpacing: '0.12em', color: 'var(--text-tertiary)', marginBottom: '10px',
           }}>
             Data Notes
           </p>
@@ -884,7 +909,7 @@ export default function CompanyDetailPage() {
               'Certain line items (e.g. Non-Interest Income for banks, R&D for Indian pharma) are structurally unavailable from the data source and will display as N/A.',
             ].map((note, i) => (
               <li key={i} style={{
-                fontFamily: 'var(--font-sans)', fontSize: '11px', color: '#2a2a2a',
+                fontFamily: 'var(--font-sans)', fontSize: '11px', color: 'var(--text-tertiary)',
                 lineHeight: 1.6, paddingLeft: '12px', position: 'relative',
               }}>
                 <span style={{ position: 'absolute', left: 0 }}>·</span>
@@ -893,7 +918,7 @@ export default function CompanyDetailPage() {
             ))}
           </ul>
           <p style={{
-            fontFamily: 'var(--font-mono)', fontSize: '9px', color: '#2a2a2a',
+            fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--text-tertiary)',
             marginTop: '10px', letterSpacing: '0.04em',
           }}>
             Data as of June 2026
