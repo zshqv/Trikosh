@@ -13,7 +13,10 @@ const securityHeaders = [
     key: 'Content-Security-Policy',
     value: [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.clerk.accounts.dev https://*.clerk.trikosh.xyz https://clerk.trikosh.xyz",
+      // 'unsafe-inline' and 'unsafe-eval' removed. Clerk SDK scripts are allowed via
+      // explicit domain allowlist below. Next.js inline hydration scripts require a
+      // per-request nonce; implement via middleware if inline script issues arise.
+      "script-src 'self' 'strict-dynamic' https://*.clerk.accounts.dev https://*.clerk.trikosh.xyz https://clerk.trikosh.xyz",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",
       "img-src 'self' data: https:",
