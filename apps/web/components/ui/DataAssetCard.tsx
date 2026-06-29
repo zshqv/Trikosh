@@ -92,6 +92,17 @@ export default function DataAssetCard({ data, onClick, isLoading }: DataAssetCar
                 justifyContent: 'center',
                 fontSize: '13px',
                 color: tokens.color.textSecondary,
+                transition: 'background-color 120ms ease, border-color 120ms ease, color 120ms ease',
+              }}
+              onMouseEnter={e => {
+                const btn = e.currentTarget as HTMLButtonElement
+                btn.style.backgroundColor = 'var(--surface-container-high)'
+                btn.style.color = 'var(--on-surface)'
+              }}
+              onMouseLeave={e => {
+                const btn = e.currentTarget as HTMLButtonElement
+                btn.style.backgroundColor = tokens.color.bgSurface2
+                btn.style.color = tokens.color.textSecondary
               }}
             >
               ↗
@@ -110,6 +121,17 @@ export default function DataAssetCard({ data, onClick, isLoading }: DataAssetCar
                 justifyContent: 'center',
                 fontSize: '13px',
                 color: tokens.color.textSecondary,
+                transition: 'background-color 120ms ease, border-color 120ms ease, color 120ms ease',
+              }}
+              onMouseEnter={e => {
+                const btn = e.currentTarget as HTMLButtonElement
+                btn.style.backgroundColor = 'var(--surface-container-high)'
+                btn.style.color = 'var(--on-surface)'
+              }}
+              onMouseLeave={e => {
+                const btn = e.currentTarget as HTMLButtonElement
+                btn.style.backgroundColor = tokens.color.bgSurface2
+                btn.style.color = tokens.color.textSecondary
               }}
             >
               ↓
