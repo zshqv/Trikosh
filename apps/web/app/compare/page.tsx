@@ -528,23 +528,80 @@ export default function ComparePage() {
         {!hasEnoughToCompare && (
           <div style={{
             backgroundColor: 'var(--bg-surface-1)', border: '1px solid #444748',
-            borderRadius: '12px', padding: '60px 24px',
+            borderRadius: '12px', padding: '64px 24px 60px',
             textAlign: 'center', marginBottom: '20px',
           }}>
-            <p style={{
-              fontFamily: 'var(--font-mono)', fontSize: '10.5px',
-              textTransform: 'uppercase', letterSpacing: '0.1em', color: '#8e9192',
+            <div style={{
+              display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+              width: '48px', height: '48px', borderRadius: '12px',
+              backgroundColor: 'rgba(255,255,255,0.04)', border: '1px solid #444748',
+              marginBottom: '20px',
             }}>
-              Select at least 2 companies above to begin comparison
+              <span style={{ fontSize: '22px', lineHeight: 1 }}>⊞</span>
+            </div>
+            <p style={{
+              fontFamily: 'var(--font-display)', fontSize: '18px', fontWeight: 700,
+              letterSpacing: '-0.01em', color: 'var(--text-primary)', marginBottom: '8px',
+            }}>
+              Select two or more companies
             </p>
+            <p style={{
+              fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-tertiary)',
+              maxWidth: '340px', margin: '0 auto 24px', lineHeight: 1.65,
+            }}>
+              Use the selectors above to pick 2–4 companies. The tool will display a side-by-side
+              metrics table and margin charts.
+            </p>
+            <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', flexWrap: 'wrap' }}>
+              {['AAPL', 'MSFT', 'JPM', 'GOOGL'].map(t => (
+                <span key={t} style={{
+                  fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.05em',
+                  padding: '4px 10px', borderRadius: '5px',
+                  border: '1px solid #444748', color: 'var(--text-tertiary)',
+                  backgroundColor: 'rgba(255,255,255,0.02)',
+                }}>
+                  {t}
+                </span>
+              ))}
+            </div>
           </div>
         )}
 
-        {isLoadingAny && (
-          <div style={{ padding: '10px 0', fontFamily: 'var(--font-mono)', fontSize: '11px', color: '#8e9192', marginBottom: '8px' }}>
-            Loading data…
+        {isLoadingAny && !hasEnoughToCompare && (
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: '10px',
+            padding: '14px 18px', marginBottom: '12px',
+            backgroundColor: 'var(--bg-surface-1)', border: '1px solid #444748',
+            borderRadius: '8px',
+          }}>
+            <span style={{
+              display: 'inline-block', width: '14px', height: '14px', borderRadius: '50%',
+              border: '2px solid rgba(255,255,255,0.15)',
+              borderTopColor: 'rgba(255,255,255,0.7)',
+              animation: 'spin 0.8s linear infinite',
+            }} />
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text-tertiary)' }}>
+              Fetching company data…
+            </span>
           </div>
         )}
+        {isLoadingAny && hasEnoughToCompare && (
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: '10px',
+            padding: '10px 0', marginBottom: '8px',
+          }}>
+            <span style={{
+              display: 'inline-block', width: '12px', height: '12px', borderRadius: '50%',
+              border: '2px solid rgba(255,255,255,0.15)',
+              borderTopColor: 'rgba(255,255,255,0.7)',
+              animation: 'spin 0.8s linear infinite',
+            }} />
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text-tertiary)' }}>
+              Fetching company data…
+            </span>
+          </div>
+        )}
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
 
         {/* Metrics table */}
         {hasEnoughToCompare && (
@@ -653,7 +710,7 @@ export default function ComparePage() {
                             return (
                               <td key={ticker} style={{ padding: '9px 18px', textAlign: 'right' }}>
                                 {loading[ticker] ? (
-                                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: '#3a3a3a' }}>…</span>
+                                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--text-tertiary)' }}>…</span>
                                 ) : (
                                   <span style={{
                                     fontFamily: 'var(--font-mono)', fontSize: '12.5px',
@@ -676,7 +733,7 @@ export default function ComparePage() {
             </div>
 
             <div style={{ padding: '9px 22px', borderTop: '1px solid #1a1a1a', backgroundColor: 'rgba(0,0,0,0.15)' }}>
-              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: '#3a3a3a' }}>
+              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-tertiary)' }}>
                 Source: Trikosh database · Live data · – shown where data unavailable
               </p>
             </div>
@@ -692,7 +749,7 @@ export default function ComparePage() {
                 <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '2px' }}>
                   Margin Profile — Latest FY
                 </h2>
-                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: '#3a3a3a' }}>
+                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-tertiary)' }}>
                   Gross → Operating → Net margin per company.
                 </p>
               </div>
@@ -719,7 +776,7 @@ export default function ComparePage() {
                   <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '2px' }}>
                     5-Year Margin Trend
                   </h2>
-                  <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: '#3a3a3a' }}>
+                  <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-tertiary)' }}>
                     FY2021–FY2025
                   </p>
                 </div>
