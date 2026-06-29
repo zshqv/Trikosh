@@ -47,7 +47,8 @@ export async function GET(
     // 1. Resolve company (single round-trip before parallel fan-out)
     // ------------------------------------------------------------------
     const [company] = await query(
-      `SELECT * FROM companies WHERE ticker = $1`,
+      `SELECT ticker, name, sector, industry, country, exchange, currency, description
+       FROM companies WHERE ticker = $1`,
       [ticker]
     )
 
@@ -73,7 +74,9 @@ export async function GET(
     ] = await Promise.all([
 
       query(
-        `SELECT * FROM income_statements
+        `SELECT ticker, fiscal_year, revenue, gross_profit, operating_income,
+                net_income, ebitda, eps, shares_outstanding
+         FROM income_statements
          WHERE ticker = $1
          ORDER BY fiscal_year DESC
          LIMIT 5`,
@@ -81,7 +84,9 @@ export async function GET(
       ),
 
       query(
-        `SELECT * FROM balance_sheets
+        `SELECT ticker, fiscal_year, total_assets, total_liabilities, total_equity,
+                cash_and_equivalents, total_debt
+         FROM balance_sheets
          WHERE ticker = $1
          ORDER BY fiscal_year DESC
          LIMIT 5`,
@@ -89,7 +94,9 @@ export async function GET(
       ),
 
       query(
-        `SELECT * FROM cash_flow_statements
+        `SELECT ticker, fiscal_year, operating_cash_flow, capital_expenditure,
+                free_cash_flow, dividends_paid
+         FROM cash_flow_statements
          WHERE ticker = $1
          ORDER BY fiscal_year DESC
          LIMIT 5`,
@@ -97,7 +104,11 @@ export async function GET(
       ),
 
       query(
-        `SELECT * FROM financial_ratios
+        `SELECT ticker, fiscal_year, gross_margin, operating_margin, net_margin,
+                return_on_equity, return_on_assets, current_ratio, debt_to_equity,
+                debt_to_assets, asset_turnover, interest_coverage, price_to_earnings,
+                price_to_book, ev_to_ebitda, free_cash_flow_yield, earnings_yield
+         FROM financial_ratios
          WHERE ticker = $1
          ORDER BY fiscal_year DESC
          LIMIT 5`,
@@ -106,7 +117,8 @@ export async function GET(
 
       // market_data orders by date (not fiscal_year) — most recent snapshot
       query(
-        `SELECT * FROM market_data
+        `SELECT ticker, date, market_cap, price, beta, volume_avg, shares_outstanding
+         FROM market_data
          WHERE ticker = $1
          ORDER BY date DESC
          LIMIT 1`,
