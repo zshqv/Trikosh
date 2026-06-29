@@ -63,10 +63,12 @@ export default function Navbar() {
           zIndex: 50,
           width: '100%',
           height: 'var(--nav-h)',
-          backgroundColor: scrolled ? 'rgba(19,19,19,0.8)' : '#131313',
-          backdropFilter: scrolled ? 'blur(12px)' : 'none',
-          WebkitBackdropFilter: scrolled ? 'blur(12px)' : 'none',
-          borderBottom: '1px solid #444748',
+          backgroundColor: scrolled
+            ? theme === 'dark' ? 'rgba(19,19,19,0.82)' : 'rgba(245,244,242,0.82)'
+            : 'var(--background)',
+          backdropFilter: scrolled ? 'blur(14px) saturate(160%)' : 'none',
+          WebkitBackdropFilter: scrolled ? 'blur(14px) saturate(160%)' : 'none',
+          borderBottom: '1px solid var(--outline-variant)',
           transition: 'background-color 200ms ease',
           display: 'flex',
           alignItems: 'center',
@@ -290,13 +292,13 @@ export default function Navbar() {
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundColor: '#131313',
+          backgroundColor: 'var(--background)',
           zIndex: 49,
           transform: menuOpen ? 'translateY(0)' : 'translateY(-100%)',
           opacity: menuOpen ? 1 : 0,
           transition: 'transform 250ms cubic-bezier(0.25, 0.1, 0.25, 1), opacity 200ms ease',
           overflowY: 'auto',
-          borderBottom: '1px solid #444748',
+          borderBottom: '1px solid var(--outline-variant)',
         }}
       >
         <div style={{ padding: '8px 0 32px' }}>
@@ -318,7 +320,7 @@ export default function Navbar() {
                   textDecoration: 'none',
                   textTransform: 'uppercase',
                   letterSpacing: '0.1em',
-                  borderBottom: '1px solid #1c1b1b',
+                  borderBottom: '1px solid var(--surface-container-low)',
                 }}
               >
                 {label}
@@ -350,11 +352,38 @@ export default function Navbar() {
               textDecoration: 'none',
               textTransform: 'uppercase',
               letterSpacing: '0.1em',
+              borderBottom: '1px solid var(--outline-variant)',
             }}
           >
             <GitBranch size={14} strokeWidth={1.5} />
             GitHub
           </a>
+
+          <button
+            onClick={toggleTheme}
+            aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              width: '100%',
+              padding: '16px 24px',
+              fontFamily: 'var(--font-sans)',
+              fontSize: '13px',
+              color: '#8e9192',
+              textTransform: 'uppercase',
+              letterSpacing: '0.1em',
+              background: 'none',
+              border: 'none',
+              textAlign: 'left',
+              cursor: 'pointer',
+            }}
+          >
+            {theme === 'dark'
+              ? <Sun size={14} strokeWidth={1.5} />
+              : <Moon size={14} strokeWidth={1.5} />}
+            {theme === 'dark' ? 'Light mode' : 'Dark mode'}
+          </button>
         </div>
       </div>
 
