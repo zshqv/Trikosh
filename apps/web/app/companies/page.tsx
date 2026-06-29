@@ -138,17 +138,17 @@ export default function CompaniesPage() {
   const sectorLabel = SECTOR_OPTIONS.find(o => o.value === sector)?.label ?? ''
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - var(--nav-h))', overflow: 'hidden', backgroundColor: '#131315' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - var(--nav-h))', overflow: 'hidden', backgroundColor: 'var(--background)' }}>
 
         {/* Filter bar */}
         <div style={{
           flexShrink: 0,
           padding: '12px 20px',
-          borderBottom: '1px solid #444749',
+          borderBottom: '1px solid var(--outline-variant)',
           display: 'flex',
           alignItems: 'center',
           gap: '10px',
-          backgroundColor: '#131315',
+          backgroundColor: 'var(--background)',
         }}>
           {/* Search */}
           <div style={{ position: 'relative', flex: '1 1 220px', maxWidth: '280px' }}>
@@ -307,8 +307,8 @@ export default function CompaniesPage() {
                       fontWeight: 500,
                       color: '#8e9192',
                       whiteSpace: 'nowrap',
-                      backgroundColor: '#131315',
-                      borderBottom: '1px solid #444749',
+                      backgroundColor: 'var(--background)',
+                      borderBottom: '1px solid var(--outline-variant)',
                     }}
                   >
                     {h}
@@ -324,13 +324,17 @@ export default function CompaniesPage() {
                   style={{
                     borderBottom: '1px solid rgba(68,71,73,0.25)',
                     cursor: 'pointer',
-                    transition: 'background-color 150ms ease',
+                    transition: 'background-color 150ms ease, box-shadow 150ms ease',
                   }}
                   onMouseEnter={e => {
-                    (e.currentTarget as HTMLTableRowElement).style.backgroundColor = '#1c1b1b'
+                    const row = e.currentTarget as HTMLTableRowElement
+                    row.style.backgroundColor = 'var(--surface-container-low)'
+                    row.style.boxShadow = 'inset 3px 0 0 var(--primary)'
                   }}
                   onMouseLeave={e => {
-                    (e.currentTarget as HTMLTableRowElement).style.backgroundColor = 'transparent'
+                    const row = e.currentTarget as HTMLTableRowElement
+                    row.style.backgroundColor = 'transparent'
+                    row.style.boxShadow = 'none'
                   }}
                 >
                   {/* Company Name */}
@@ -339,7 +343,7 @@ export default function CompaniesPage() {
                     fontFamily: 'var(--font-sans)',
                     fontSize: '13.5px',
                     fontWeight: 500,
-                    color: '#e5e2e1',
+                    color: 'var(--text-primary)',
                     maxWidth: '280px',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
@@ -353,7 +357,7 @@ export default function CompaniesPage() {
                     <span style={{
                       fontFamily: 'var(--font-mono)',
                       fontSize: '12px',
-                      color: '#c4c7c8',
+                      color: 'var(--text-secondary)',
                       letterSpacing: '0.05em',
                     }}>
                       {card.company.ticker}
@@ -367,7 +371,7 @@ export default function CompaniesPage() {
                       fontSize: '10px',
                       textTransform: 'uppercase',
                       letterSpacing: '0.07em',
-                      color: '#8e9192',
+                      color: 'var(--text-tertiary)',
                     }}>
                       {card.company.sector}
                     </span>
@@ -379,7 +383,7 @@ export default function CompaniesPage() {
                     textAlign: 'right',
                     fontFamily: 'var(--font-mono)',
                     fontSize: '13px',
-                    color: '#e5e2e1',
+                    color: 'var(--text-primary)',
                     fontVariantNumeric: 'tabular-nums',
                   }}>
                     {fmtGrossMargin(card)}
@@ -391,7 +395,7 @@ export default function CompaniesPage() {
                     textAlign: 'right',
                     fontFamily: 'var(--font-mono)',
                     fontSize: '13px',
-                    color: '#e5e2e1',
+                    color: 'var(--text-primary)',
                     fontVariantNumeric: 'tabular-nums',
                   }}>
                     {fmtPE(card)}
