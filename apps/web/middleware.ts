@@ -6,6 +6,13 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
+// INTENTIONAL PRODUCT DECISION (open data philosophy):
+// /api/companies(.*) and /api/sectors(.*) are deliberately public. Trikosh's
+// mission is open financial research infrastructure — unauthenticated users
+// can browse the company directory and sector list to evaluate the product.
+// This is NOT a security oversight. Any future mutation endpoints or
+// user-specific data (portfolios, watchlists) must require Clerk auth.
+// Last reviewed: security hardening sprint, Day 2.
 const isPublicRoute = createRouteMatcher([
   "/",
   "/sign-in(.*)",
