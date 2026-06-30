@@ -117,12 +117,19 @@ export default function CompaniesPage() {
     return result
   }, [allCards, sector, search, sort])
 
+  function sanitizeCsvField(value: string): string {
+    return /^[=+\-@]/.test(value) ? `'${value}` : value
+  }
+
   function exportCSV() {
     const lines = [
       'Company Name,Ticker,Sector,5YR AVG ROE,P/E Ratio',
-      ...rows.map(c =>
-        `"${c.company.name}",${c.company.ticker},"${c.company.sector}",${fmtROE(c)},${fmtPE(c)}`
-      ),
+      ...rows.map(c => {
+        const name   = sanitizeCsvField(c.company.name)
+        const ticker = sanitizeCsvField(c.company.ticker)
+        const sector = sanitizeCsvField(c.company.sector)
+        return `"${name}",${ticker},"${sector}",${fmtROE(c)},${fmtPE(c)}`
+      }),
     ]
     const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8;' })
     const url  = URL.createObjectURL(blob)
