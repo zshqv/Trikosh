@@ -179,7 +179,7 @@ export async function GET() {
     headers: {
       'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       'Content-Disposition': 'attachment; filename="trikosh-equity-research-template.xlsx"',
-      'Cache-Control': 'public, max-age=86400',
+      'Cache-Control': 'private, max-age=86400',
     },
   })
   } catch (err) {
