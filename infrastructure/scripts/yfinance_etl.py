@@ -39,16 +39,14 @@ def get_connection():
     return psycopg2.connect(**DB_CONFIG)
 
 
-def upsert_company(conn, ticker: str, info: dict) -> Optional[int]:
+def upsert_company(
+    conn,
+    ticker: str,
+    info: dict,
+    data_start_year: Optional[int] = None,
+    data_end_year: Optional[int] = None,
+) -> Optional[int]:
     """Insert or update the companies row, return company_id."""
-    sector_map = {
-        "Financial Services":                    "Financial Services",
-        "AI & Technology":                       "AI & Technology",
-        "Healthcare":                            "Healthcare",
-        "Consumer & Retail":                     "Consumer & Retail",
-        "Consumer Internet & Digital Platforms": "Consumer Internet & Digital Platforms",
-        "Industrials":                           "Industrials",
-    }
     # Resolve sector from config COMPANIES list
     config_sector = next((s for t, _, s in COMPANIES if t == ticker), None)
     if not config_sector:
@@ -83,8 +81,8 @@ def upsert_company(conn, ticker: str, info: dict) -> Optional[int]:
             info.get("exchange", ""),
             info.get("financialCurrency", "USD"),
             info.get("country", ""),
-            2019,
-            2024,
+            data_start_year,
+            data_end_year,
         ))
         row = cur.fetchone()
         conn.commit()
@@ -247,7 +245,18 @@ def process_company(conn, ticker: str, dry_run: bool) -> bool:
             logger.warning("%s: financialCurrency not found in yfinance info — defaulting to USD", ticker)
             currency = "USD"
 
-        company_id = upsert_company(conn, ticker, info)
+        # Derive fiscal year range from actual income statement columns
+        income_df = yf_ticker.financials
+        fiscal_years: list[int] = []
+        if income_df is not None and not income_df.empty:
+            fiscal_years = [
+                c.year if hasattr(c, "year") else int(str(c)[:4])
+                for c in income_df.columns
+            ]
+        data_start_year = min(fiscal_years) if fiscal_years else None
+        data_end_year = max(fiscal_years) if fiscal_years else None
+
+        company_id = upsert_company(conn, ticker, info, data_start_year, data_end_year)
         if company_id is None:
             return False
 
