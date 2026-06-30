@@ -115,6 +115,14 @@ That is what this will become.
 
 ---
 
+## Security
+
+Trikosh uses Clerk for authentication, rate-limited public API endpoints, and strict Content Security Policy headers.
+
+For standing security decisions, deferred risks, and compliance notes (CSRF, data licensing, secret management), see [`infrastructure/docs/SECURITY_NOTES.md`](./infrastructure/docs/SECURITY_NOTES.md).
+
+---
+
 ## Contributing
 
 Trikosh is open-source and welcomes contributions. If you are a finance student, developer, or analyst who believes in this mission, read the contributing guidelines (coming at v0.1.0).
