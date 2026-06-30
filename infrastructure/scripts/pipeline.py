@@ -1,4 +1,5 @@
 import argparse
+import sys
 import time
 from config import COMPANIES, YEARS_OF_DATA
 from fetcher import fetch_income_statement, fetch_balance_sheet, fetch_cash_flow, fetch_company_profile, fetch_market_data, fetch_price_history
@@ -31,6 +32,8 @@ def run_pipeline(ticker_filter: str | None = None):
 
     print(f"Starting Trikosh pipeline for {len(companies_to_run)} "
           f"{'company' if len(companies_to_run) == 1 else 'companies'}...\n")
+
+    failed_tickers: list[str] = []
 
     for ticker, name, sector in companies_to_run:
         print(f"Processing {name} ({ticker})...")
@@ -70,11 +73,16 @@ def run_pipeline(ticker_filter: str | None = None):
         except Exception as e:
             conn.rollback()
             print(f"  ERROR on {name} ({ticker}): {e}")
+            failed_tickers.append(ticker)
 
         finally:
             conn.close()
 
         time.sleep(1)
+
+    if failed_tickers:
+        print(f"\nPipeline finished with {len(failed_tickers)} failure(s): {failed_tickers}")
+        sys.exit(1)
 
     print("\nPipeline complete. All data loaded into PostgreSQL.")
 
