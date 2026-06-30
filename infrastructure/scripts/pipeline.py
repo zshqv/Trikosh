@@ -1,10 +1,13 @@
 import argparse
+import logging
 import sys
 import time
 from config import COMPANIES, YEARS_OF_DATA
 from fetcher import fetch_income_statement, fetch_balance_sheet, fetch_cash_flow, fetch_company_profile, fetch_market_data, fetch_price_history
 from calculator import compute_ratios
 from loader import get_connection, upsert_company, upsert_market_data, upsert_income_statement, upsert_balance_sheet, upsert_cash_flow, upsert_ratios
+
+logger = logging.getLogger(__name__)
 
 
 def run_pipeline(ticker_filter: str | None = None):
@@ -30,13 +33,16 @@ def run_pipeline(ticker_filter: str | None = None):
                 f"Known tickers: {known}"
             )
 
-    print(f"Starting Trikosh pipeline for {len(companies_to_run)} "
-          f"{'company' if len(companies_to_run) == 1 else 'companies'}...\n")
+    logger.info(
+        "Starting Trikosh pipeline for %d %s...",
+        len(companies_to_run),
+        "company" if len(companies_to_run) == 1 else "companies",
+    )
 
     failed_tickers: list[str] = []
 
     for ticker, name, sector in companies_to_run:
-        print(f"Processing {name} ({ticker})...")
+        logger.info("Processing %s (%s)...", name, ticker)
 
         conn = get_connection()
         try:
@@ -68,11 +74,11 @@ def run_pipeline(ticker_filter: str | None = None):
                 upsert_ratios(conn, ticker, fiscal_year, ratios)
 
             conn.commit()
-            print(f"  Done: {name} ({ticker})")
+            logger.info("  Done: %s (%s)", name, ticker)
 
         except Exception as e:
             conn.rollback()
-            print(f"  ERROR on {name} ({ticker}): {e}")
+            logger.error("  ERROR on %s (%s): %s", name, ticker, e)
             failed_tickers.append(ticker)
 
         finally:
@@ -81,13 +87,18 @@ def run_pipeline(ticker_filter: str | None = None):
         time.sleep(1)
 
     if failed_tickers:
-        print(f"\nPipeline finished with {len(failed_tickers)} failure(s): {failed_tickers}")
+        logger.error("Pipeline finished with %d failure(s): %s", len(failed_tickers), failed_tickers)
         sys.exit(1)
 
-    print("\nPipeline complete. All data loaded into PostgreSQL.")
+    logger.info("Pipeline complete. All data loaded into PostgreSQL.")
 
 
 if __name__ == "__main__":
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s [%(levelname)s] %(message)s",
+    )
+
     parser = argparse.ArgumentParser(
         description="Trikosh financial data pipeline — fetch and load company data into PostgreSQL."
     )

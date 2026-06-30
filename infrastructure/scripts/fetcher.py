@@ -1,4 +1,8 @@
+import logging
+
 import yfinance as yf
+
+logger = logging.getLogger(__name__)
 
 
 def clean(value):
@@ -20,7 +24,7 @@ def fetch_company_profile(ticker):
         info = t.info
         return info
     except Exception as e:
-        print(f"  [ERROR] Profile fetch failed for {ticker}: {e}")
+        logger.error("Profile fetch failed for %s: %s", ticker, e)
         return {}
 
 
@@ -45,7 +49,7 @@ def fetch_market_data(ticker):
             "sharesOutstanding": clean(info.get("sharesOutstanding"))
         }
     except Exception as e:
-        print(f"  [ERROR] Market data fetch failed for {ticker}: {e}")
+        logger.error("Market data fetch failed for %s: %s", ticker, e)
         return {}
 
 
@@ -73,7 +77,7 @@ def fetch_income_statement(ticker):
             })
         return results
     except Exception as e:
-        print(f"  [ERROR] Income statement fetch failed for {ticker}: {e}")
+        logger.error("Income statement fetch failed for %s: %s", ticker, e)
         return []
 
 
@@ -101,7 +105,7 @@ def fetch_balance_sheet(ticker):
             })
         return results
     except Exception as e:
-        print(f"  [ERROR] Balance sheet fetch failed for {ticker}: {e}")
+        logger.error("Balance sheet fetch failed for %s: %s", ticker, e)
         return []
 
 
@@ -125,7 +129,7 @@ def fetch_cash_flow(ticker):
             })
         return results
     except Exception as e:
-        print(f"  [ERROR] Cash flow fetch failed for {ticker}: {e}")
+        logger.error("Cash flow fetch failed for %s: %s", ticker, e)
         return []
 
 
@@ -161,5 +165,5 @@ def fetch_price_history(ticker: str, years: int = 5) -> list[dict]:
             })
         return results
     except Exception as e:
-        print(f"  [ERROR] Price history fetch failed for {ticker}: {e}")
+        logger.error("Price history fetch failed for %s: %s", ticker, e)
         return []

@@ -1,5 +1,9 @@
+import logging
+
 import psycopg2
 from config import DB_CONFIG
+
+logger = logging.getLogger(__name__)
 
 
 def get_connection():
@@ -109,7 +113,7 @@ def create_tables():
     conn.commit()
     cur.close()
     conn.close()
-    print("All tables created successfully.")
+    logger.info("All tables created successfully.")
 
 
 def upsert_company(conn, ticker, profile):
@@ -280,5 +284,6 @@ def upsert_ratios(conn, ticker, fiscal_year, ratios):
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
     create_tables()
-    print("loader.py is working. Tables are ready.")
+    logger.info("loader.py is working. Tables are ready.")

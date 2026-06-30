@@ -11,6 +11,7 @@ Usage:
 """
 
 import argparse
+import logging
 import time
 import sys
 from typing import Optional
@@ -18,6 +19,8 @@ from typing import Optional
 import yfinance as yf
 import psycopg2
 from config import DB_CONFIG, COMPANIES
+
+logger = logging.getLogger(__name__)
 
 
 RATE_LIMIT_SECONDS = 0.5  # yfinance is more forgiving than FMP, but be polite
@@ -49,7 +52,7 @@ def upsert_company(conn, ticker: str, info: dict) -> Optional[int]:
     # Resolve sector from config COMPANIES list
     config_sector = next((s for t, _, s in COMPANIES if t == ticker), None)
     if not config_sector:
-        print(f"  [WARN] {ticker} not found in COMPANIES config — skipping")
+        logger.warning("%s not found in COMPANIES config — skipping", ticker)
         return None
 
     sql = """
@@ -96,7 +99,7 @@ def upsert_financials(conn, company_id: int, ticker: str, financials: yf.Ticker)
         cashflow = financials.cashflow          # annual cash flow
 
         if income is None or income.empty:
-            print(f"  [WARN] {ticker}: no income statement data")
+            logger.warning("%s: no income statement data", ticker)
             return
 
         for col in income.columns[:5]:  # up to 5 fiscal years
@@ -194,7 +197,7 @@ def upsert_financials(conn, company_id: int, ticker: str, financials: yf.Ticker)
 
     except Exception as e:
         conn.rollback()
-        print(f"  [ERROR] {ticker} financials: {e}")
+        logger.error("%s financials: %s", ticker, e)
 
 
 def upsert_market_data(conn, company_id: int, ticker: str, info: dict) -> None:
@@ -222,7 +225,7 @@ def upsert_market_data(conn, company_id: int, ticker: str, info: dict) -> None:
         conn.commit()
     except Exception as e:
         conn.rollback()
-        print(f"  [ERROR] {ticker} market data: {e}")
+        logger.error("%s market data: %s", ticker, e)
 
 
 def process_company(conn, ticker: str, dry_run: bool) -> bool:
@@ -232,11 +235,11 @@ def process_company(conn, ticker: str, dry_run: bool) -> bool:
         info = yf_ticker.info
 
         if not info or not (info.get("symbol") or info.get("shortName")):
-            print(f"  [SKIP] {ticker}: yfinance returned no data — invalid or delisted ticker")
+            logger.warning("%s: yfinance returned no data — invalid or delisted ticker", ticker)
             return False
 
         if dry_run:
-            print(f"  [DRY-RUN] {ticker}: {info.get('longName', 'unknown')} — validated OK")
+            logger.info("[DRY-RUN] %s: %s — validated OK", ticker, info.get("longName", "unknown"))
             return True
 
         company_id = upsert_company(conn, ticker, info)
@@ -248,7 +251,7 @@ def process_company(conn, ticker: str, dry_run: bool) -> bool:
         return True
 
     except Exception as e:
-        print(f"  [ERROR] {ticker}: {e}")
+        logger.error("%s: %s", ticker, e)
         return False
 
 
@@ -263,17 +266,21 @@ def main():
         t = args.ticker.upper()
         companies = [(tick, name, sec) for tick, name, sec in COMPANIES if tick == t]
         if not companies:
-            print(f"Ticker '{t}' not found in COMPANIES config.")
+            logger.error("Ticker '%s' not found in COMPANIES config.", t)
             sys.exit(1)
 
-    print(f"yfinance ETL — {len(companies)} {'company' if len(companies) == 1 else 'companies'}")
-    print(f"Mode: {'DRY RUN (no DB writes)' if args.dry_run else 'LIVE (writes to PostgreSQL)'}\n")
+    logger.info(
+        "yfinance ETL — %d %s",
+        len(companies),
+        "company" if len(companies) == 1 else "companies",
+    )
+    logger.info("Mode: %s", "DRY RUN (no DB writes)" if args.dry_run else "LIVE (writes to PostgreSQL)")
 
     conn = None if args.dry_run else get_connection()
 
     ok = fail = skip = 0
     for ticker, name, _ in companies:
-        print(f"→ {name} ({ticker})")
+        logger.info("→ %s (%s)", name, ticker)
         success = process_company(conn, ticker, args.dry_run)
         if success:
             ok += 1
@@ -284,9 +291,12 @@ def main():
     if conn:
         conn.close()
 
-    print(f"\n{'─'*40}")
-    print(f"Done — {ok} succeeded, {fail} failed, {skip} skipped")
+    logger.info("Done — %d succeeded, %d failed, %d skipped", ok, fail, skip)
 
 
 if __name__ == "__main__":
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s [%(levelname)s] %(message)s",
+    )
     main()
