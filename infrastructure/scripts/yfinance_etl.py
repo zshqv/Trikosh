@@ -91,7 +91,7 @@ def upsert_company(conn, ticker: str, info: dict) -> Optional[int]:
         return row[0] if row else None
 
 
-def upsert_financials(conn, company_id: int, ticker: str, financials: yf.Ticker) -> None:
+def upsert_financials(conn, company_id: int, ticker: str, financials: yf.Ticker, currency: str) -> None:
     """Upsert income statement, balance sheet, and cash flow data."""
     try:
         income = financials.financials          # annual income statement
@@ -126,7 +126,7 @@ def upsert_financials(conn, company_id: int, ticker: str, financials: yf.Ticker)
                     company_id, fiscal_year, fiscal_year_end_date, period_type,
                     currency, unit, revenue_total, gross_profit, operating_income,
                     net_income, ebitda, eps_diluted, data_source
-                ) VALUES (%s,%s,%s,'Annual','USD','Millions',%s,%s,%s,%s,%s,%s,'yfinance')
+                ) VALUES (%s,%s,%s,'Annual',%s,'Millions',%s,%s,%s,%s,%s,%s,'yfinance')
                 ON CONFLICT (company_id, fiscal_year, period_type) DO UPDATE SET
                     revenue_total    = EXCLUDED.revenue_total,
                     gross_profit     = EXCLUDED.gross_profit,
@@ -138,7 +138,7 @@ def upsert_financials(conn, company_id: int, ticker: str, financials: yf.Ticker)
             """
             with conn.cursor() as cur:
                 cur.execute(sql_income, (
-                    company_id, fiscal_year, col,
+                    company_id, fiscal_year, col, currency,
                     g(income, "Total Revenue"),
                     g(income, "Gross Profit"),
                     g(income, "Operating Income", "EBIT"),
@@ -154,7 +154,7 @@ def upsert_financials(conn, company_id: int, ticker: str, financials: yf.Ticker)
                         company_id, fiscal_year, fiscal_year_end_date, period_type,
                         currency, unit, total_assets, total_liabilities,
                         total_shareholders_equity, cash_and_equivalents, data_source
-                    ) VALUES (%s,%s,%s,'Annual','USD','Millions',%s,%s,%s,%s,'yfinance')
+                    ) VALUES (%s,%s,%s,'Annual',%s,'Millions',%s,%s,%s,%s,'yfinance')
                     ON CONFLICT (company_id, fiscal_year, period_type) DO UPDATE SET
                         total_assets             = EXCLUDED.total_assets,
                         total_liabilities        = EXCLUDED.total_liabilities,
@@ -164,7 +164,7 @@ def upsert_financials(conn, company_id: int, ticker: str, financials: yf.Ticker)
                 """
                 with conn.cursor() as cur:
                     cur.execute(sql_bs, (
-                        company_id, fiscal_year, col,
+                        company_id, fiscal_year, col, currency,
                         g(balance, "Total Assets"),
                         g(balance, "Total Liabilities Net Minority Interest", "Total Liabilities"),
                         g(balance, "Stockholders Equity", "Total Equity Gross Minority Interest"),
@@ -178,7 +178,7 @@ def upsert_financials(conn, company_id: int, ticker: str, financials: yf.Ticker)
                         company_id, fiscal_year, fiscal_year_end_date, period_type,
                         currency, unit, cash_from_operations, capital_expenditures,
                         free_cash_flow, data_source
-                    ) VALUES (%s,%s,%s,'Annual','USD','Millions',%s,%s,%s,%s,'yfinance')
+                    ) VALUES (%s,%s,%s,'Annual',%s,'Millions',%s,%s,%s,%s,'yfinance')
                     ON CONFLICT (company_id, fiscal_year, period_type) DO UPDATE SET
                         cash_from_operations = EXCLUDED.cash_from_operations,
                         capital_expenditures = EXCLUDED.capital_expenditures,
@@ -187,7 +187,7 @@ def upsert_financials(conn, company_id: int, ticker: str, financials: yf.Ticker)
                 """
                 with conn.cursor() as cur:
                     cur.execute(sql_cf, (
-                        company_id, fiscal_year, col,
+                        company_id, fiscal_year, col, currency,
                         g(cashflow, "Operating Cash Flow", "Cash Flows From Used In Operating Activities Direct Method"),
                         g(cashflow, "Capital Expenditure"),
                         g(cashflow, "Free Cash Flow"),
@@ -200,14 +200,14 @@ def upsert_financials(conn, company_id: int, ticker: str, financials: yf.Ticker)
         logger.error("%s financials: %s", ticker, e)
 
 
-def upsert_market_data(conn, company_id: int, ticker: str, info: dict) -> None:
+def upsert_market_data(conn, company_id: int, ticker: str, info: dict, currency: str) -> None:
     """Upsert most recent market data snapshot."""
     import datetime
     sql = """
         INSERT INTO market_data (
             company_id, fiscal_year, data_date, currency, unit,
             share_price_close, market_cap, beta, data_source
-        ) VALUES (%s,%s,%s,'USD','Millions',%s,%s,%s,'yfinance')
+        ) VALUES (%s,%s,%s,%s,'Millions',%s,%s,%s,'yfinance')
         ON CONFLICT (company_id, fiscal_year) DO UPDATE SET
             share_price_close = EXCLUDED.share_price_close,
             market_cap        = EXCLUDED.market_cap,
@@ -221,7 +221,7 @@ def upsert_market_data(conn, company_id: int, ticker: str, info: dict) -> None:
         beta = info.get("beta")
         today = datetime.date.today()
         with conn.cursor() as cur:
-            cur.execute(sql, (company_id, today.year, today, price, mktcap, beta))
+            cur.execute(sql, (company_id, today.year, today, currency, price, mktcap, beta))
         conn.commit()
     except Exception as e:
         conn.rollback()
@@ -242,12 +242,17 @@ def process_company(conn, ticker: str, dry_run: bool) -> bool:
             logger.info("[DRY-RUN] %s: %s — validated OK", ticker, info.get("longName", "unknown"))
             return True
 
+        currency = info.get("financialCurrency") or ""
+        if not currency:
+            logger.warning("%s: financialCurrency not found in yfinance info — defaulting to USD", ticker)
+            currency = "USD"
+
         company_id = upsert_company(conn, ticker, info)
         if company_id is None:
             return False
 
-        upsert_financials(conn, company_id, ticker, yf_ticker)
-        upsert_market_data(conn, company_id, ticker, info)
+        upsert_financials(conn, company_id, ticker, yf_ticker, currency)
+        upsert_market_data(conn, company_id, ticker, info, currency)
         return True
 
     except Exception as e:
