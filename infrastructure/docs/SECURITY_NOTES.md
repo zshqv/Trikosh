@@ -65,3 +65,41 @@ Do not launch a monetised product tier while still sourcing data
 exclusively from yfinance without completing this review.
 
 ---
+
+## Git History Secret Scan
+
+**Scan date:** 2026-06-30
+**Scope:** Full git history (154 commits) — searched for `DB_PASSWORD` and `ashu`
+
+### Finding — hardcoded password in early commit
+
+`git log --all -S "ashu" --oneline` returned a hit:
+
+```
+02857ad security: remove hardcoded credential fallbacks (audit fix)
+```
+
+The parent of this commit introduced `password=os.getenv("DB_PASSWORD", "ashu")` as
+a default fallback in `infrastructure/scripts/main.py`. The string `"ashu"` was
+a local development password — it was never used in production and does not grant
+access to any live system.
+
+**Current state:** The hardcoded fallback was removed in commit `02857ad` (Day 1
+security sprint). The working tree contains no hardcoded credentials.
+
+**Recommended action:** Since this is a local development default and not a
+production credential, history rewrite is low priority but advisable before any
+public release or if the repository is made fully public on GitHub without
+private visibility. Use `git filter-repo` (not `BFG`) to strip the string from
+history — requires explicit maintainer sign-off before execution.
+
+**Do not rewrite history without explicit confirmation from the maintainer.**
+
+### .gitignore coverage check
+
+- `infrastructure/scripts/.env` — gitignored ✓ (present on filesystem, not tracked)
+- `apps/web/.env.local` — gitignored ✓ (via `apps/web/.gitignore`)
+- Root `.env` and `.env.*` — gitignored ✓
+- No `.env` files found in tracked files (`git ls-files -- "*.env"` returned empty)
+
+---
