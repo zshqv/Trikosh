@@ -34,3 +34,34 @@ must be in place:
 Do not add POST/PUT/DELETE routes without revisiting this section first.
 
 ---
+
+## Yahoo Finance / yfinance Terms of Service
+
+**Current status:** In use. Compliance depends on use-case classification.
+
+Trikosh fetches financial data via [yfinance](https://github.com/ranaroussi/yfinance),
+an open-source Python library that retrieves publicly available data from
+Yahoo Finance. Yahoo Finance's Terms of Service explicitly restrict
+**automated, commercial use** of their data.
+
+Trikosh's current position — open-source, educational, non-commercial,
+MIT-licensed — is consistent with the spirit of non-commercial research
+access. The project README and DISCLAIMER.md both document this clearly.
+
+**Required review before any monetisation:**
+
+If Trikosh introduces paid tiers, advertising, a data API with SLA, or
+any commercial arrangement that generates revenue from the displayed
+financial data, the data licensing position must be reviewed before launch:
+
+1. **Review Yahoo Finance ToS** for current restrictions on automated
+   data retrieval and commercial redistribution.
+2. **Evaluate alternative licensed data sources** — Financial Modeling
+   Prep (FMP), Polygon.io, Refinitiv, Bloomberg — for commercial tiers.
+3. **Obtain legal review** if there is any ambiguity about whether
+   Trikosh's use case qualifies as commercial under the applicable ToS.
+
+Do not launch a monetised product tier while still sourcing data
+exclusively from yfinance without completing this review.
+
+---
