@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { UserButton, SignedIn, SignedOut, SignInButton } from '@clerk/nextjs'
-import { GitBranch, Sun, Moon } from 'lucide-react'
+import { GitBranch } from 'lucide-react'
 
 const NAV_LINKS = [
   { label: 'Home',      href: '/' },
@@ -20,22 +20,6 @@ export default function Navbar() {
   const pathname = usePathname()
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark')
-
-  useEffect(() => {
-    const saved = localStorage.getItem('trikosh-theme') as 'dark' | 'light' | null
-    const initial = saved ?? 'dark'
-    setTheme(initial)
-    document.documentElement.dataset.theme = initial
-  }, [])
-
-  function toggleTheme() {
-    const next = theme === 'dark' ? 'light' : 'dark'
-    setTheme(next)
-    document.documentElement.dataset.theme = next
-    localStorage.setItem('trikosh-theme', next)
-  }
-
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8)
     window.addEventListener('scroll', onScroll, { passive: true })
@@ -63,9 +47,7 @@ export default function Navbar() {
           zIndex: 50,
           width: '100%',
           height: 'var(--nav-h)',
-          backgroundColor: scrolled
-            ? theme === 'dark' ? 'rgba(19,19,19,0.82)' : 'rgba(245,244,242,0.82)'
-            : 'var(--background)',
+          backgroundColor: scrolled ? 'rgba(19,19,19,0.82)' : 'var(--background)',
           backdropFilter: scrolled ? 'blur(14px) saturate(160%)' : 'none',
           WebkitBackdropFilter: scrolled ? 'blur(14px) saturate(160%)' : 'none',
           borderBottom: '1px solid var(--outline-variant)',
@@ -155,26 +137,6 @@ export default function Navbar() {
             >
               <GitBranch size={16} strokeWidth={1.5} />
             </a>
-
-            <button
-              onClick={toggleTheme}
-              aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: '8px 10px',
-                background: 'none',
-                border: 'none',
-                color: '#8e9192',
-                cursor: 'pointer',
-                transition: 'color 150ms ease',
-              }}
-              onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.color = '#c4c7c8' }}
-              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.color = '#8e9192' }}
-            >
-              {theme === 'dark' ? <Sun size={16} strokeWidth={1.5} /> : <Moon size={16} strokeWidth={1.5} />}
-            </button>
 
             <SignedOut>
               <SignInButton mode="modal">
@@ -359,31 +321,6 @@ export default function Navbar() {
             GitHub
           </a>
 
-          <button
-            onClick={toggleTheme}
-            aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px',
-              width: '100%',
-              padding: '16px 24px',
-              fontFamily: 'var(--font-sans)',
-              fontSize: '13px',
-              color: '#8e9192',
-              textTransform: 'uppercase',
-              letterSpacing: '0.1em',
-              background: 'none',
-              border: 'none',
-              textAlign: 'left',
-              cursor: 'pointer',
-            }}
-          >
-            {theme === 'dark'
-              ? <Sun size={14} strokeWidth={1.5} />
-              : <Moon size={14} strokeWidth={1.5} />}
-            {theme === 'dark' ? 'Light mode' : 'Dark mode'}
-          </button>
         </div>
       </div>
 
