@@ -30,3 +30,16 @@ Sub-issues and actions taken:
 5. **apps/api placeholder** — `apps/api/` was not empty; it had a full FastAPI app with a working `/health` endpoint. Fixed the contradiction in docs: added `apps/api/README.md` and updated `CLAUDE.md` from "Empty placeholder" to "FastAPI backend (WIP)".
 
 6. **Standardise design tokens** — Expanded `lib/tokens.ts` (added missing tokens, fixed broken `font.serif` → `font.display`). Replaced all raw `var(--token)` inline strings in `DataAssetCard`, `DeltaLabel`, `TickerBadge`, `MetaBadge`, `RatioRail`, `MetaStrip`, and `SectorPill` with `tokens.xxx` imports. `lib/tokens.ts` is now the single source of truth.
+
+---
+
+## Issue #3 — Light Mode Toggle Non-Functional (raised by ajay9326, July 2026)
+
+**Concern:** The light mode toggle was non-functional — clicking it did not switch the interface, and the UI remained unchanged.
+
+**Action Taken:**
+- Root cause: the toggle (added while resolving Issue #2) was wired to a `data-theme="light"` CSS block, but most component colors were hardcoded to dark values rather than theme-aware tokens, so the switch had no visible effect.
+- Rather than retrofit every hardcoded color to a theme-aware token under time pressure, removed the toggle entirely (`Navbar.tsx`: state, `localStorage` persistence, both desktop and mobile buttons) and standardized on dark-only.
+- Left the dead `[data-theme="light"]` CSS block in `globals.css` for now — harmless, revisit only if light mode is reintroduced.
+
+**Status:** Resolved ✅
