@@ -22,15 +22,15 @@ const isPublicRoute = createRouteMatcher([
   "/companies(.*)",
 ]);
 
-export default clerkMiddleware((auth, request) => {
+export default clerkMiddleware(async (auth, request) => {
   if (!isPublicRoute(request)) {
     if (request.nextUrl.pathname.startsWith('/api/')) {
-      const { userId } = auth();
+      const { userId } = await auth();
       if (!userId) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
       }
     } else {
-      auth.protect();
+      await auth.protect();
     }
   }
 });
